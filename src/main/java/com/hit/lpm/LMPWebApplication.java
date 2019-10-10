@@ -7,7 +7,6 @@ import org.wf.jwtp.configuration.EnableJwtPermission;
 @EnableJwtPermission
 @SpringBootApplication
 public class LMPWebApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(LMPWebApplication.class, args);
     }
