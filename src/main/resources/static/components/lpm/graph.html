@@ -1,0 +1,48 @@
+<style>
+    .layui-badge-rim + .layui-badge-rim {
+        margin-left: 5px;
+    }
+</style>
+<link rel="stylesheet" href="../../assets/module/dtree/dtree.css">
+<link rel="stylesheet" href="../../assets/module/dtree/font/dtreefont.css">
+
+<div id="demo" class="dtree" data-id="0">
+</div>
+
+
+<!-- js部分 -->
+<script>
+    layui.use(['dtree'], function () {
+        var dtree = layui.dtree;
+        // 渲染，使用data渲染
+        dtree.render({
+            elem: "#demo",
+            dataFormat: "list",  //配置data的风格为list
+            // icon:"-1",
+            // ficon:"-1",
+            skin: "laySimple",
+            data: [
+                {"id": "01", "title": "计算机", "checkArr": "0", "parentId": "0"},
+                {"id": "001", "title": "数据结构", "checkArr": "0", "parentId": "01"},
+                {"id": "002", "title": "计算机网络", "checkArr": "0", "parentId": "01"},
+                {"id": "003", "title": "编译原理", "checkArr": "0", "parentId": "01"},
+                {"id": "004", "title": "操作系统", "checkArr": "0", "parentId": "01"},
+                {"id": "005", "title": "算法分析与设计", "checkArr": "0", "parentId": "01"},
+                {"id": "001001", "title": "线性表", "checkArr": "0", "parentId": "001"},
+                {"id": "001002", "title": "二叉树", "checkArr": "0", "parentId": "001"},
+                {"id": "001003", "title": "图", "checkArr": "0", "parentId": "001"},
+                {"id": "001004", "title": "搜索算法", "checkArr": "0", "parentId": "001"},
+                {"id": "001005", "title": "排序算法", "checkArr": "0", "parentId": "001"},
+                {"id": "002001", "title": "http", "checkArr": "0", "parentId": "002"},
+                {"id": "002002", "title": "tcp", "checkArr": "0", "parentId": "002"},
+                {"id": "002003", "title": "ip", "checkArr": "0", "parentId": "002"},
+                {"id": "003001", "title": "词法分析", "checkArr": "0", "parentId": "003"},
+                {"id": "003002", "title": "语法法分析", "checkArr": "0", "parentId": "003"},
+                {"id": "003003", "title": "语义分析", "checkArr": "0", "parentId": "003"},
+                {"id": "004001", "title": "内存管理", "checkArr": "0", "parentId": "004"},
+                {"id": "005001", "title": "时间复杂度分析", "checkArr": "0", "parentId": "005"}
+            ]
+        });
+
+    });
+</script>

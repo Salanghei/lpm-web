@@ -1,0 +1,214 @@
+<div class="layui-container">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-col-md6" name="感兴趣领域">
+                    <div id="domain-graph" style="width: 100%;height:500px;"></div>
+                </div>
+                <div class="layui-col-md6" name="感兴趣话题">
+                    <div id="topic-graph" style="width: 100%;height:500px;"></div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-card-header">感兴趣课程</div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="course-table" lay-filter="userTable">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>课程名称</th>
+                            <th>开课时间</th>
+                            <th>主讲教师</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>计算机网络</td>
+                            <td>2019-11-29</td>
+                            <td>李全龙</td>
+                        </tr>
+                        <tr>
+                            <td>数据结构</td>
+                            <td>2019-11-21</td>
+                            <td>黄虎杰</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- js部分 -->
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+<script src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+
+
+<!-- 感兴趣的领域饼图渲染 -->
+<script type="text/javascript">
+    layui.use(['util', 'admin', 'config'], function () {
+        var $ = layui.jquery;
+        // 基于准备好的dom，初始化echarts实例
+        var domainChart = echarts.init(document.getElementById('domain-graph'));
+        var topicChart = echarts.init(document.getElementById('topic-graph'));
+        var option0 = {
+            title: {
+                text: '感兴趣领域分析',
+                x: 'center'
+            },
+            series: [
+                {
+                    name: '感兴趣的领域',
+                    type: 'pie',
+                    radius: [30, 110],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    data: [
+                        {value: 10, name: '心理学'},
+                        {value: 5, name: '哲学'},
+                        {value: 15, name: '历史'},
+                        {value: 25, name: '文学文化'},
+                        {value: 20, name: '外语'},
+                        {value: 35, name: '经济学'},
+                        {value: 30, name: '教育教学'},
+                        {value: 40, name: '计算机'}
+                    ]
+                }
+            ]
+        };
+        var option1 = {
+            title: {
+                text: '感兴趣话题分析',
+                x: 'center'
+            },
+            series: [
+                {
+                    type: 'wordCloud',
+                    // gridSize: 2,
+                    // sizeRange: [12, 50],
+                    // rotationRange: [-90, 90],
+                    shape: 'pentagon',
+                    center: ['50%', '50%'],
+                    // width: 600,
+                    // height: 400,
+                    // drawOutOfBound: true,
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: [
+                        {
+                            name: '计算机网络',
+                            value: 10000,
+                            textStyle: {
+                                normal: {
+                                    color: 'black'
+                                },
+                                emphasis: {
+                                    color: 'red'
+                                }
+                            }
+                        },
+                        {
+                            name: 'http',
+                            value: 6181
+                        },
+                        {
+                            name: '红黑树',
+                            value: 4386
+                        },
+                        {
+                            name: '多线程',
+                            value: 4055
+                        },
+                        {
+                            name: 'java',
+                            value: 2467
+                        },
+                        {
+                            name: 'tcp',
+                            value: 2244
+                        },
+                        {
+                            name: '内存管理',
+                            value: 1898
+                        },
+                        {
+                            name: '虚拟地址',
+                            value: 1484
+                        },
+                        {
+                            name: 'cpu',
+                            value: 1112
+                        },
+                        {
+                            name: '语法分析',
+                            value: 965
+                        },
+                        {
+                            name: '自动机',
+                            value: 847
+                        },
+                        {
+                            name: 'NP完全问题',
+                            value: 582
+                        },
+                        {
+                            name: '数字逻辑',
+                            value: 555
+                        },
+                        {
+                            name: 'KXAN',
+                            value: 550
+                        },
+                        {
+                            name: '状态图',
+                            value: 462
+                        },
+                        {
+                            name: '任务队列',
+                            value: 366
+                        },
+                        {
+                            name: '分词算法',
+                            value: 360
+                        },
+                        {
+                            name: '索引',
+                            value: 282
+                        },
+                        {
+                            name: '死锁',
+                            value: 273
+                        },
+                        {
+                            name: '银行家算法',
+                            value: 265
+                        }
+                    ]
+                }
+            ]
+        };
+        domainChart.setOption(option0, true);
+        topicChart.setOption(option1, true);
+    });
+</script>
+
+
