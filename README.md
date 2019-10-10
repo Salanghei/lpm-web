@@ -54,7 +54,7 @@
 
 **系统架构图**
 ![系统架构图](http://assets.processon.com/chart_image/5d39576ee4b0511f1312708f.png)
-**系统架构图**
+**功能结构图**
 ![功能结构图](http://assets.processon.com/chart_image/5d394ee8e4b02015bd8a27f1.png)
 **思维导图**
 ![思维导图](http://assets.processon.com/chart_image/5d7ef2abe4b04c14c4e3f36f.png)
