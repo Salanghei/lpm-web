@@ -16,7 +16,12 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     // 支持跨域访问
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").maxAge(3600).allowedHeaders("Content-Type, x-requested-with, X-Custom-Header, Authorization");
+        registry.addMapping("/**").allowedMethods("PUT", "DELETE", "GET", "POST").allowedHeaders("*")
+                .exposedHeaders("access-control-allow-headers",
+                        "access-control-allow-methods",
+                        "access-control-allow-origin",
+                        "access-control-max-age",
+                        "X-Frame-Options");
     }
 
     // 支持PUT请求

@@ -1,99 +1,128 @@
 <div class="layui-container">
     <div class="layui-card">
         <div class="layui-card-body">
-            <div class="layui-row">
-                <div class="layui-card-header">感兴趣领域</div>
-                <div class="layui-card-body">
-                    <table class="layui-table" id="domain-table" lay-filter="userTable">
-                        <colgroup>
-                            <col width="150">
-                            <col width="200">
-                            <col>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>领域名称</th>
-                            <th>感兴趣程度</th>
-                            <th>详细信息</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>计算机</td>
-                            <td>50</td>
-                            <td>计算机科学，研究计算机及其周围各种现象和规律的科学，亦即研究计算机系统结构、程序系统（即软件）、人工智能以及计算本身的性质和问题的学科</td>
-                        </tr>
-                        <tr>
-                            <td>心理学</td>
-                            <td>35</td>
-                            <td>心理学包括基础心理学与应用心理学两大领域，其研究涉及知觉、认知、情绪、思维、人格、行为习惯、人际关系、社会关系等许多领域，也与日常生活的许多领域——家庭、教育、健康、社会等发生关联。</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="layui-row">
-                <div class="layui-card-header">感兴趣课程</div>
-                <div class="layui-card-body">
-                    <table class="layui-table" id="course-table" lay-filter="userTable">
-                        <colgroup>
-                            <col width="150">
-                            <col width="200">
-                            <col>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>课程名称</th>
-                            <th>开课时间</th>
-                            <th>主讲教师</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>计算机网络</td>
-                            <td>2019-11-29</td>
-                            <td>李全龙</td>
-                        </tr>
-                        <tr>
-                            <td>数据结构</td>
-                            <td>2019-11-21</td>
-                            <td>黄虎杰</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="layui-row">
-                <div class="layui-card-header">感兴趣话题</div>
-                <div class="layui-card-body">
-                    <table class="layui-table" id="topic-table" lay-filter="userTable">
-                        <colgroup>
-                            <col width="150">
-                            <col width="200">
-                            <col>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>名称</th>
-                            <th>感兴趣度</th>
-                            <th>详细信息</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>红黑树</td>
-                            <td>50</td>
-                            <td>一种数据结构</td>
-                        </tr>
-                        <tr>
-                            <td>路由</td>
-                            <td>30</td>
-                            <td>计算机网络</td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li>知识背景</li>
+                    <li class="layui-this">兴趣意图</li>
+                    <li>学习风格</li>
+                    <li>学习状态</li>
+                </ul>
+
+                <div class="layui-tab-content">
+                    <div id="knowledge-tab-content" class="layui-tab-item">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="knowledge-table" lay-filter="knowledgeTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item layui-show" id="topic-tab">
+                        <div class="layui-card">
+                            <div class="layui-card-header">感兴趣领域</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="domain-table" lay-filter="domainTable"></table>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">感兴趣课程</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="course-table" lay-filter="courseTable"></table>
+                            </div>
+                        </div>
+                        <div class="layui-card">
+                            <div class="layui-card-header">感兴趣话题</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table" id="topic-table" lay-filter="topicTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        内容3
+                    </div>
+                    <div class="layui-tab-item">内容4</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'config'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var util = layui.util;
+        var config = layui.config;
+        //渲染感兴趣的领域表格
+        var menuIns = table.render({
+            elem: '#domain-table',
+            url: config.base_server + 'interest/domain',
+            where: {
+                access_token: config.getToken()
+            },
+            page: false,
+            //cellMinWidth: 60,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'domain', title: '领域名称'},
+                {field: 'info', title: '详细信息'},
+                {field: 'score', title: '感兴趣程度'}
+            ]]
+        });
+        //渲染感兴趣的课程表格
+        var menuIns = table.render({
+            elem: '#course-table',
+            url: config.base_server + 'interest/course',
+            where: {
+                access_token: config.getToken()
+            },
+            page: false,
+           // cellMinWidth: 60,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'course', title: '课程名称'},
+                {field: 'teacher', title: '主讲教师'},
+                {field: 'domain', title: '领域'},
+                {field: 'score', title: '感兴趣程度'},
+                {
+                    templet: function (d) {
+                        return util.toDateString(d.startTime);
+                    }, title: '开课时间'
+                }
+            ]]
+        });
+        //渲染感兴趣的话题表格
+        var menuIns = table.render({
+            elem: '#topic-table',
+            url: config.base_server + 'interest/topic',
+            where: {
+                access_token: config.getToken()
+            },
+            page: false,
+            //cellMinWidth: 60,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'topic', title: '话题名称'},
+                {field: 'domain', title: '领域'},
+                {field: 'score', title: '感兴趣程度'}
+            ]]
+        });
+        //渲染学习的知识点表格
+        var menuIns = table.render({
+            elem: '#knowledge-table',
+            url: config.base_server + 'knowledge',
+            where: {
+                access_token: config.getToken()
+            },
+            page: false,
+            //cellMinWidth: 60,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'knowledge_node', title: '知识点'},
+                {field: 'parent_knowledge_node', title: '父知识点'},
+                {field: 'score', title: '掌握程度'}
+            ]]
+        });
+
+    });
+</script>
