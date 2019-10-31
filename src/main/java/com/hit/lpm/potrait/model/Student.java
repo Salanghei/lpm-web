@@ -19,6 +19,7 @@ public class Student implements Serializable {
     private Integer userId;
     private String studentName;
 
+
     public Integer getStudentId() {
         return studentId;
     }

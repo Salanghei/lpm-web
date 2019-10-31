@@ -70,5 +70,7 @@ public class StringUtil {
         String out = head.toUpperCase() + in.substring(1, in.length());
         return out;
     }
-
+    public static boolean isWord(String str) {
+        return str.matches("[\\u4E00-\\u9FA5a-zA-Z]+");
+    }
 }

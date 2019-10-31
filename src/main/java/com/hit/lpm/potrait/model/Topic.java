@@ -1,9 +1,11 @@
 package com.hit.lpm.potrait.model;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @program: lmp-web
@@ -20,9 +22,31 @@ public class Topic implements Serializable {
 
     private String topicName;
 
-    private Integer domainId;
+    private String domain;
+
+    private Integer count;
 
     private String topicInfo;
+
+    @TableField(exist=false)
+    private Map<String, Integer> domainMap;
+
+    public Map<String, Integer> getDomainMap() {
+        return domainMap;
+    }
+
+    public void setDomainMap(Map<String, Integer> domainMap) {
+        this.domainMap = domainMap;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
 
     public Integer getTopicId() {
         return topicId;
@@ -40,12 +64,23 @@ public class Topic implements Serializable {
         this.topicName = topicName;
     }
 
-    public Integer getDomainId() {
-        return domainId;
+    public String getDomain() {
+        if (this.domain != null && !this.domain.isEmpty()) return domain;
+        else {
+            String domain = "其他";
+            int max = 0;
+            for (String k : domainMap.keySet()) {
+                if (domainMap.get(k) > max) {
+                    max = domainMap.get(k);
+                    domain = k;
+                }
+            }
+            return domain;
+        }
     }
 
-    public void setDomainId(Integer domainId) {
-        this.domainId = domainId;
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public String getTopicInfo() {

@@ -2,6 +2,7 @@ package com.hit.lpm.potrait.model;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,28 +16,27 @@ import java.util.Date;
 
 @TableName("lpm_course")
 public class Course implements Serializable {
-    @TableId
-    private Integer courseId;
+
+    @TableId(type = IdType.INPUT)
+    private String courseId;
+
     private String courseName;
     private Integer domainId;
-    private Integer teacherId;
+    private String teacher;
     private String courseInfo;
     private String courseUrl;
     private Date startTime;
+    private Date endTime;
 
-    public Date getStartTime() {
-        return startTime;
-    }
+    private String courseType;
+    private String prerequisites;
+    private String courseSchool;
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Integer getCourseId() {
+    public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(Integer courseId) {
+    public void setCourseId(String courseId) {
         this.courseId = courseId;
     }
 
@@ -56,12 +56,12 @@ public class Course implements Serializable {
         this.domainId = domainId;
     }
 
-    public Integer getTeacherId() {
-        return teacherId;
+    public String getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 
     public String getCourseInfo() {
@@ -78,5 +78,45 @@ public class Course implements Serializable {
 
     public void setCourseUrl(String courseUrl) {
         this.courseUrl = courseUrl;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
+    }
+
+    public String getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(String prerequisites) {
+        this.prerequisites = prerequisites;
+    }
+
+    public String getCourseSchool() {
+        return courseSchool;
+    }
+
+    public void setCourseSchool(String courseSchool) {
+        this.courseSchool = courseSchool;
     }
 }

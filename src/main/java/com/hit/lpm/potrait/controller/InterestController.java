@@ -61,9 +61,9 @@ public class InterestController extends BaseController {
         for (StudentTopicRelation st : sts) {
             Map<String, Object> map = new HashMap<>();
             Topic topic = topicService.selectById(st.getTopicId());
-            Domain domain = domainService.selectById(topic.getDomainId());
+            //Domain domain = domainService.selectById(topic.getDomainId());
             map.put("topic", topic.getTopicName());
-            map.put("domain", domain.getDomainName());
+            map.put("domain", topic.getDomain());
             map.put("score", st.getScore());
             maps.add(map);
         }
@@ -86,11 +86,11 @@ public class InterestController extends BaseController {
             Map<String, Object> map = new HashMap<>();
             Course course = courseService.selectById(sc.getCourseId());
             Domain domain = domainService.selectById(course.getDomainId());
-            Teacher teacher = teacherService.selectById(course.getTeacherId());
+            //Teacher teacher = teacherService.selectById(course.getTeacherId());
             map.put("course", course.getCourseName());
             map.put("startTime", course.getStartTime());
             map.put("domain", domain.getDomainName());
-            map.put("teacher", teacher.getTeacherName());
+            map.put("teacher", course.getTeacher());
             map.put("score", sc.getScore());
             maps.add(map);
         }
@@ -119,7 +119,7 @@ public class InterestController extends BaseController {
         for (StudentTopicRelation st : sts) {
             Topic topic = topicService.selectById(st.getTopicId());
             //此处10是一个常数，用于缩小数字，今后可以考虑放到常数变量中
-            domains.put(topic.getDomainId(), domains.getOrDefault(topic.getDomainId(), 0) + st.getScore() / 10);
+            //domains.put(topic.getDomain(), domains.getOrDefault(topic.getDomain(), 0) + st.getScore() / 10);
         }
         for (Integer domainId : domains.keySet()) {
             Map<String, Object> map = new HashMap<>();
