@@ -16,7 +16,7 @@ public class StudentCourseRelation {
 
     private Integer studentId;
 
-    private Integer courseId;
+    private String courseId;
 
     private Integer score;
 
@@ -36,11 +36,11 @@ public class StudentCourseRelation {
         this.studentId = studentId;
     }
 
-    public Integer getCourseId() {
+    public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(Integer courseId) {
+    public void setCourseId(String courseId) {
         this.courseId = courseId;
     }
 

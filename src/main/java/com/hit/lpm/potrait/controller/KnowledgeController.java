@@ -5,6 +5,8 @@ import com.hit.lpm.common.BaseController;
 import com.hit.lpm.common.PageResult;
 import com.hit.lpm.potrait.model.*;
 import com.hit.lpm.potrait.service.*;
+import com.hit.lpm.system.model.User;
+import com.hit.lpm.system.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -37,6 +39,8 @@ public class KnowledgeController extends BaseController {
     private  KnowledgeNodeService knowledgeNodeService;
     @Autowired
     private StudentKnowledgeRelationService studentKnowledgeRelationService;
+    @Autowired
+    private UserService userService;
 
 
 
@@ -49,7 +53,10 @@ public class KnowledgeController extends BaseController {
     public PageResult<Map<String, Object>> listKnowledge(HttpServletRequest request) {
         List<Map<String, Object>> maps = new ArrayList<>();
         Integer userId = getLoginUserId(request);
-        Integer stuId = studentService.selectOne(new EntityWrapper<Student>().eq("user_id", userId)).getStudentId();
+        User user = userService.selectById(userId);
+        //Integer stuId = studentService.selectOne(new EntityWrapper<Student>().eq("user_id", user.getUsername())).getStudentId();
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         List<StudentKnowledgeRelation> sks = studentKnowledgeRelationService
                 .selectList(new EntityWrapper<StudentKnowledgeRelation>().eq("student_id", stuId));
         for (StudentKnowledgeRelation sk : sks) {
