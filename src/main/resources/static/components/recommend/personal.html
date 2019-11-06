@@ -1,0 +1,279 @@
+<style>
+    .layui-card-img-box img{
+        width: 70%;
+    }
+    .layadmin-takerates{
+        padding: 10px 50px;
+    }
+    .layui-res{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .tags{
+        margin: 10px 0 15px 0;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-md12">
+
+                    <div class="layui-card">
+                        <div class="layui-card-header">信任关系网络</div>
+                        <div class="layui-card-body">
+                            <div style="width: 100%; height: 430px" id="echarts-main"></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-card">
+                        <div class="layui-card-header">学习资源
+                            <a href="moreResources" class="pull-right layui-card-more layui-word-aux">更多>></a>
+                        </div>
+                        <div class="layui-card-body layadmin-takerates" id="resource-box">
+                            <!--模板引擎,id="resource" -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4" id="right-card">
+
+
+            <div class="layui-card">
+                <div class="layui-card-header">学习伙伴推荐</div>
+                <div class="layui-card-body layadmin-takerates" id="recommend-student-box">
+                    <!--模板引擎,id="recommend-student" -->
+                </div>
+            </div>
+
+            <div class="layui-card" id="recommend-resources">
+                <div class="layui-card-header">课程推荐</div>
+                <div class="layui-card-body layadmin-takerates" id="recommend-course-box">
+                    <!--模板引擎,id="recommend-course" -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script id="resource" type="text/html">
+{{# layui.each(d, function(index, item){ }}
+    <div class="layui-row layui-res">
+        <div class="layui-col-md2">
+            <a href="#"><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon" /></a>
+        </div>
+        <div class="layui-col-md10 layui-card-res-box">
+            <h3><b><a href="#">{{ item.name }}</a></b></h3>
+            {{# layui.each(item.tags, function(key, cell){ }}
+                <span class="layui-badge-rim tags">{{ cell }}</span>
+            {{# }); }}
+            <p class="layui-word-aux">
+                上传时间：{{ item.time }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                上传者：{{ item.uploader }}
+            </p>
+        </div>
+    </div>
+{{# }); }}
+</script>
+
+<script id="recommend-student" type="text/html">
+{{# layui.each(d, function(index, item){ }}
+    <div class="layui-row layui-res">
+        <div class="layui-col-md4 layui-card-img-box">
+            <img src="../../assets/images/head.png" class="layui-card-img" />
+        </div>
+        <div class="layui-col-md8 layui-card-mes-box">
+            <h4><b><a href="#">{{ item.studentName }}</a></b></h4>
+            <p class="layui-word-aux">信任度：{{ item.trust }}</p>
+            <p class="layui-word-aux">已选课程：{{ item.course }}</p>
+        </div>
+    </div>
+{{# }); }}
+</script>
+
+<script id="recommend-course" type="text/html">
+{{# layui.each(d, function(index, item){ }}
+    <div class="layui-res reco-res-box">
+        <h3><b><a href="#">{{ item.courseName }}</a></b></h3>
+        <p class="layui-word-aux">主讲老师：{{ item.teacher }}</p>
+        <p class="layui-word-aux">开课院校：{{ item.courseSchool }}</p>
+    </div>
+{{# }); }}
+</script>
+
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+
+<script type="text/javascript">
+    layui.use(['config', 'element', 'laytpl'], function(){
+        var $ = layui.jquery;
+        var config = layui.config;
+        var laytpl = layui.laytpl;
+
+        var myChart = echarts.init(document.getElementById("echarts-main"));
+        myChart.showLoading();
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'recommend/getRelationNetwork?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (result) {
+                //console.log(result);
+                var categories = [
+                    {name: "中心节点"},
+                    {name: "直接信任关系"},
+                    {name: "第一层间接信任关系"},
+                    {name: "第二层间接信任关系"}
+                ];
+                var nodes = [];  // 图中的节点
+                var links = [];  // 图中的边
+                $.each(result["nodes"], function (key, item) {
+                    nodes.push({category: item["category"], name: item["name"], value: item["value"]});
+                });
+                //console.log(nodes);
+                $.each(result["edges"], function (key, item) {
+                    links.push({source: item["source"], target: item["target"], weight: item["weight"]});
+                });
+                //console.log(links);
+                var option = {
+                    title: {
+                        text: '信任关系网络',
+                        x: 'right',
+                        y: 'bottom'
+                    },
+                    legend: [{
+                        data: categories.map(function (a) {
+                            return a.name;
+                        }),
+                        orient: 'vertical',
+                        left: 0,
+                        bottom: 0
+                    }],
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            if (params.data.weight) {
+                                return params.data.source + '-' + params.data.target + '信任值:' + params.data.weight;
+                            }
+                            else {
+                                return "学生ID:" + params.name;
+                            }
+                        }
+                    },
+                    animation: false,
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        lineStyle: {
+                            normal: {
+                                color: 'source'
+                            }
+                        },
+                        data: nodes.map(function (node) {
+                            node.itemStyle = null;
+                            node.symbolSize = node.value;
+                            // Use random x, y
+                            node.x = node.y = null;
+                            node.draggable = true;
+                            if (node.name === result.userId) {
+                                node.label = {
+                                    normal: {
+                                        show: true,
+                                        position: 'inside',
+                                        color: '#ffffff'
+                                    }
+                                };
+                            } else {
+                                node.label = {
+                                    normal: {
+                                        show: false
+                                    }
+                                };
+                            }
+                            return node;
+                        }),
+                        links: links,
+                        categories: categories,
+                        label: {
+                            normal: {
+                                position: 'right'
+                            }
+                        },
+                        force: {
+                            repulsion: 150
+                        }
+                    }]
+                };
+                myChart.hideLoading();
+                myChart.setOption(option);
+            },
+            error: function(){
+                alert("数据加载失败!");
+            }
+        });
+
+        // 获取全部资源
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'resource/getAllResource?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var getResourceTpl = document.getElementById("resource").innerHTML;
+                var resourceView = document.getElementById("resource-box");
+                laytpl(getResourceTpl).render(data, function(html){
+                    resourceView.innerHTML = html;
+                });
+            },
+            error: function (){
+                alert("数据加载失败");
+            }
+        });
+
+        // 获取推荐学生
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'recommend/recommendStudent?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getStudentTpl = document.getElementById("recommend-student").innerHTML;
+                var studentView = document.getElementById("recommend-student-box");
+                laytpl(getStudentTpl).render(data, function(html){
+                    studentView.innerHTML = html;
+                });
+            },
+            error: function (){
+                alert("数据加载失败");
+            }
+        });
+
+        // 获取推荐课程
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'recommend/recommendCourse?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                var getCourseTpl = document.getElementById("recommend-course").innerHTML;
+                var courseView = document.getElementById("recommend-course-box");
+                laytpl(getCourseTpl).render(data, function(html){
+                    courseView.innerHTML = html;
+                });
+            },
+            error: function (){
+                alert("数据加载失败");
+            }
+        });
+    });
+</script>

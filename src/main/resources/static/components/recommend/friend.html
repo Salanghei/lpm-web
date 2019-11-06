@@ -1,0 +1,139 @@
+<style>
+    .layui-card-img-box img{
+        width: 70%;
+    }
+    .layadmin-takerates{
+        padding: 10px 50px;
+    }
+    .layui-res{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .details{
+        color: #009688;
+        cursor: pointer;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-md12">
+
+
+                    <div class="layui-card" style="min-height: 500px;">
+                        <div class="layui-card-header">学习伙伴</div>
+                        <div class="layui-card-body layadmin-takerates" id="friend-box">
+                            <!-- 模板引擎, id="friend" -->
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4">
+
+
+            <div class="layui-card">
+                <div class="layui-card-header">学习伙伴推荐</div>
+                <div class="layui-card-body layadmin-takerates" id="recommend-student-box">
+                    <!--模板引擎,id="recommend-student" -->
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<script id="friend" type="text/html">
+    {{# layui.each(d, function(index, item){ }}
+    <div class="layui-row layui-res detailsBox">
+        <div class="layui-col-md2 layui-card-img-box">
+            <a href="#"><img src="../../assets/images/head.png" class="friends-img" /></a>
+        </div>
+        <div class="layui-col-md10">
+            <h3><b><a href="#">{{ item.name }}</a></b></h3>
+            <p class="layui-word-aux">信任值：{{ item.trust }}</p>
+            <br/>
+            <p class="layui-word-aux">最高学历：{{ item.education }}&nbsp;&nbsp;&nbsp;&nbsp;所在地：{{ item.position }}</p>
+            <a class="details pull-right" style="display: none;">解除关系</a>
+        </div>
+    </div>
+    {{# }); }}
+</script>
+
+<script id="recommend-student" type="text/html">
+    {{# layui.each(d, function(index, item){ }}
+    <div class="layui-row layui-res">
+        <div class="layui-col-md4 layui-card-img-box">
+            <img src="../../assets/images/head.png" class="layui-card-img" />
+        </div>
+        <div class="layui-col-md8 layui-card-mes-box">
+            <h4><b><a href="#">{{ item.studentName }}</a></b></h4>
+            <p class="layui-word-aux">信任度：{{ item.trust }}</p>
+            <p class="layui-word-aux">已选课程：{{ item.course }}</p>
+        </div>
+    </div>
+    {{# }); }}
+</script>
+
+<script type="text/javascript">
+    layui.use(['config', 'element', 'laytpl'], function(){
+        var $ = layui.jquery;
+        var config = layui.config;
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+
+        for(var i = 0; i < $(".detailsBox").length; i ++){
+            $(".detailsBox").eq(i).mouseover(function(){
+                $(this).find(".details").last().show();
+            });
+            $(".detailsBox").eq(i).mouseout(function(){
+                $(this).find(".details").last().hide();
+            });
+        }
+
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'friend/getFriend?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getFriendTpl = document.getElementById("friend").innerHTML;
+                var friendView = document.getElementById("friend-box");
+                laytpl(getFriendTpl).render(data, function(html){
+                    friendView.innerHTML = html;
+                });
+                element.render();
+            },
+            error: function (){
+                alert("数据加载失败");
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'recommend/recommendStudent?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getStudentTpl = document.getElementById("recommend-student").innerHTML;
+                var studentView = document.getElementById("recommend-student-box");
+                laytpl(getStudentTpl).render(data, function(html){
+                    studentView.innerHTML = html;
+                });
+            },
+            error: function (){
+                alert("数据加载失败");
+            }
+        });
+    });
+</script>

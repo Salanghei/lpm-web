@@ -1,0 +1,63 @@
+<style>
+    .self-mes-img-box img{
+        width: 80%;
+    }
+    .layadmin-takerates{
+        padding: 30px 50px;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md10 layui-col-md-offset1">
+            <div class="layui-card" style="min-height: 500px;">
+                <div class="layui-card-header">个人信息</div>
+
+                <div class="layui-card-body layadmin-takerates">
+                    <div class="layui-row">
+                        <div class="layui-col-md4 self-mes-img-box">
+                            <img src="../../assets/images/head.png" class="layui-card-img" />
+                            <!--<div>
+                                <button class="layui-btn layui-btn-primary">修改头像</button>
+                                <a href="changeMes" class="layui-btn">修改资料</a>
+                            </div>-->
+                        </div>
+                        <div class="layui-col-md8 self-mes" style="padding-bottom: 30px;" id="message-box">
+                            <!--使用模板引擎 id="message"-->
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script id="message" type="text/html">
+    <p><b>昵称：{{ d.nickname }}</b></p>
+    <p>真实姓名：{{ d.studentName }}</p>
+    <p>性别：{{ d.gender }}</p>
+    <p>生日：{{ d.birthday }}</p>
+    <p>最高学历：{{ d.education }}</p>
+    <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+    <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理、国际交流英语</p>
+    <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+</script>
+<script type="text/javascript">
+    layui.use(['element', 'config', 'laytpl'], function(){
+        var $ = layui.jquery;
+        var config = layui.config;
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        $.get(config.base_server + 'message?access_token=' + config.getToken(), function(data){
+            console.log(data);
+            var getTpl = message.innerHTML;
+            var view = document.getElementById("message-box");
+            laytpl(getTpl).render(data, function(html){
+                view.innerHTML = html;
+            });
+            element.render();
+        });
+    });
+</script>

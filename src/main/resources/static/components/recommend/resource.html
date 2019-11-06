@@ -1,0 +1,318 @@
+<style>
+    .mes-pic-box{
+        text-align: center;
+    }
+    .layadmin-takerates{
+        padding: 10px 50px;
+    }
+    .mes-box{
+        margin: 20px;
+    }
+    .mes-box img{
+        width: 70%;
+    }
+    .count-box{
+        text-align: center;
+    }
+    .btn-box{
+        margin: 10px;
+    }
+    .res-box{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .tags{
+        margin: 10px 0 15px 0;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md9">
+            <div class="layui-card" style="min-height: 500px;">
+                <div class="layui-card-header">学习资源
+
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">已审核</li>
+                            <li>待审核</li>
+                            <li>未通过</li>
+                        </ul>
+                        <div class="layui-tab-content layadmin-takerates">
+                            <div class="layui-tab-item layui-show" id="pass-resource-box">
+                                <!-- 已通过资源，模板引擎，id="pass-resource" -->
+                            </div>
+                            <div class="layui-tab-item" id="topass-resource-box">
+                                <!-- 待审核资源，模板引擎，id="pass-resource -->
+                            </div>
+                            <div class="layui-tab-item" id="fail-resource-box">
+                                <!-- 未通过资源，模板引擎，id="pass-resource -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+
+            <div class="layui-card">
+                <div class="layui-card-header">我的资源信息</div>
+                <div class="layui-card-body">
+                    <div class="mes-pic-box">
+                        <div class="mes-box">
+                            <img src="../../assets/images/head.png" />
+                        </div>
+                        <div class="mes-box">
+                            <h3><b><a href="#">用户名</a></b></h3>
+                        </div>
+                    </div>
+                    <div class="layui-row mymes-mes-box">
+                        <div class="layui-col-md4 count-box">
+                            <h4><b>资源数量</b></h4>
+                            <p>2</p>
+                        </div>
+                        <div class="layui-col-md4 count-box">
+                            <h4><b>权限请求</b></h4>
+                            <p>0</p>
+                        </div>
+                        <div class="layui-col-md4 count-box">
+                            <h4><b>下载许可</b></h4>
+                            <p>0</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="btn-box">
+                            <a class="layui-btn layui-btn-primary layui-btn-fluid" id="resource-auth-list-btn">下载许可列表</a>
+                        </div>
+                        <div class="btn-box">
+                            <a class="layui-btn layui-btn-fluid" id="openUploadLayer">上传资源</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 弹出层：上传资源 -->
+<div id="uploadLayer" style="display: none; margin: 30px 50px 30px 10px;">
+    <div class="layui-form" id="uploadFile">
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传资源</label>
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="choose-file">
+                    <i class="layui-icon">&#xe67c;</i>选择文件
+                </button>
+                <!--<input type="file" name="uploadfile" required lay-verify="required" placeholder="选择文件">-->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="tag" title="教程" value="教程" lay-skin="primary">
+                <input type="checkbox" name="tag" title="软件" value="软件" lay-skin="primary">
+                <input type="checkbox" name="tag" title="代码" value="代码" lay-skin="primary">
+                <input type="checkbox" name="tag" title="笔记" value="笔记" lay-skin="primary">
+                <input type="checkbox" name="tag" title="工学" value="工学" lay-skin="primary">
+                <input type="checkbox" name="tag" title="农学" value="农学" lay-skin="primary">
+                <input type="checkbox" name="tag" title="医学" value="医学" lay-skin="primary">
+                <input type="checkbox" name="tag" title="人文社科" value="人文社科" lay-skin="primary">
+                <input type="checkbox" name="tag" title="文史类" value="文史类" lay-skin="primary">
+                <input type="checkbox" name="tag" title="基础学科" value="基础学科" lay-skin="primary">
+                <input type="checkbox" name="tag" title="其他" value="其他" lay-skin="primary">
+                <input type="hidden" name="tag">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限</label>
+            <div class="layui-input-block">
+                <input type="radio" name="auth" value="仅查看" title="仅查看">
+                <input type="radio" name="auth" value="可下载" title="可下载" checked>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea name="details" placeholder="请输入内容" class="layui-textarea" style="resize:none"></textarea>
+            </div>
+        </div>
+        <!--<input type="text" style="display: none;" name="id_student" value="${id_student}">-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" id="upload">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 弹出层：下载许可列表 -->
+<div id="resource-auth-list" style="display: none; margin: 30px 50px">
+    <div style="margin-bottom: 20px;" id="resource-auth-list-content">
+
+    </div>
+</div>
+
+<!--已通过资源列表，模板引擎-->
+<script id="resource" type="text/html">
+{{# if(d.length > 0){ }}
+    {{# layui.each(d, function(index, item){ }}
+        <div class="layui-row res-box">
+            <div class="layui-col-md2">
+                <a href="#"><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon" /></a>
+            </div>
+            <div class="layui-col-md10 layui-card-res-box">
+                <h3><b><a href="#">{{ item.name }}</a></b></h3>
+                {{# layui.each(item.tags, function(key, cell){ }}
+                    <span class="layui-badge-rim tags">{{ cell }}</span>
+                {{# }); }}
+                <p class="layui-word-aux">
+                    上传时间：{{ item.time }}
+                </p>
+            </div>
+        </div>
+    {{# }); }}
+{{# }else{ }}
+    暂无资源
+{{# } }}
+</script>
+
+<script type="text/javascript">
+    layui.use(['config', 'layer', 'form', 'laytpl', 'upload'], function(){
+        var $ = layui.jquery;
+        var config = layui.config;
+        var laytpl = layui.laytpl;
+        var layer = layui.layer;
+        var form = layui.form;
+        var upload = layui.upload;
+
+        // 获取用户已通过的资源
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'resource/getUserPassResource?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getPassResourceTpl = document.getElementById("resource").innerHTML;
+                var passResourceView = document.getElementById("pass-resource-box");
+                laytpl(getPassResourceTpl).render(data, function(html){
+                    passResourceView.innerHTML = html;
+                });
+            },
+            error: function(){
+                alert("数据加载失败");
+            }
+        });
+
+        // 获取用户待通过的资源
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'resource/getUserTopassResource?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getTopassResourceTpl = document.getElementById("resource").innerHTML;
+                var topassResourceView = document.getElementById("topass-resource-box");
+                laytpl(getTopassResourceTpl).render(data, function(html){
+                    topassResourceView.innerHTML = html;
+                });
+            },
+            error: function(){
+                alert("数据加载失败");
+            }
+        });
+
+        // 获取用户未通过的资源
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'resource/getUserFailResource?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getFailResourceTpl = document.getElementById("resource").innerHTML;
+                var failResourceView = document.getElementById("fail-resource-box");
+                laytpl(getFailResourceTpl).render(data, function(html){
+                    failResourceView.innerHTML = html;
+                });
+            },
+            error: function(){
+                alert("数据加载失败");
+            }
+        });
+
+
+        // 打开弹出层：上传资源
+        $("#openUploadLayer").on("click", function(){
+            layer.open({
+                type: 1,
+                title:"上传资源",
+                shade: 0,
+                area: ['70%','77%'],
+                content: $("#uploadLayer"),
+                end: function(){
+                    $("#uploadLayer").css("display", "none");
+                }
+            });
+        });
+
+        // 打开弹出层：查看下载许可列表
+        $("#resource-auth-list-btn").on("click", function(){
+            layer.open({
+                type: 1,
+                title:"下载许可列表",
+                shade: 0,
+                area: ['70%','77%'],
+                content: $("#resource-auth-list"),
+                end: function(){
+                    $("#resource-auth-list").css("display", "none");
+                }
+            });
+        });
+
+        // 上传文件
+        upload.render({
+            elem: "#choose-file",
+            url: config.base_server + "resource/uploadResource",
+            data: {
+                access_token: config.getToken(),
+                auth: function(){
+                    return $("input[name='auth']:checked").val();
+                },
+                tag: function(){
+                    var tag = "";
+                    $("input[name='tag']:checked").each(function(){
+                        tag += $(this).val() + ",";
+                    });
+                    return tag;
+                },
+                details: function(){
+                    return $("textarea[name='details']").val();
+                }
+            },
+            auto: false,
+            bindAction: "#upload",
+            accept: "file",
+            done: function(res){
+                console.log(res);
+                if(res.msg === "success"){
+                    layer.msg("上传成功");
+                    // layer.close(layer.index - 1);  // 关闭弹出层
+                    /*setTimeout(function(){// 1秒后跳转
+                        location.reload("#/recommend/resource");
+                    },1000);*/
+                }else if(res.msg === "empty"){
+                    layer.msg("文件不存在");
+                }else{
+                    layer.msg("上传失败");
+                }
+                return false;
+            }
+        });
+    });
+</script>

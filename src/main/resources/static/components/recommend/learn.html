@@ -1,0 +1,189 @@
+<style>
+    .layuiadmin-big-font{
+        font-size: 40px;
+        display: block;
+        margin: 20px 0;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    总计资料浏览量
+                    <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">次</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">1024</p>
+                    <p>
+                        所选课程的所有资料点击次数
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-log"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    课程通过率
+                    <span class="layui-badge layui-bg-red layuiadmin-badge pull-right">%</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">89%</p>
+                    <p>
+                        获得Pass的课程所占比例
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-ok-circle"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习资源
+                    <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">个</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">2</p>
+                    <p>
+                        上传的学习资源总数
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-read"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习伙伴
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">人</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">1</p>
+                    <p>
+                        添加的学习伙伴数量
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-user"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习情况
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-sm6" style="padding: 20px 20px 0 0;">
+                            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 400px;" id="showStudyCondition">
+                            </div>
+                        </div>
+                        <div class="layui-col-sm6" style="padding-top: 20px;">
+                            <div class="layuiadmin-card-list">
+                                <h2>成绩组成</h2>
+                                <div id="module-decription" style="margin: 20px 10px 0 10px;">
+                                    <p>第一单元测试：20%</p>
+                                    <p>第二单元测试：20%</p>
+                                    <p>第三单元测试：20%</p>
+                                    <p>第四单元测试：20%</p>
+                                    <p>第五单元测试：20%</p>
+                                </div>
+                            </div>
+
+                            <div class="layuiadmin-card-list" style="margin-top: 20px;">
+                                <h2>课程学习情况</h2>
+                                <table class="layui-table" style="margin-top: 20px;">
+                                    <thead>
+                                    <tr>
+                                        <th>课程单元</th>
+                                        <th>一</th>
+                                        <th>二</th>
+                                        <th>三</th>
+                                        <th>四</th>
+                                        <th>五</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>学习时长</td>
+                                        <td>10Hours</td>
+                                        <td>0Hours</td>
+                                        <td>1Hours</td>
+                                        <td>2Hours</td>
+                                        <td>4Hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td>最终成绩</td>
+                                        <td>Pass</td>
+                                        <td>Fail</td>
+                                        <td>Pass</td>
+                                        <td>Pass</td>
+                                        <td>Pass</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+
+<script type="text/javascript">
+    layui.use(['config'], function(){
+        var $ = layui.jquery;
+        var config = layui.config;
+
+        var myChart = echarts.init(document.getElementById('showStudyCondition'));
+        myChart.showLoading();
+        var option = {
+            title: {
+                text: '计算机网络',
+                subtext: '成绩分布情况'
+            },
+            tooltip: {},
+            toolbox: {
+                show : false
+            },
+            calculable : true,
+            legend: {
+                x: 'left',
+                y: 'bottom',
+                data: ['成绩']
+            },
+            radar : [
+                {
+                    indicator : [
+                        {text: "第一单元测试", max: 100},
+                        {text: "第二单元测试", max: 100},
+                        {text: "第三单元测试", max: 100},
+                        {text: "第四单元测试", max: 100},
+                        {text: "第五单元测试", max: 100}
+                    ]
+                }
+            ],
+            series: [
+                {
+                    type: 'radar',
+                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                    data: [
+                        {
+                            value: [83, 42, 78, 76, 79],
+                            name: '成绩'
+                        }
+                    ]
+                }
+            ]
+        };
+        myChart.hideLoading();
+        myChart.setOption(option);
+    });
+</script>
