@@ -13,6 +13,9 @@
         color: #009688;
         cursor: pointer;
     }
+    .friend-a{
+        cursor: pointer;
+    }
 </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
@@ -51,23 +54,25 @@
     </div>
 </div>
 
+<!--我的学习伙伴-->
 <script id="friend" type="text/html">
     {{# layui.each(d, function(index, item){ }}
-    <div class="layui-row layui-res detailsBox">
+    <div class="layui-row layui-res detailsBox" onmouseover="show(this);" onmouseout="hide(this);">
         <div class="layui-col-md2 layui-card-img-box">
             <a href="#"><img src="../../assets/images/head.png" class="friends-img" /></a>
         </div>
         <div class="layui-col-md10">
-            <h3><b><a href="#">{{ item.name }}</a></b></h3>
+            <h3><b><a class="friend-a" name="{{ item.friendId }}" onclick="direct(this);">{{ item.name }}</a></b></h3>
             <p class="layui-word-aux">信任值：{{ item.trust }}</p>
             <br/>
-            <p class="layui-word-aux">最高学历：{{ item.education }}&nbsp;&nbsp;&nbsp;&nbsp;所在地：{{ item.position }}</p>
-            <a class="details pull-right" style="display: none;">解除关系</a>
+            <p class="layui-word-aux" style="display: inline-block;">最高学历：{{ item.education }}&nbsp;&nbsp;&nbsp;&nbsp;所在地：{{ item.position }}</p>
+            <a class="details pull-right delete-relation" style="display: none;">解除关系</a>
         </div>
     </div>
     {{# }); }}
 </script>
 
+<!--推荐用户-->
 <script id="recommend-student" type="text/html">
     {{# layui.each(d, function(index, item){ }}
     <div class="layui-row layui-res">
@@ -75,7 +80,7 @@
             <img src="../../assets/images/head.png" class="layui-card-img" />
         </div>
         <div class="layui-col-md8 layui-card-mes-box">
-            <h4><b><a href="#">{{ item.studentName }}</a></b></h4>
+            <h4><b><a class="friend-a" name="{{ item.friendId }}">{{ item.studentName }}</a></b></h4>
             <p class="layui-word-aux">信任度：{{ item.trust }}</p>
             <p class="layui-word-aux">已选课程：{{ item.course }}</p>
         </div>
@@ -84,21 +89,31 @@
 </script>
 
 <script type="text/javascript">
-    layui.use(['config', 'element', 'laytpl'], function(){
+    function show(dom){
+        //console.log(dom.childNodes[3].childNodes[9]);
+        var node = dom.childNodes[3].childNodes[9];
+        node.setAttribute("style", "display: block;");
+    }
+
+    function hide(dom){
+        //console.log(dom.childNodes[3].childNodes[9]);
+        var node = dom.childNodes[3].childNodes[9];
+        node.setAttribute("style", "display: none;");
+    }
+
+    function direct(dom){   // 页面跳转
+        var id = dom.getAttribute("name");
+        //console.log(id);
+        sessionStorage.setItem("friendId", "" + id);
+        window.location.href = "#/recommend/message";
+    }
+
+    layui.use(['config', 'laytpl'], function(){
         var $ = layui.jquery;
         var config = layui.config;
         var laytpl = layui.laytpl;
-        var element = layui.element;
 
-        for(var i = 0; i < $(".detailsBox").length; i ++){
-            $(".detailsBox").eq(i).mouseover(function(){
-                $(this).find(".details").last().show();
-            });
-            $(".detailsBox").eq(i).mouseout(function(){
-                $(this).find(".details").last().hide();
-            });
-        }
-
+        // 获取全部好友
         $.ajax({
             type: "get",
             async: true,
@@ -111,13 +126,13 @@
                 laytpl(getFriendTpl).render(data, function(html){
                     friendView.innerHTML = html;
                 });
-                element.render();
             },
             error: function (){
                 alert("数据加载失败");
             }
         });
 
+        // 获取推荐好友
         $.ajax({
             type: "get",
             async: true,

@@ -27,7 +27,7 @@ import java.util.*;
  * @program: lmp-web
  * @description:
  * @author: zhaoyang
- * @create: 2019-11-14 21:57
+ * @create: 2019-11-4 21:57
  **/
 @Api(value = "资源相关功能", tags = "resource")
 @RestController
@@ -80,7 +80,11 @@ public class ResourceController {
         for(RecResource resource : resourceList){
             JSONObject resultCell = new JSONObject();
             resultCell.put("name", resource.getName());
-            resultCell.put("tags", resource.getTag().split(","));
+            if(!resource.getTag().equals("")) {
+                resultCell.put("tags", resource.getTag().split(","));
+            }else{
+                resultCell.put("tags", new String[0]);
+            }
             resultCell.put("time", resource.getTime());
             resultCell.put("type", resource.getType() + ".svg");
             resultCell.put("resourceId", resource.getResourceId());
@@ -104,7 +108,11 @@ public class ResourceController {
         for(RecResource resource : resourceList){
             JSONObject resultCell = new JSONObject();
             resultCell.put("name", resource.getName());
-            resultCell.put("tags", resource.getTag().split(","));
+            if(!resource.getTag().equals("")) {
+                resultCell.put("tags", resource.getTag().split(","));
+            }else{
+                resultCell.put("tags", new String[0]);
+            }
             resultCell.put("time", resource.getTime());
             resultCell.put("type", resource.getType() + ".svg");
             result.add(resultCell);
@@ -128,7 +136,11 @@ public class ResourceController {
             resultCell.put("name", resource.getName());
             resultCell.put("time", resource.getTime());
             resultCell.put("type", resource.getType() + ".svg");
-            resultCell.put("tags", resource.getTag().split(","));
+            if(!resource.getTag().equals("")) {
+                resultCell.put("tags", resource.getTag().split(","));
+            }else{
+                resultCell.put("tags", new String[0]);
+            }
             result.add(resultCell);
         }
         return result;

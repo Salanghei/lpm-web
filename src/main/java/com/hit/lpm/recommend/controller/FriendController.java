@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * @program: lmp-web
  * @description:
  * @author: zhaoyang
- * @create: 2019-11-14 21:57
+ * @create: 2019-11-4 21:57
  **/
 @Api(value = "学习伙伴相关功能", tags = "friend")
 @RestController
@@ -62,4 +63,15 @@ public class FriendController {
         }
         return result;
     }
+
+    /*@ApiOperation(value = "测试")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/test")
+    public ModelAndView test(){
+        ModelAndView modelAndView = new ModelAndView("components/recommend/test");
+        modelAndView.addObject("name", "lalala");
+        return modelAndView;
+    }*/
 }

@@ -24,7 +24,7 @@ import java.util.List;
  * @program: lmp-web
  * @description:
  * @author: zhaoyang
- * @create: 2019-11-14 19:07
+ * @create: 2019-11-4 19:07
  **/
 @Api(value = "个人信息", tags = "message")
 @RestController
@@ -37,12 +37,16 @@ public class StudentController {
 
     @ApiOperation(value = "查询个人信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "id", value = "ID", required = true, dataType = "String", paramType = "query")
     })
     @GetMapping
     @ResponseBody
-    public Student studentMessage(HttpServletRequest request){
+    public Student studentMessage(String id, HttpServletRequest request){
         Integer userId = baseController.getLoginUserId(request);
+        if(!id.equals("")) {
+            userId = Integer.valueOf(id);
+        }
         return studentService.selectById(userId);
     }
 }

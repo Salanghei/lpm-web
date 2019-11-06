@@ -1,9 +1,19 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <style>
     .self-mes-img-box img{
-        width: 80%;
+        width: 50%;
     }
     .layadmin-takerates{
-        padding: 30px 50px;
+        padding: 80px 50px;
+    }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-btn{
+        margin-top: 30px;
+    }
+    .self-mes{
+        padding-bottom: 30px;
     }
 </style>
 <div class="layui-container">
@@ -13,17 +23,8 @@
                 <div class="layui-card-header">个人信息</div>
 
                 <div class="layui-card-body layadmin-takerates">
-                    <div class="layui-row">
-                        <div class="layui-col-md4 self-mes-img-box">
-                            <img src="../../assets/images/head.png" class="layui-card-img" />
-                            <!--<div>
-                                <button class="layui-btn layui-btn-primary">修改头像</button>
-                                <a href="changeMes" class="layui-btn">修改资料</a>
-                            </div>-->
-                        </div>
-                        <div class="layui-col-md8 self-mes" style="padding-bottom: 30px;" id="message-box">
-                            <!--使用模板引擎 id="message"-->
-                        </div>
+                    <div class="layui-row" id="message-box">
+                        <!--使用模板引擎 id="message"-->
                     </div>
 
 
@@ -35,25 +36,46 @@
     </div>
 </div>
 <script id="message" type="text/html">
-    <p><b>昵称：{{ d.nickname }}</b></p>
-    <p>真实姓名：{{ d.studentName }}</p>
-    <p>性别：{{ d.gender }}</p>
-    <p>生日：{{ d.birthday }}</p>
-    <p>最高学历：{{ d.education }}</p>
-    <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
-    <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理、国际交流英语</p>
-    <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+    <div class="layui-col-md4 self-mes-img-box">
+        <img src="../../assets/images/head.png" class="layui-card-img" />
+        <div class="self-mes-img-btn">
+            {{# if(d.id === ""){ }}
+                <button class="layui-btn layui-btn-primary">修改头像</button>
+            {{# }else{ }}
+                <button class="layui-btn layui-btn-primary">结伴申请</button>
+            {{# } }}
+            <!--<a href="changeMes" class="layui-btn">修改资料</a>-->
+        </div>
+    </div>
+    <div class="layui-col-md8 self-mes">
+        <p><b>昵称：{{ d.nickname }}</b></p>
+        <p>真实姓名：{{ d.studentName }}</p>
+        <p>性别：{{ d.gender }}</p>
+        <p>生日：{{ d.birthday }}</p>
+        <p>最高学历：{{ d.education }}</p>
+        <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+        <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理</p>
+        <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+    </div>
 </script>
 <script type="text/javascript">
+    var id = sessionStorage.getItem("friendId");
+    if(id === null){
+        id = "";
+    }
+    sessionStorage.setItem("friendId", "");
+
     layui.use(['element', 'config', 'laytpl'], function(){
         var $ = layui.jquery;
         var config = layui.config;
         var laytpl = layui.laytpl;
         var element = layui.element;
-        $.get(config.base_server + 'message?access_token=' + config.getToken(), function(data){
+        console.log(config.base_server + 'message?access_token=' + config.getToken() + "&id=" + id);
+        $.get(config.base_server + 'message?access_token=' + config.getToken() + "&id=" + id, function(data){
             console.log(data);
             var getTpl = message.innerHTML;
             var view = document.getElementById("message-box");
+            data["id"] = id;
             laytpl(getTpl).render(data, function(html){
                 view.innerHTML = html;
             });

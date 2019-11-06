@@ -24,6 +24,10 @@
     .tags{
         margin: 10px 0 15px 0;
     }
+    .details{
+        color: #009688;
+        cursor: pointer;
+    }
 </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
@@ -156,22 +160,29 @@
     </div>
 </div>
 
-<!--已通过资源列表，模板引擎-->
+<!--资源列表，模板引擎-->
 <script id="resource" type="text/html">
 {{# if(d.length > 0){ }}
     {{# layui.each(d, function(index, item){ }}
-        <div class="layui-row res-box">
+        <div class="layui-row res-box" onmouseover="show(this);" onmouseout="hide(this);">
             <div class="layui-col-md2">
                 <a href="#"><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon" /></a>
             </div>
             <div class="layui-col-md10 layui-card-res-box">
                 <h3><b><a href="#">{{ item.name }}</a></b></h3>
-                {{# layui.each(item.tags, function(key, cell){ }}
-                    <span class="layui-badge-rim tags">{{ cell }}</span>
-                {{# }); }}
-                <p class="layui-word-aux">
+                <div>
+                    {{# if(item.tags.length > 0){ }}
+                        {{# layui.each(item.tags, function(key, cell){ }}
+                            <span class="layui-badge-rim tags">{{ cell }}</span>
+                        {{# }); }}
+                    {{# }else{ }}
+                        <span class="layui-badge-rim tags">无标签</span>
+                    {{# } }}
+                </div>
+                <p class="layui-word-aux" style="display: inline-block;">
                     上传时间：{{ item.time }}
                 </p>
+                <a class="details pull-right delete-relation" style="display: none;">删除</a>
             </div>
         </div>
     {{# }); }}
@@ -181,6 +192,16 @@
 </script>
 
 <script type="text/javascript">
+    function show(dom){
+        var node = dom.childNodes[3].childNodes[7];
+        node.setAttribute("style", "display: block;");
+    }
+
+    function hide(dom){
+        var node = dom.childNodes[3].childNodes[7];
+        node.setAttribute("style", "display: none;");
+    }
+
     layui.use(['config', 'layer', 'form', 'laytpl', 'upload'], function(){
         var $ = layui.jquery;
         var config = layui.config;
@@ -303,9 +324,9 @@
                 if(res.msg === "success"){
                     layer.msg("上传成功");
                     // layer.close(layer.index - 1);  // 关闭弹出层
-                    /*setTimeout(function(){// 1秒后跳转
+                    setTimeout(function(){// 1秒后跳转
                         location.reload("#/recommend/resource");
-                    },1000);*/
+                    },1000);
                 }else if(res.msg === "empty"){
                     layer.msg("文件不存在");
                 }else{
