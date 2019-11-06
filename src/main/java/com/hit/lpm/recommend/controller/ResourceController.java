@@ -193,7 +193,7 @@ public class ResourceController {
             resource.setAuth(auth);
             resource.setDetails(details);
             resource.setResourceId(Integer.valueOf(new SimpleDateFormat("MMddHHmmss").format(date)));
-            resource.setState("toPass");
+            resource.setState("pass");
             recResourceService.insertAllColumn(resource);
         }
         message.put("code", "0");

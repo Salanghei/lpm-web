@@ -94,7 +94,9 @@
                     <a class="message-list-item" href="javascript:;">
                         <img class="message-item-icon" src="{{item.icon}}">
                         <div class="message-item-right">
-                            <h2 class="message-item-title">{{item.title}}</h2>
+                            <h2 class="message-item-title">{{item.name}}</h2>
+                            <p class="message-item-text">{{item.details}}</p>
+                            <p class="message-item-text">信任值：{{item.trust}}</p>
                             <p class="message-item-text">{{item.time}}</p>
                         </div>
                     </a>
@@ -176,16 +178,16 @@
 </div>
 
 <script>
+    /*notices: [{
+        icon: 'assets/images/message.png',
+        title: '你收到了14份新周报',
+        time: '10个月前'
+    }, {
+        icon: 'assets/images/message.png',
+        title: '你收到了14份新周报',
+        time: '10个月前'
+    }],*/
     var dataList = {
-        notices: [{
-            icon: 'assets/images/message.png',
-            title: '你收到了14份新周报',
-            time: '10个月前'
-        }, {
-            icon: 'assets/images/message.png',
-            title: '你收到了14份新周报',
-            time: '10个月前'
-        }],
         messages: [{
             icon: 'assets/images/head.png',
             title: 'xx评论了你',
@@ -208,10 +210,23 @@
         }]
     };
 
-    layui.use(['element', 'laytpl'], function () {
+    layui.use(['element', 'laytpl', 'config'], function () {
         var $ = layui.jquery;
         var element = layui.element;
         var laytpl = layui.laytpl;
+        var config = layui.config;
+
+        $.ajax({
+            type: "get",
+            async: false,
+            url: config.base_server + 'friend/getFriendApply?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                dataList["notices"] = data;
+            }
+        });
 
         // 渲染消息列表
         laytpl(messageView.innerHTML).render(dataList, function (html) {

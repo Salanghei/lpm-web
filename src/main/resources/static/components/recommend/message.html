@@ -35,6 +35,13 @@
 
     </div>
 </div>
+
+<!-- 弹出层：结伴申请 -->
+<div id="friend-apply" style="display: none; margin: 30px 50px">
+    <!--模板引擎：结伴申请表格-->
+</div>
+
+<!--具体信息-->
 <script id="message" type="text/html">
     <div class="layui-col-md4 self-mes-img-box">
         <img src="../../assets/images/head.png" class="layui-card-img" />
@@ -42,7 +49,7 @@
             {{# if(d.id === ""){ }}
                 <button class="layui-btn layui-btn-primary">修改头像</button>
             {{# }else{ }}
-                <button class="layui-btn layui-btn-primary">结伴申请</button>
+                <button class="layui-btn layui-btn-primary" id="friend-apply-btn">结伴申请</button>
             {{# } }}
             <!--<a href="changeMes" class="layui-btn">修改资料</a>-->
         </div>
@@ -58,28 +65,94 @@
         <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
     </div>
 </script>
+
+<!--结伴申请表格-->
+<script id="apply-form-box" type="text/html">
+    <h3 style="margin: 20px 0;">申请理由：</h3>
+    <div id="apply-form">
+        <input type="text" name="toApplyUserId" value="{{ d.id }}" style="display: none;">
+        <input type="text" name="trust" value="{{ d.trust }}" style="display: none;">
+        <textarea name="details" class="layui-textarea" style="resize:none">你好，很高兴认识你，我想和你结为学习伙伴，共同学习共同进步~</textarea>
+        <div style="margin-top: 20px;">
+            <button class="layui-btn" id="submit">提交</button>
+        </div>
+    </div>
+</script>
+
 <script type="text/javascript">
     var id = sessionStorage.getItem("friendId");
-    if(id === null){
-        id = "";
-    }
-    sessionStorage.setItem("friendId", "");
+    var trust = sessionStorage.getItem("trust");
 
-    layui.use(['element', 'config', 'laytpl'], function(){
+    layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function(){
         var $ = layui.jquery;
         var config = layui.config;
         var laytpl = layui.laytpl;
         var element = layui.element;
-        console.log(config.base_server + 'message?access_token=' + config.getToken() + "&id=" + id);
+        var form = layui.form;
+        var layer = layui.layer;
+
+        var applyMessage = {};
+        applyMessage["id"] = id;
+        applyMessage["trust"] = trust;
+
+        // 获取页面信息
+        //console.log(config.base_server + 'message?access_token=' + config.getToken() + "&id=" + id);
         $.get(config.base_server + 'message?access_token=' + config.getToken() + "&id=" + id, function(data){
-            console.log(data);
+            //console.log(data);
             var getTpl = message.innerHTML;
             var view = document.getElementById("message-box");
             data["id"] = id;
             laytpl(getTpl).render(data, function(html){
                 view.innerHTML = html;
+                element.render();
             });
-            element.render();
+        });
+
+        var applyBoxTpl = document.getElementById("apply-form-box").innerHTML;
+        var applyBoxView = document.getElementById("friend-apply");
+        laytpl(applyBoxTpl).render(applyMessage, function(html){
+            applyBoxView.innerHTML = html;
+        });
+
+        // 这里要使用事件委托（为尚不存在的元素添加事件）
+        // 打开弹出层
+        $(document).on("click", "#friend-apply-btn", function(){
+            layer.open({
+                type: 1,
+                title:"结伴申请",
+                shade: 0,
+                area: ['50%','55%'],
+                content: $("#friend-apply"),
+                end: function(){
+                    $("#friend-apply").css("display", "none");
+                }
+            });
+        });
+
+        // 提交申请
+        $("#friend-apply").on("click", "#submit", function(){
+            var postData = {};
+            postData["access_token"] = config.getToken();
+            postData["toApplyUserId"] = $("input[name='toApplyUserId']").val();
+            postData["trust"] = $("input[name='trust']").val();
+            postData["details"] = $("textarea[name='details']").val();
+            //console.log(postData);
+            $.ajax({
+                type : "post",
+                async : true,
+                url : config.base_server + 'friend/applyFriend',
+                data: postData,
+                success: function(result){
+                    if(result.msg === "success"){
+                        layer.msg("结伴申请已发送");
+                        layer.close(layer.index - 1);  // 关闭弹出层
+                    }
+                },
+                error: function(errorMes){
+                    layer.msg("申请发送失败");
+                }
+            });
+            return false;
         });
     });
 </script>

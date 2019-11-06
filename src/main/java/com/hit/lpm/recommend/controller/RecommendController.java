@@ -146,6 +146,7 @@ public class RecommendController {
         for(Student student : studentLst){
             JSONObject resultCell = new JSONObject();
             resultCell.put("studentName", student.getStudentName());
+            resultCell.put("studentId", student.getStudentId());
             double trust = r.nextDouble() / 5 + 0.8;
             resultCell.put("trust", String.format("%.2f", trust));
             resultCell.put("course", "计算机网络");

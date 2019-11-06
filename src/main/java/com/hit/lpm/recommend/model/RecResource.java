@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @author: zhaoyang
  * @create: 2019-11-5 12:25
  **/
-
 @TableName("rec_resource")
 public class RecResource {
     private String name;
