@@ -145,7 +145,7 @@ public class RecommendController {
         Random r = new Random();
         for(Student student : studentLst){
             JSONObject resultCell = new JSONObject();
-            resultCell.put("studentName", student.getStudentName());
+            resultCell.put("studentName", student.getNickname());
             resultCell.put("studentId", student.getStudentId());
             double trust = r.nextDouble() / 5 + 0.8;
             resultCell.put("trust", String.format("%.2f", trust));

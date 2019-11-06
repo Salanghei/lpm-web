@@ -64,7 +64,7 @@ public class FriendController {
             Student friendInfo = studentService.selectById(friend.getFriendId());
             resultCell.put("friendId", friend.getFriendId());
             resultCell.put("trust", friend.getTrust());
-            resultCell.put("name", friendInfo.getStudentName());
+            resultCell.put("name", friendInfo.getNickname());
             resultCell.put("education", friendInfo.getEducation());
             resultCell.put("position", friendInfo.getCountry() + " | " + friendInfo.getProvince() + " | " + friendInfo.getCity());
             result.add(resultCell);

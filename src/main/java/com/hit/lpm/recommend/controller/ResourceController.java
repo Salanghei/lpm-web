@@ -60,7 +60,7 @@ public class ResourceController {
             resultCell.put("resourceId", resource.getResourceId());
             resultCell.put("auth", resource.getAuth());
             Integer uploaderId = resource.getStudentId();
-            resultCell.put("uploader", studentService.selectById(uploaderId).getStudentName());
+            resultCell.put("uploader", studentService.selectById(uploaderId).getNickname());
             result.add(resultCell);
         }
         return result;
