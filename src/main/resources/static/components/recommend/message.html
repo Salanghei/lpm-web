@@ -81,7 +81,11 @@
 
 <script type="text/javascript">
     var id = sessionStorage.getItem("friendId");
+    if(id === null){
+        id = "";
+    }
     var trust = sessionStorage.getItem("trust");
+    sessionStorage.setItem("friendId", "");
 
     layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function(){
         var $ = layui.jquery;
