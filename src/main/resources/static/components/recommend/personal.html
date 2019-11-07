@@ -19,6 +19,22 @@
     .loading-box p{
         line-height: 250px;
     }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 10px 0;
+    }
+    .resource-mes-img-box{
+        text-align: center;
+        margin-top: 20px;
+    }
+    .resource-mes-img-box img{
+        width: 30%;
+    }
 </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
@@ -71,17 +87,36 @@
     </div>
 </div>
 
+<!-- 弹出层：资源详情 -->
+<div id="resource-details" style="display: none; margin: 30px 50px">
+    <div style="padding: 50px 100px;" id="resource-details-content">
+
+    </div>
+</div>
+
+<!-- 弹出层：用户详情 -->
+<div id="student-details" style="display: none; margin: 30px 50px">
+    <div style="padding: 50px 100px;" id="student-details-content">
+
+    </div>
+</div>
+
+<!--全部资源-->
 <script id="resource" type="text/html">
 {{# layui.each(d, function(index, item){ }}
     <div class="layui-row layui-res">
         <div class="layui-col-md2">
-            <a href="#"><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon" /></a>
+            <a><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon" /></a>
         </div>
         <div class="layui-col-md10 layui-card-res-box">
-            <h3><b><a href="#">{{ item.name }}</a></b></h3>
-            {{# layui.each(item.tags, function(key, cell){ }}
-                <span class="layui-badge-rim tags">{{ cell }}</span>
-            {{# }); }}
+            <h3><b><a style="cursor: pointer;" class="resource-name" name="{{ item.resourceId }}" value="{{ item.uploaderId }}">{{ item.name }}</a></b></h3>
+            {{# if(item.tags.length > 0){ }}
+                {{# layui.each(item.tags, function(key, cell){ }}
+                    <span class="layui-badge-rim tags">{{ cell }}</span>
+                {{# }); }}
+            {{# }else{ }}
+                <span class="layui-badge-rim tags">无标签</span>
+            {{# } }}
             <p class="layui-word-aux">
                 上传时间：{{ item.time }}
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -92,6 +127,7 @@
 {{# }); }}
 </script>
 
+<!--推荐学习伙伴-->
 <script id="recommend-student" type="text/html">
 {{# layui.each(d, function(index, item){ }}
     <div class="layui-row layui-res">
@@ -99,7 +135,7 @@
             <img src="../../assets/images/head.png" class="layui-card-img" />
         </div>
         <div class="layui-col-md8 layui-card-mes-box">
-            <h4><b><a href="#">{{ item.studentName }}</a></b></h4>
+            <h4><b><a style="cursor: pointer;" class="student-name" name="{{ item.studentId }}" value="{{ item.trust }}">{{ item.studentName }}</a></b></h4>
             <p class="layui-word-aux">信任度：{{ item.trust }}</p>
             <p class="layui-word-aux">已选课程：{{ item.course }}</p>
         </div>
@@ -107,6 +143,7 @@
 {{# }); }}
 </script>
 
+<!--推荐课程-->
 <script id="recommend-course" type="text/html">
 {{# layui.each(d, function(index, item){ }}
     <div class="layui-res reco-res-box">
@@ -117,13 +154,112 @@
 {{# }); }}
 </script>
 
+<!--资源信息-->
+<script id="resource-message" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4 resource-mes-img-box">
+            <img src="../../assets/images/format-icon/{{ d.resource.type }}.svg" class="layui-card-icon" />
+        </div>
+        <div class="layui-col-md8 self-mes">
+            <p style="font-size: 20px;"><b>{{ d.resource.name }}</b></p>
+            {{# if(d.tags.length > 0){ }}
+                {{# layui.each(d.tags, function(key, cell){ }}
+                    <span class="layui-badge-rim tags">{{ cell }}</span>
+                {{# }); }}
+            {{# }else{ }}
+                <span class="layui-badge-rim tags">无标签</span>
+            {{# } }}
+            <p>上传时间：{{ d.resource.time }}</p>
+            <p>上传者：{{ d.uploader }}</p>
+            <p>资源描述：{{ d.resource.details }}</p>
+
+            {{# if(d.auth === "可下载" || d.auth === "all"){ }}
+                <button class="layui-btn" style="margin-top: 20px;">下载资源</button>
+            {{# } }}
+        </div>
+    </div>
+    <div style="margin-top: 30px;">
+        {{# if(d.auth === "仅查看"){ }}
+            <h3 style="margin: 10px 0;">申请理由：</h3>
+            <div id="resource-apply-form">
+                <input type="text" name="toApplyResourceId" value="{{ d.resource.resourceId }}" style="display: none;">
+                <input type="text" name="toApplyResourceName" value="{{ d.resource.name }}" style="display: none;">
+                <input type="text" name="toApplyResourceUserId" value="{{ d.resource.studentId }}" style="display: none;">
+                <textarea name="details" class="layui-textarea" style="resize:none">同学你好，我很需要这个资源，希望可以得到下载许可，谢谢啦~</textarea>
+                <div style="margin-top: 20px;">
+                    <button class="layui-btn" id="submit-resource-apply">申请资源</button>
+                </div>
+            </div>
+        {{# } }}
+        {{# if(d.auth === "all"){ }}
+            <h3 style="margin: 10px 0;">下载许可列表：</h3>
+            <div>
+            {{# if(d.authStudentList.length > 0){ }}
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>用户昵称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="showStudentLst">
+                    {{# layui.each(d.authStudentList, function(index, item){ }}
+                        <tr>
+                            <td>{{ item.authName }}</td>
+                            <td>{{ item.authTime }}</td>
+                            <td><a style="cursor: pointer;">撤销权限</a></td>
+                        </tr>
+                    {{# }); }}
+                    </tbody>
+                </table>
+            {{# }else{ }}
+                <p style="margin: 20px;">该资源暂无下载许可列表...</p>
+            {{# } }}
+            </div>
+        {{# } }}
+    </div>
+</script>
+
+<!--用户信息-->
+<script id="student-message" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4 self-mes-img-box">
+            <img src="../../assets/images/head.png" class="layui-card-img" />
+        </div>
+        <div class="layui-col-md8 self-mes">
+            <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
+            <p>真实姓名：{{ d.studentName }}</p>
+            <p>性别：{{ d.gender }}</p>
+            <p>生日：{{ d.birthday }}</p>
+            <p>最高学历：{{ d.education }}</p>
+            <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+            <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理</p>
+            <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+        </div>
+    </div>
+    <div style="margin-top: 30px;">
+        <h4 style="margin: 10px 0;">申请理由：</h4>
+        <div id="apply-form">
+            <input type="text" name="toApplyUserId" value="{{ d.studentId }}" style="display: none;">
+            <input type="text" name="trust" value="{{ d.trust }}" style="display: none;">
+            <textarea name="details" class="layui-textarea" style="resize:none">你好，很高兴认识你，我想和你结为学习伙伴，共同学习共同进步~</textarea>
+            <div style="margin-top: 20px;">
+                <button class="layui-btn" id="submit-friend-apply">申请结伴</button>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script src="../../assets/libs/echarts/echarts.min.js"></script>
 
 <script type="text/javascript">
-    layui.use(['config', 'element', 'laytpl'], function(){
+    layui.use(['config', 'element', 'laytpl', 'layer'], function(){
         var $ = layui.jquery;
         var config = layui.config;
         var laytpl = layui.laytpl;
+        var element = layui.element;
+        var layer = layui.layer;
 
         var myChart = echarts.init(document.getElementById("echarts-main"));
         myChart.showLoading();
@@ -236,11 +372,12 @@
             data: {},
             dataType: "json",
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 var getResourceTpl = document.getElementById("resource").innerHTML;
                 var resourceView = document.getElementById("resource-box");
                 laytpl(getResourceTpl).render(data, function(html){
                     resourceView.innerHTML = html;
+                    element.render();
                 });
             },
             error: function (){
@@ -260,6 +397,7 @@
                 var studentView = document.getElementById("recommend-student-box");
                 laytpl(getStudentTpl).render(data, function(html){
                     studentView.innerHTML = html;
+                    element.render();
                 });
             },
             error: function (){
@@ -280,11 +418,113 @@
                 var courseView = document.getElementById("recommend-course-box");
                 laytpl(getCourseTpl).render(data, function(html){
                     courseView.innerHTML = html;
+                    element.render();
                 });
             },
             error: function (){
                 alert("数据加载失败");
             }
+        });
+
+        // 资源详情弹出层
+        $(document).on("click", ".resource-name", function(){
+            var resourceId = $(this).attr("name");
+            var uploaderId = $(this).attr("value");
+            //console.log(resourceId);
+            $.ajax({
+                type: "get",
+                async: true,
+                url: config.base_server + 'resource/getResource?access_token=' + config.getToken() + "&resourceid=" + resourceId + "&uploaderid=" + uploaderId,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    var getResourceDetailsTpl = document.getElementById("resource-message").innerHTML;
+                    var resourceDetailsView = document.getElementById("resource-details-content");
+                    laytpl(getResourceDetailsTpl).render(data, function(html){
+                        resourceDetailsView.innerHTML = html;
+                        element.render();
+                    });
+                },
+                error: function (){
+                    alert("数据加载失败");
+                }
+            });
+
+            layer.open({
+                type: 1,
+                title:"资源详情",
+                shade: 0,
+                area: ['50%','70%'],
+                content: $("#resource-details"),
+                end: function(){
+                    $("#resource-details").css("display", "none");
+                }
+            });
+        });
+
+        // 用户详情弹出层
+        $(document).on("click", ".student-name", function(){
+            var studentId = $(this).attr("name");
+            var trust = $(this).attr("value");
+            //console.log(studentId);
+            $.ajax({
+                type: "get",
+                async: true,
+                url: config.base_server + 'message?access_token=' + config.getToken() + "&id=" + studentId,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    data["trust"] = trust;
+                    //console.log(data);
+                    var getStudentDetailsTpl = document.getElementById("student-message").innerHTML;
+                    var studentDetailsView = document.getElementById("student-details-content");
+                    laytpl(getStudentDetailsTpl).render(data, function(html){
+                        studentDetailsView.innerHTML = html;
+                        element.render();
+                    });
+                },
+                error: function (){
+                    alert("数据加载失败");
+                }
+            });
+
+            layer.open({
+                type: 1,
+                title:"用户详情",
+                shade: 0,
+                area: ['50%','70%'],
+                content: $("#student-details"),
+                end: function(){
+                    $("#student-details").css("display", "none");
+                }
+            });
+        });
+
+        // 提交申请
+        $("#student-details-content").on("click", "#submit-friend-apply", function(){
+            var postData = {};
+            postData["access_token"] = config.getToken();
+            postData["toApplyUserId"] = $("input[name='toApplyUserId']").val();
+            postData["trust"] = $("input[name='trust']").val();
+            postData["details"] = $("textarea[name='details']").val();
+            //console.log(postData);
+            $.ajax({
+                type : "post",
+                async : true,
+                url : config.base_server + 'friend/applyFriend',
+                data: postData,
+                success: function(result){
+                    if(result.msg === "success"){
+                        layer.msg("结伴申请已发送");
+                        layer.close(layer.index - 1);  // 关闭弹出层
+                    }
+                },
+                error: function(errorMes){
+                    layer.msg("申请发送失败");
+                }
+            });
+            return false;
         });
     });
 </script>

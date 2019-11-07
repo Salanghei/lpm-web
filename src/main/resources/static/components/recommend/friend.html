@@ -26,6 +26,15 @@
     .loading-box p{
         line-height: 250px;
     }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 10px 0;
+    }
 </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
@@ -61,9 +70,14 @@
                 </div>
             </div>
 
-
-
         </div>
+
+    </div>
+</div>
+
+<!-- 弹出层：用户详情 -->
+<div id="student-details" style="display: none; margin: 30px 50px">
+    <div style="padding: 50px 100px;" id="student-details-content">
 
     </div>
 </div>
@@ -100,6 +114,36 @@
         </div>
     </div>
     {{# }); }}
+</script>
+
+<!--用户信息-->
+<script id="student-message" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4 self-mes-img-box">
+            <img src="../../assets/images/head.png" class="layui-card-img" />
+        </div>
+        <div class="layui-col-md8 self-mes">
+            <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
+            <p>真实姓名：{{ d.studentName }}</p>
+            <p>性别：{{ d.gender }}</p>
+            <p>生日：{{ d.birthday }}</p>
+            <p>最高学历：{{ d.education }}</p>
+            <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+            <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理</p>
+            <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+        </div>
+    </div>
+    <div style="margin-top: 30px;">
+        <h4 style="margin: 10px 0;">申请理由：</h4>
+        <div id="apply-form">
+            <input type="text" name="toApplyUserId" value="{{ d.studentId }}" style="display: none;">
+            <input type="text" name="trust" value="{{ d.trust }}" style="display: none;">
+            <textarea name="details" class="layui-textarea" style="resize:none">你好，很高兴认识你，我想和你结为学习伙伴，共同学习共同进步~</textarea>
+            <div style="margin-top: 20px;">
+                <button class="layui-btn" id="submit-friend-apply">申请结伴</button>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type="text/javascript">
@@ -158,13 +202,68 @@
             $(this).find(".details").last().hide();
         });
 
+        // 用户详情弹出层
         $(document).on("click", ".recommend-friend-a", function(){
-            var id = this.getAttribute("name");
-            var trust = this.getAttribute("value");
-            //console.log(id);
-            sessionStorage.setItem("friendId", "" + id);
-            sessionStorage.setItem("trust", "" + trust);
-            window.location.href = "#/recommend/message";
+            var studentId = $(this).attr("name");
+            var trust = $(this).attr("value");
+            //console.log(studentId);
+            $.ajax({
+                type: "get",
+                async: true,
+                url: config.base_server + 'message?access_token=' + config.getToken() + "&id=" + studentId,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    data["trust"] = trust;
+                    //console.log(data);
+                    var getStudentDetailsTpl = document.getElementById("student-message").innerHTML;
+                    var studentDetailsView = document.getElementById("student-details-content");
+                    laytpl(getStudentDetailsTpl).render(data, function(html){
+                        studentDetailsView.innerHTML = html;
+                        element.render();
+                    });
+                },
+                error: function (){
+                    alert("数据加载失败");
+                }
+            });
+
+            layer.open({
+                type: 1,
+                title:"用户详情",
+                shade: 0,
+                area: ['50%','70%'],
+                content: $("#student-details"),
+                end: function(){
+                    $("#student-details").css("display", "none");
+                }
+            });
+        });
+
+        // 提交结伴申请
+        $("#student-details-content").on("click", "#submit-friend-apply", function(){
+            var postData = {};
+            postData["access_token"] = config.getToken();
+            postData["toApplyUserId"] = $("input[name='toApplyUserId']").val();
+            postData["trust"] = $("input[name='trust']").val();
+            postData["details"] = $("textarea[name='details']").val();
+            //console.log(postData);
+            $.ajax({
+                type : "post",
+                async : true,
+                url : config.base_server + 'friend/applyFriend',
+                data: postData,
+                success: function(result){
+                    if(result.msg === "success"){
+                        layer.msg("结伴申请已发送");
+                        layer.close(layer.index - 1);  // 关闭弹出层
+                    }
+                },
+                error: function(errorMes){
+                    layer.msg("申请发送失败");
+                }
+            });
+            return false;
         });
     });
 </script>

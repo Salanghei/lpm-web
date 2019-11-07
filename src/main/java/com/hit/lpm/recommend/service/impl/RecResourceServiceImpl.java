@@ -17,11 +17,5 @@ import java.util.List;
  **/
 @Service
 public class RecResourceServiceImpl extends ServiceImpl<RecResourceMapper, RecResource> implements RecResourceService {
-    @Resource
-    private RecResourceMapper recResourceMapper;
 
-    @Override
-    public List<RecResource> getAllResource(){
-        return recResourceMapper.selectAll();
-    }
 }
