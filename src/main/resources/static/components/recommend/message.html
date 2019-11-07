@@ -49,11 +49,7 @@
     <div class="layui-col-md4 self-mes-img-box">
         <img src="../../assets/images/head.png" class="layui-card-img" />
         <div class="self-mes-img-btn">
-            {{# if(d.id === ""){ }}
-                <button class="layui-btn layui-btn-primary">修改头像</button>
-            {{# }else{ }}
-                <button class="layui-btn layui-btn-primary" id="friend-apply-btn">结伴申请</button>
-            {{# } }}
+            <button class="layui-btn layui-btn-primary">修改头像</button>
             <!--<a href="changeMes" class="layui-btn">修改资料</a>-->
         </div>
     </div>
@@ -66,19 +62,6 @@
         <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
         <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理</p>
         <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
-    </div>
-</script>
-
-<!--结伴申请表格-->
-<script id="apply-form-box" type="text/html">
-    <h3 style="margin: 20px 0;">申请理由：</h3>
-    <div id="apply-form">
-        <input type="text" name="toApplyUserId" value="{{ d.id }}" style="display: none;">
-        <input type="text" name="trust" value="{{ d.trust }}" style="display: none;">
-        <textarea name="details" class="layui-textarea" style="resize:none">你好，很高兴认识你，我想和你结为学习伙伴，共同学习共同进步~</textarea>
-        <div style="margin-top: 20px;">
-            <button class="layui-btn" id="submit">提交</button>
-        </div>
     </div>
 </script>
 

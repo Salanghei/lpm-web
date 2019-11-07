@@ -427,7 +427,7 @@
         });
 
         // 资源详情弹出层
-        $(document).on("click", ".resource-name", function(){
+        $("#resource-box").on("click", ".resource-name", function(){
             var resourceId = $(this).attr("name");
             var uploaderId = $(this).attr("value");
             //console.log(resourceId);
@@ -438,7 +438,7 @@
                 data: {},
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     var getResourceDetailsTpl = document.getElementById("resource-message").innerHTML;
                     var resourceDetailsView = document.getElementById("resource-details-content");
                     laytpl(getResourceDetailsTpl).render(data, function(html){
@@ -464,7 +464,7 @@
         });
 
         // 用户详情弹出层
-        $(document).on("click", ".student-name", function(){
+        $("#recommend-student-box").on("click", ".student-name", function(){
             var studentId = $(this).attr("name");
             var trust = $(this).attr("value");
             //console.log(studentId);
