@@ -12,6 +12,13 @@
     .tags{
         margin: 10px 0 15px 0;
     }
+    .loading-box{
+        min-height: 250px;
+        text-align: center;
+    }
+    .loading-box p{
+        line-height: 250px;
+    }
 </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
@@ -46,6 +53,10 @@
                 <div class="layui-card-header">学习伙伴推荐</div>
                 <div class="layui-card-body layadmin-takerates" id="recommend-student-box">
                     <!--模板引擎,id="recommend-student" -->
+                    <!--数据加载前显示-->
+                    <div class="loading-box">
+                        <p><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading"></i>  Loading</p>
+                    </div>
                 </div>
             </div>
 
