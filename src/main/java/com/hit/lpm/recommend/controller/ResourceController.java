@@ -8,7 +8,9 @@ import com.hit.lpm.common.BaseController;
 import com.hit.lpm.potrait.model.Student;
 import com.hit.lpm.potrait.service.StudentService;
 import com.hit.lpm.recommend.model.RecResource;
+import com.hit.lpm.recommend.model.RecResourceApply;
 import com.hit.lpm.recommend.model.ResourceStudentAuth;
+import com.hit.lpm.recommend.service.RecResourceApplyService;
 import com.hit.lpm.recommend.service.RecResourceService;
 import com.hit.lpm.recommend.service.ResourceStudentAuthService;
 import io.swagger.annotations.Api;
@@ -43,6 +45,9 @@ public class ResourceController {
 
     @Autowired
     private ResourceStudentAuthService resourceStudentAuthService;
+
+    @Autowired
+    private RecResourceApplyService recResourceApplyService;
 
     private BaseController baseController = new BaseController();
 
@@ -120,75 +125,21 @@ public class ResourceController {
         return result;
     }
 
-    @ApiOperation(value = "获取某用户的已通过资源")
+    @ApiOperation(value = "获取某用户的资源")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "state", value = "审核状态", required = true, dataType = "String", paramType = "query")
     })
-    @GetMapping("/getUserPassResource")
+    @GetMapping("/getUserResource")
     @ResponseBody
-    public JSONArray getUserPassResource(HttpServletRequest request){
+    public JSONArray getUserTopassResource(String state, HttpServletRequest request){
         Integer userId = baseController.getLoginUserId(request);
         List<RecResource> resourceList = recResourceService.selectList(
-                new EntityWrapper<RecResource>().eq("student_id", userId).eq("state", "pass"));
+                new EntityWrapper<RecResource>().eq("student_id", userId).eq("state", state));
         JSONArray result = new JSONArray();
         for(RecResource resource : resourceList){
             JSONObject resultCell = new JSONObject();
-            resultCell.put("name", resource.getName());
-            if(!resource.getTag().equals("")) {
-                resultCell.put("tags", resource.getTag().split(","));
-            }else{
-                resultCell.put("tags", new String[0]);
-            }
-            resultCell.put("time", resource.getTime());
-            resultCell.put("type", resource.getType() + ".svg");
-            resultCell.put("resourceId", resource.getResourceId());
-            result.add(resultCell);
-        }
-        return result;
-    }
-
-    @ApiOperation(value = "获取某用户的待审核资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
-    })
-    @GetMapping("/getUserTopassResource")
-    @ResponseBody
-    public JSONArray getUserTopassResource(HttpServletRequest request){
-        Integer userId = baseController.getLoginUserId(request);
-        List<RecResource> resourceList = recResourceService.selectList(
-                new EntityWrapper<RecResource>().eq("student_id", userId).eq("state", "topass"));
-        JSONArray result = new JSONArray();
-        for(RecResource resource : resourceList){
-            JSONObject resultCell = new JSONObject();
-            resultCell.put("name", resource.getName());
-            if(!resource.getTag().equals("")) {
-                resultCell.put("tags", resource.getTag().split(","));
-            }else{
-                resultCell.put("tags", new String[0]);
-            }
-            resultCell.put("time", resource.getTime());
-            resultCell.put("type", resource.getType() + ".svg");
-            result.add(resultCell);
-        }
-        return result;
-    }
-
-    @ApiOperation(value = "获取某用户的未通过资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
-    })
-    @GetMapping("/getUserFailResource")
-    @ResponseBody
-    public JSONArray getUserFailResource(HttpServletRequest request){
-        Integer userId = baseController.getLoginUserId(request);
-        List<RecResource> resourceList = recResourceService.selectList(
-                new EntityWrapper<RecResource>().eq("student_id", userId).eq("state", "fail"));
-        JSONArray result = new JSONArray();
-        for(RecResource resource : resourceList){
-            JSONObject resultCell = new JSONObject();
-            resultCell.put("name", resource.getName());
-            resultCell.put("time", resource.getTime());
-            resultCell.put("type", resource.getType() + ".svg");
+            resultCell.put("resource", resource);
             if(!resource.getTag().equals("")) {
                 resultCell.put("tags", resource.getTag().split(","));
             }else{
@@ -274,6 +225,54 @@ public class ResourceController {
             resultCell.put("uploadTime", resource.getTime());
             resultCell.put("getAuthTime", rsa.getTime());
             resultCell.put("uploader", studentService.selectById(resource.getStudentId()).getNickname());
+            result.add(resultCell);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "资源权限申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "toApplyResourceId", value = "申请的资源ID", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "toApplyResourceName", value = "申请的资源名字", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "toApplyResourceUserId", value = "资源上传者ID", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "details", value = "申请理由", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping("/applyResource")
+    @ResponseBody
+    public Map<String, String> applyResource(String toApplyResourceId, String toApplyResourceName,
+                                             String toApplyResourceUserId, String details, HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        RecResourceApply recResourceApply = new RecResourceApply();
+        recResourceApply.setApplyUserId(userId);
+        recResourceApply.setResourceId(Integer.valueOf(toApplyResourceId));
+        recResourceApply.setResourceName(toApplyResourceName);
+        recResourceApply.setUserId(Integer.valueOf(toApplyResourceUserId));
+        Date date = new Date();
+        recResourceApply.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+        recResourceApply.setDetails(details);
+        recResourceApply.setState("toPass");
+        recResourceApplyService.insertAllColumn(recResourceApply);
+        Map<String, String> map = new HashMap<>();
+        map.put("msg", "success");
+        return map;
+    }
+
+    @ApiOperation(value = "获取某用户收到的资源申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/getResourceApply")
+    @ResponseBody
+    public JSONArray getResourceApply(HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        List<RecResourceApply> recResourceApplyList = recResourceApplyService.selectList(
+                new EntityWrapper<RecResourceApply>().eq("user_id", userId).eq("state", "toPass"));
+        JSONArray result = new JSONArray();
+        for(RecResourceApply  recResourceApply : recResourceApplyList){
+            JSONObject resultCell = new JSONObject();
+            resultCell.put("resourceApply", recResourceApply);
+            resultCell.put("applyUser", studentService.selectById(recResourceApply.getApplyUserId()).getNickname());
             result.add(resultCell);
         }
         return result;

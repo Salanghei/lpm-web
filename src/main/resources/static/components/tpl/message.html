@@ -120,16 +120,17 @@
 
                     {{# layui.each(d.messages, function(index, item){ }}
                     <a class="message-list-item" href="javascript:;">
-                        <img class="message-item-icon" src="{{item.icon}}">
+                        <!--<img class="message-item-icon" src="{{item.icon}}">-->
                         <div class="message-item-right">
-                            <h2 class="message-item-title">{{item.title}}</h2>
-                            <p class="message-item-text">{{item.content}}</p>
-                            <p class="message-item-text">{{item.time}}</p>
+                            <h2 class="message-item-title">{{item.resourceApply.resourceName}}</h2>
+                            <p class="message-item-text">{{item.resourceApply.details}}</p>
+                            <p class="message-item-text">申请人：{{item.applyUser}}</p>
+                            <p class="message-item-text">{{item.resourceApply.time}}</p>
                         </div>
                     </a>
                     {{# }); }}
 
-                    <a id="btn-more1" class="message-btn-more" href="javascript:;">加载更多</a>
+                    <!--<a id="btn-more1" class="message-btn-more" href="javascript:;">加载更多</a>-->
 
                     <!-- 列表为空 -->
                     <div class="message-list-empty" style="display: none;">
@@ -187,18 +188,18 @@
         title: '你收到了14份新周报',
         time: '10个月前'
     }],*/
+    /*messages: [{
+        icon: 'assets/images/head.png',
+        title: 'xx评论了你',
+        content: '哈哈哈哈哈哈',
+        time: '10个月前'
+    }, {
+        icon: 'assets/images/head.png',
+        title: 'xx评论了你',
+        content: '哈哈哈哈哈哈',
+        time: '10个月前'
+    }],*/
     var dataList = {
-        messages: [{
-            icon: 'assets/images/head.png',
-            title: 'xx评论了你',
-            content: '哈哈哈哈哈哈',
-            time: '10个月前'
-        }, {
-            icon: 'assets/images/head.png',
-            title: 'xx评论了你',
-            content: '哈哈哈哈哈哈',
-            time: '10个月前'
-        }],
         schedules: [{
             title: '你收到了14份新周报',
             time: '10个月前',
@@ -225,6 +226,18 @@
             success: function (data) {
                 //console.log(data);
                 dataList["notices"] = data;
+            }
+        });
+
+        $.ajax({
+            type: "get",
+            async: false,
+            url: config.base_server + 'resource/getResourceApply?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                dataList["messages"] = data;
             }
         });
 
