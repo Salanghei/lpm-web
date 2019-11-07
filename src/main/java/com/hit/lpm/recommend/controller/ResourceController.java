@@ -18,7 +18,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -253,5 +252,30 @@ public class ResourceController {
         message.put("code", "0");
         System.out.println(JSON.toJSONString(message));
         return message;
+    }
+
+    @ApiOperation(value = "有下载权限的资源列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/getAuthResource")
+    @ResponseBody
+    public JSONArray getAuthResource(HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        JSONArray result = new JSONArray();
+        List<ResourceStudentAuth> rsaList = resourceStudentAuthService.selectList(
+                new EntityWrapper<ResourceStudentAuth>().eq("student_id", userId));
+        for(ResourceStudentAuth rsa : rsaList){
+            JSONObject resultCell = new JSONObject();
+            RecResource resource = recResourceService.selectOne(
+                    new EntityWrapper<RecResource>().eq("resource_id", rsa.getResourceId()));
+            resultCell.put("resourceName", resource.getName());
+            resultCell.put("resourceId", resource.getResourceId());
+            resultCell.put("uploadTime", resource.getTime());
+            resultCell.put("getAuthTime", rsa.getTime());
+            resultCell.put("uploader", studentService.selectById(resource.getStudentId()).getNickname());
+            result.add(resultCell);
+        }
+        return result;
     }
 }

@@ -191,6 +191,34 @@
 {{# } }}
 </script>
 
+<!--下载许可列表 -->
+<script type="text/html" id="resource-auth-details">
+    {{# if(d.length > 0){ }}
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>资源名</th>
+            <th>上传时间</th>
+            <th>取得权限时间</th>
+            <th>上传者</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d, function(index, item){ }}
+        <tr>
+            <td><a style="cursor: pointer;" name="{{ d.resourceId }}">{{ item.resourceName }}</a></td>
+            <td>{{ item.uploadTime }}</td>
+            <td>{{ item.getAuthTime }}</td>
+            <td>{{ item.uploader }}</td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+    {{# }else{ }}
+    <p>暂无获取到下载许可的资源...</p>
+    {{# } }}
+</script>
+
 <script type="text/javascript">
     function show(dom){
         var node = dom.childNodes[3].childNodes[7];
@@ -274,7 +302,7 @@
                 type: 1,
                 title:"上传资源",
                 shade: 0,
-                area: ['70%','77%'],
+                area: ['50%','50%'],
                 content: $("#uploadLayer"),
                 end: function(){
                     $("#uploadLayer").css("display", "none");
@@ -284,11 +312,28 @@
 
         // 打开弹出层：查看下载许可列表
         $("#resource-auth-list-btn").on("click", function(){
+            $.ajax({
+                type: "get",
+                async: true,
+                url: config.base_server + 'resource/getAuthResource?access_token=' + config.getToken(),
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var getResourceAuthTpl = document.getElementById("resource-auth-details").innerHTML;
+                    var resourceAuthView = document.getElementById("resource-auth-list-content");
+                    laytpl(getResourceAuthTpl).render(data, function(html){
+                        resourceAuthView.innerHTML = html;
+                    });
+                },
+                error: function(){
+                    alert("数据加载失败");
+                }
+            });
             layer.open({
                 type: 1,
                 title:"下载许可列表",
                 shade: 0,
-                area: ['70%','77%'],
+                area: ['50%','50%'],
                 content: $("#resource-auth-list"),
                 end: function(){
                     $("#resource-auth-list").css("display", "none");
