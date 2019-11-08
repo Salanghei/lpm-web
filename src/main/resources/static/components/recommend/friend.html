@@ -94,7 +94,7 @@
             <p class="layui-word-aux">信任值：{{ item.trust }}</p>
             <br/>
             <p class="layui-word-aux" style="display: inline-block;">最高学历：{{ item.education }}&nbsp;&nbsp;&nbsp;&nbsp;所在地：{{ item.position }}</p>
-            <a class="details pull-right delete-relation" style="display: none;">解除关系</a>
+            <a class="details pull-right delete-relation" name="{{ item.friendId }}" style="display: none;">解除关系</a>
         </div>
     </div>
     {{# }); }}
@@ -265,5 +265,26 @@
             });
             return false;
         });
+
+        $("#friend-box").on("click", ".delete-relation", function(){
+            var friendId = $(this).attr("name");
+            $.ajax({
+                type : "get",
+                async : true,
+                url : config.base_server + 'friend/deleteFriend?access_token=' + config.getToken() + '&friendId=' + friendId,
+                data: {},
+                success: function(result){
+                    if(result.msg === "success"){
+                        layer.msg("解除成功");
+                        setTimeout(function(){// 1秒后跳转
+                            window.location.reload("#/recommend/friend");
+                        },1000);
+                    }
+                },
+                error: function(errorMes){
+                    layer.msg("解除失败");
+                }
+            });
+        })
     });
 </script>

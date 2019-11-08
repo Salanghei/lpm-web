@@ -292,8 +292,11 @@
                         data: {},
                         dataType: "json",
                         success: function (data) {
+                            layer.msg("已通过");
                             layer.close(index);
-                            window.location.reload("#/recommend/friend");
+                            setTimeout(function(){// 1秒后跳转
+                                window.location.reload();
+                            },1000);
                         }
                     });
                 },
@@ -305,8 +308,10 @@
                         data: {},
                         dataType: "json",
                         success: function (data) {
-                            // do something
-                            window.location.reload();
+                            layer.msg("已拒绝");
+                            setTimeout(function(){// 1秒后跳转
+                                window.location.reload();
+                            },1000);
                         }
                     });
                 }
@@ -324,9 +329,12 @@
                         url: config.base_server + 'resource/passResourceApply?access_token=' + config.getToken() + "&applyId=" + applyId,
                         data: {},
                         dataType: "json",
-                        success: function (data) {
+                        success: function () {
+                            layer.msg("已通过");
                             layer.close(index);
-                            window.location.reload("#/recommend/resource");
+                            setTimeout(function(){// 1秒后跳转
+                                window.location.reload();
+                            },1000);
                         }
                     });
                 },
@@ -337,9 +345,11 @@
                         url: config.base_server + 'resource/refuseResourceApply?access_token=' + config.getToken() + "&applyId=" + applyId,
                         data: {},
                         dataType: "json",
-                        success: function (data) {
-                            // do something
-                            window.location.reload();
+                        success: function () {
+                            layer.msg("已拒绝");
+                            setTimeout(function(){// 1秒后跳转
+                                window.location.reload();
+                            },1000);
                         }
                     });
                 }

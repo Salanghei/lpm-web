@@ -160,4 +160,22 @@ public class FriendController {
         result.put("msg", "success");
         return result;
     }
+
+    @ApiOperation(value = "解除学习伙伴关系")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "friendId", value = "学习伙伴ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/deleteFriend")
+    @ResponseBody
+    public JSONObject deleteFriend(String friendId, HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        recFriendService.delete(
+                new EntityWrapper<RecFriend>().eq("user_id", userId).eq("friend_id", friendId));
+        recFriendService.delete(
+                new EntityWrapper<RecFriend>().eq("user_id", friendId).eq("friend_id", userId));
+        JSONObject result = new JSONObject();
+        result.put("msg", "success");
+        return result;
+    }
 }
