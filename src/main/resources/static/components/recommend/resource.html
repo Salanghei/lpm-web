@@ -199,7 +199,7 @@
                 <p class="layui-word-aux" style="display: inline-block;">
                     上传时间：{{ item.resource.time }}
                 </p>
-                <a class="details pull-right delete-relation" style="display: none;">删除</a>
+                <a class="details pull-right delete-resource" name="{{ item.resource.resourceId }}" style="display: none;">删除</a>
             </div>
         </div>
     {{# }); }}
@@ -278,7 +278,7 @@
                 <tr>
                     <td>{{ item.authName }}</td>
                     <td>{{ item.authTime }}</td>
-                    <td><a style="cursor: pointer;">撤销权限</a></td>
+                    <td><a style="cursor: pointer;" class="delete-auth" name="{{ item.authId }}">撤销权限</a></td>
                 </tr>
                 {{# }); }}
                 </tbody>
@@ -443,7 +443,7 @@
                     layer.msg("上传成功");
                     // layer.close(layer.index - 1);  // 关闭弹出层
                     setTimeout(function(){// 1秒后跳转
-                        location.reload("#/recommend/resource");
+                        window.location.reload();
                     },1000);
                 }else if(res.msg === "empty"){
                     layer.msg("文件不存在");
@@ -487,6 +487,48 @@
                 content: $("#resource-details"),
                 end: function(){
                     $("#resource-details").css("display", "none");
+                }
+            });
+        });
+
+        $("#pass-resource-box").on("click", ".delete-resource", function(){
+            var resourceId = $(this).attr("name");
+            $.ajax({
+                type : "get",
+                async : true,
+                url : config.base_server + 'resource/deleteResource?access_token=' + config.getToken() + '&resourceId=' + resourceId,
+                data: {},
+                success: function(result){
+                    if(result.msg === "success"){
+                        layer.msg("删除成功");
+                        setTimeout(function(){// 1秒后跳转
+                            window.location.reload();
+                        },1000);
+                    }
+                },
+                error: function(errorMes){
+                    layer.msg("删除失败");
+                }
+            });
+        });
+
+        $("#resource-details-content").on("click", ".delete-auth", function (){
+            var authId = $(this).attr("name");
+            $.ajax({
+                type : "get",
+                async : true,
+                url : config.base_server + 'resource/deleteResourceAuth?access_token=' + config.getToken() + '&authId=' + authId,
+                data: {},
+                success: function(result){
+                    if(result.msg === "success"){
+                        layer.msg("撤销成功");
+                        setTimeout(function(){// 1秒后跳转
+                            window.location.reload();
+                        },1000);
+                    }
+                },
+                error: function(errorMes){
+                    layer.msg("撤销失败");
                 }
             });
         });

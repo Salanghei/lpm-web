@@ -109,6 +109,7 @@ public class ResourceController {
                 JSONObject authStudent = new JSONObject();
                 authStudent.put("authName", studentService.selectById(auth.getStudentId()).getNickname());
                 authStudent.put("authTime", auth.getTime());
+                authStudent.put("authId", auth.getRsaId());
                 authStudentList.add(authStudent);
             }
             result.put("authStudentList", authStudentList);
@@ -285,8 +286,7 @@ public class ResourceController {
     })
     @GetMapping("/passResourceApply")
     @ResponseBody
-    public JSONObject passResourceApply(String applyId, HttpServletRequest request){
-        Integer userId = baseController.getLoginUserId(request);
+    public JSONObject passResourceApply(String applyId){
         JSONObject result = new JSONObject();
         RecResourceApply recResourceApply = recResourceApplyService.selectById(applyId);
         recResourceApply.setState("pass");
@@ -301,19 +301,54 @@ public class ResourceController {
         return result;
     }
 
-    @ApiOperation(value = "拒绝好友申请")
+    @ApiOperation(value = "拒绝资源申请")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "applyId", value = "申请ID", required = true, dataType = "String", paramType = "query")
     })
     @GetMapping("/refuseResourceApply")
     @ResponseBody
-    public JSONObject refuseResourceApply(String applyId, HttpServletRequest request){
-        Integer userId = baseController.getLoginUserId(request);
+    public JSONObject refuseResourceApply(String applyId){
         JSONObject result = new JSONObject();
         RecResourceApply recResourceApply = recResourceApplyService.selectById(applyId);
         recResourceApply.setState("fail");
         recResourceApplyService.updateById(recResourceApply);  // 更新申请状态
+        result.put("msg", "success");
+        return result;
+    }
+
+    @ApiOperation(value = "删除资源")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "resourceId", value = "资源ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/deleteResource")
+    @ResponseBody
+    public JSONObject deleteResource(String resourceId){
+        // 删除资源
+        recResourceService.delete(
+                new EntityWrapper<RecResource>().eq("resource_id", resourceId));
+        // 删除授权信息
+        resourceStudentAuthService.delete(
+                new EntityWrapper<ResourceStudentAuth>().eq("resource_id", resourceId));
+        // 删除资源申请信息
+        recResourceApplyService.delete(
+                new EntityWrapper<RecResourceApply>().eq("resource_id", resourceId));
+        JSONObject result = new JSONObject();
+        result.put("msg", "success");
+        return result;
+    }
+
+    @ApiOperation(value = "撤销下载权限")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "authId", value = "资源ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/deleteResourceAuth")
+    @ResponseBody
+    public JSONObject deleteResourceAuth(String authId){
+        resourceStudentAuthService.deleteById(Integer.valueOf(authId));
+        JSONObject result = new JSONObject();
         result.put("msg", "success");
         return result;
     }
