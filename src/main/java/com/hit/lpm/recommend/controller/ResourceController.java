@@ -277,4 +277,44 @@ public class ResourceController {
         }
         return result;
     }
+
+    @ApiOperation(value = "通过资源申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "applyId", value = "申请ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/passResourceApply")
+    @ResponseBody
+    public JSONObject passResourceApply(String applyId, HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        JSONObject result = new JSONObject();
+        RecResourceApply recResourceApply = recResourceApplyService.selectById(applyId);
+        recResourceApply.setState("pass");
+        recResourceApplyService.updateById(recResourceApply);  // 更新申请状态
+        ResourceStudentAuth newAuth = new ResourceStudentAuth();
+        newAuth.setResourceId(recResourceApply.getResourceId());
+        newAuth.setStudentId(recResourceApply.getApplyUserId());
+        Date date = new Date();
+        newAuth.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+        resourceStudentAuthService.insertAllColumn(newAuth);
+        result.put("msg", "success");
+        return result;
+    }
+
+    @ApiOperation(value = "拒绝好友申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "applyId", value = "申请ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/refuseResourceApply")
+    @ResponseBody
+    public JSONObject refuseResourceApply(String applyId, HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        JSONObject result = new JSONObject();
+        RecResourceApply recResourceApply = recResourceApplyService.selectById(applyId);
+        recResourceApply.setState("fail");
+        recResourceApplyService.updateById(recResourceApply);  // 更新申请状态
+        result.put("msg", "success");
+        return result;
+    }
 }

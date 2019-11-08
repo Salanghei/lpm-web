@@ -73,6 +73,17 @@
     }
 
     /** //消息列表样式结束 */
+
+    /** 弹出层样式 */
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 10px 0;
+    }
 </style>
 
 <div class="layui-tab layui-tab-brief" style="padding: 5px 0 0 0;margin: 0;">
@@ -91,13 +102,13 @@
                 <div class="message-list">
 
                     {{# layui.each(d.notices, function(index, item){ }}
-                    <a class="message-list-item" href="javascript:;">
-                        <img class="message-item-icon" src="{{item.icon}}">
+                    <a class="message-list-item deal-friend-apply" href="javascript:;" name="{{ item.apply.applyId }}">
+                        <img class="message-item-icon" src="../../assets/images/head.png">
                         <div class="message-item-right">
-                            <h2 class="message-item-title">{{item.name}}</h2>
-                            <p class="message-item-text">{{item.details}}</p>
-                            <p class="message-item-text">信任值：{{item.trust}}</p>
-                            <p class="message-item-text">{{item.time}}</p>
+                            <h2 class="message-item-title">{{item.applyUser}}</h2>
+                            <p class="message-item-text">{{item.apply.details}}</p>
+                            <p class="message-item-text">信任值：{{item.apply.trust}}</p>
+                            <p class="message-item-text">{{item.apply.time}}</p>
                         </div>
                     </a>
                     {{# }); }}
@@ -119,7 +130,7 @@
                 <div class="message-list">
 
                     {{# layui.each(d.messages, function(index, item){ }}
-                    <a class="message-list-item" href="javascript:;">
+                    <a class="message-list-item deal-resource-apply" href="javascript:;" name="{{ item.resourceApply.applyId }}">
                         <!--<img class="message-item-icon" src="{{item.icon}}">-->
                         <div class="message-item-right">
                             <h2 class="message-item-title">{{item.resourceApply.resourceName}}</h2>
@@ -178,6 +189,7 @@
     </script>
 </div>
 
+
 <script>
     /*notices: [{
         icon: 'assets/images/message.png',
@@ -211,11 +223,12 @@
         }]
     };
 
-    layui.use(['element', 'laytpl', 'config'], function () {
+    layui.use(['element', 'laytpl', 'config', 'layer'], function () {
         var $ = layui.jquery;
         var element = layui.element;
         var laytpl = layui.laytpl;
         var config = layui.config;
+        var layer = layui.layer;
 
         $.ajax({
             type: "get",
@@ -266,5 +279,71 @@
         // 调整列表的高度(减去弹窗top、选项卡标题高度、清空按钮高度)
         var mdh = (document.documentElement.clientHeight || document.body.clientHeight) - 50 - 50 - 50;
         $('.message-list').height(mdh);
+
+        $(document).on("click", ".deal-friend-apply", function(){
+            var applyId = $(this).attr("name");
+            layer.confirm("是否同意该结伴申请？",
+                {title: "处理申请", btn: ["同意", "拒绝"]},
+                function(index){
+                    $.ajax({
+                        type: "get",
+                        async: true,
+                        url: config.base_server + 'friend/passFriendApply?access_token=' + config.getToken() + "&applyId=" + applyId,
+                        data: {},
+                        dataType: "json",
+                        success: function (data) {
+                            layer.close(index);
+                            window.location.reload("#/recommend/friend");
+                        }
+                    });
+                },
+                function() {
+                    $.ajax({
+                        type: "get",
+                        async: true,
+                        url: config.base_server + 'friend/refuseFriendApply?access_token=' + config.getToken() + "&applyId=" + applyId,
+                        data: {},
+                        dataType: "json",
+                        success: function (data) {
+                            // do something
+                            window.location.reload();
+                        }
+                    });
+                }
+            );
+        });
+
+        $(document).on("click", ".deal-resource-apply", function(){
+            var applyId = $(this).attr("name");
+            layer.confirm("是否同意该资源申请？",
+                {title: "处理申请", btn: ["同意", "拒绝"]},
+                function(index){
+                    $.ajax({
+                        type: "get",
+                        async: true,
+                        url: config.base_server + 'resource/passResourceApply?access_token=' + config.getToken() + "&applyId=" + applyId,
+                        data: {},
+                        dataType: "json",
+                        success: function (data) {
+                            layer.close(index);
+                            window.location.reload("#/recommend/resource");
+                        }
+                    });
+                },
+                function() {
+                    $.ajax({
+                        type: "get",
+                        async: true,
+                        url: config.base_server + 'resource/refuseResourceApply?access_token=' + config.getToken() + "&applyId=" + applyId,
+                        data: {},
+                        dataType: "json",
+                        success: function (data) {
+                            // do something
+                            window.location.reload();
+                        }
+                    });
+                }
+            );
+        });
     });
 </script>

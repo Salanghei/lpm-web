@@ -111,13 +111,53 @@ public class FriendController {
         for(RecFriendApply apply : applyList){
             JSONObject resultCell = new JSONObject();
             Student applyUser = studentService.selectById(apply.getApplyUserId());
-            resultCell.put("details", apply.getDetails());
-            resultCell.put("name", applyUser.getNickname());
-            resultCell.put("trust", apply.getTrust());
-            resultCell.put("time", apply.getTime());
-            resultCell.put("icon", "../../assets/images/head.png");
+            resultCell.put("apply", apply);
+            resultCell.put("applyUser", applyUser.getNickname());
             result.add(resultCell);
         }
+        return result;
+    }
+
+    @ApiOperation(value = "通过好友申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "applyId", value = "申请ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/passFriendApply")
+    @ResponseBody
+    public JSONObject passFriendApply(String applyId, HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        JSONObject result = new JSONObject();
+        RecFriendApply recFriendApply = recFriendApplyService.selectById(applyId);
+        recFriendApply.setState("pass");
+        recFriendApplyService.updateById(recFriendApply);  // 更新申请状态
+        RecFriend newFriend = new RecFriend();
+        newFriend.setUserId(userId);
+        newFriend.setFriendId(recFriendApply.getApplyUserId());
+        newFriend.setTrust(recFriendApply.getTrust());
+        recFriendService.insertAllColumn(newFriend);
+        newFriend.setUserId(recFriendApply.getApplyUserId());
+        newFriend.setFriendId(userId);
+        newFriend.setTrust(recFriendApply.getTrust());
+        recFriendService.insertAllColumn(newFriend);
+        result.put("msg", "success");
+        return result;
+    }
+
+    @ApiOperation(value = "拒绝好友申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "applyId", value = "申请ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/refuseFriendApply")
+    @ResponseBody
+    public JSONObject refuseFriendApply(String applyId, HttpServletRequest request){
+        Integer userId = baseController.getLoginUserId(request);
+        JSONObject result = new JSONObject();
+        RecFriendApply recFriendApply = recFriendApplyService.selectById(applyId);
+        recFriendApply.setState("fail");
+        recFriendApplyService.updateById(recFriendApply);  // 更新申请状态
+        result.put("msg", "success");
         return result;
     }
 }
