@@ -1,6 +1,6 @@
 package com.hit.lpm.recommend.service;
 
-import com.hit.lpm.potrait.model.Course;
+import com.hit.lpm.portrait.model.Course;
 
 import java.util.List;
 

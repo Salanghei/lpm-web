@@ -1,9 +1,8 @@
 package com.hit.lpm.recommend.service.impl;
 
-import com.hit.lpm.potrait.model.Student;
+import com.hit.lpm.portrait.model.Student;
 import com.hit.lpm.recommend.dao.RecStudentMapper;
 import com.hit.lpm.recommend.service.RecStudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

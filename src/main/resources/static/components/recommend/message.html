@@ -1,21 +1,26 @@
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <style>
-    .self-mes-img-box img{
+    .self-mes-img-box img {
         width: 50%;
     }
-    .layadmin-takerates{
+
+    .layadmin-takerates {
         padding: 80px 50px;
     }
-    .self-mes-img-box{
+
+    .self-mes-img-box {
         text-align: center;
     }
-    .self-mes-img-btn{
+
+    .self-mes-img-btn {
         margin-top: 30px;
     }
-    .self-mes{
+
+    .self-mes {
         padding-bottom: 30px;
     }
-    .self-mes p{
+
+    .self-mes p {
         margin: 10px 0;
     }
 </style>
@@ -23,11 +28,16 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md10 layui-col-md-offset1">
             <div class="layui-card" style="min-height: 500px;">
-                <div class="layui-card-header">个人信息</div>
-
-                <div class="layui-card-body layadmin-takerates">
-                    <div class="layui-row" id="message-box">
-                        <!--使用模板引擎 id="message"-->
+                <!--<div class="layui-card-header">个人信息</div>-->
+                <div class="layui-card-body ">
+                    <div class="layui-row" id="message-box"> <!--使用模板引擎 id="message"--></div>
+                    <div class="layui-row">
+                        <div class="layui-col-md6" name="感兴趣领域">
+                            <div id="domain-graph" style="width: 100%;height:250px;"></div>
+                        </div>
+                        <div class="layui-col-md6" name="感兴趣话题">
+                            <div id="topic-graph" style="width: 100%;height:250px;"></div>
+                        </div>
                     </div>
 
 
@@ -47,7 +57,7 @@
 <!--具体信息-->
 <script id="message" type="text/html">
     <div class="layui-col-md4 self-mes-img-box">
-        <img src="../../assets/images/head.png" class="layui-card-img" />
+        <img src="../../assets/images/head.png" class="layui-card-img"/>
         <div class="self-mes-img-btn">
             <button class="layui-btn layui-btn-primary">修改头像</button>
             <!--<a href="changeMes" class="layui-btn">修改资料</a>-->
@@ -66,22 +76,102 @@
 </script>
 
 <script type="text/javascript">
-    layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function(){
+    layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function () {
         var $ = layui.jquery;
         var config = layui.config;
         var laytpl = layui.laytpl;
         var element = layui.element;
-
         // 获取页面信息
         console.log('access_token=' + config.getToken());
-        $.get(config.base_server + 'message?access_token=' + config.getToken() + "&id=", function(data){
-            //console.log(data);
+        $.get(config.base_server + 'student/message?access_token=' + config.getToken() + "&id=", function (data) {
+            console.log(data);
             var getTpl = message.innerHTML;
             var view = document.getElementById("message-box");
-            laytpl(getTpl).render(data, function(html){
+            laytpl(getTpl).render(data, function (html) {
                 view.innerHTML = html;
                 element.render();
             });
+        });
+    });
+</script>
+<!-- js部分 -->
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+<script src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+
+<!-- 感兴趣的领域饼图渲染 感兴趣的话题词图渲染 -->
+<script type="text/javascript">
+    layui.use(['util', 'admin', 'config'], function () {
+        var $ = layui.jquery;
+        var config = layui.config;
+        // 基于准备好的dom，初始化echarts实例
+        var domainChart = echarts.init(document.getElementById('domain-graph'));
+        var topicChart = echarts.init(document.getElementById('topic-graph'));
+        var option0 = {
+            title: {
+                text: '感兴趣的领域',
+                x: 'center'
+            }
+        };
+        var option1 = {
+            title: {
+                text: '感兴趣的话题',
+                x: 'center'
+            }
+        };
+        $.get(config.base_server + 'interest/topic?access_token=' + config.getToken(), function (data) {
+            var topics = new Array();
+            for (i = 0; i < data.count; i++) {
+                var topic = new Object();
+                topic.name = data.data[i].topic;
+                topic.value = data.data[i].score * Math.ceil(Math.random() * 100);
+                topics.push(topic);
+            }
+            option1.series = [
+                {
+                    type: 'wordCloud',
+                    shape: 'pentagon',
+                    center: ['50%', '50%'],
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: topics
+                }
+            ]
+           // console.log(option1);
+            topicChart.setOption(option1, true);
+        });
+        $.get(config.base_server + 'interest/domain?access_token=' + config.getToken(), function (data) {
+            var domains = new Array();
+            for (i = 0; i < data.count; i++) {
+                var domain = new Object();
+                domain.name = data.data[i].domain;
+                domain.value = data.data[i].score * Math.ceil(Math.random() * 100);
+                domains.push(domain);
+            }
+            option0.series = [
+                {
+                    name: '感兴趣的领域',
+                    type: 'pie',
+                    radius: [30, 70],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    data: domains
+                }
+            ]
+            //console.log(option0);
+            domainChart.setOption(option0, true);
         });
     });
 </script>

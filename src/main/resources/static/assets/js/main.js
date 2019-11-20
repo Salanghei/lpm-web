@@ -44,7 +44,8 @@ layui.config({
         });
         index.regRouter(res.data);  // 注册路由
         index.loadHome({  // 加载主页
-            url: '#/welcome',
+            //url: '#/welcome',
+            url: '#/recommend/personal',
             name: '<i class="layui-icon layui-icon-home"></i>'
         });
     }, 'get');

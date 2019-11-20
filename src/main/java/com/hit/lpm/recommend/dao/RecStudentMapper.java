@@ -1,6 +1,6 @@
 package com.hit.lpm.recommend.dao;
 
-import com.hit.lpm.potrait.model.Student;
+import com.hit.lpm.portrait.model.Student;
 
 import java.util.List;
 

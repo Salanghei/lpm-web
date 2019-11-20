@@ -1,0 +1,133 @@
+<style>
+    .layui-badge-rim + .layui-badge-rim {
+        margin-left: 5px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <select id="userSltKey">
+                            <option value="">搜索条件</option>
+                            <option value="username">账号</option>
+                            <option value="nick_name">用户名</option>
+                            <option value="sex">性别</option>
+                            <option value="phone">手机号</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <input id="userEdtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="userBtnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button id="userBtnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="studentTable" lay-filter="studentTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="studentTableBar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">详情</a>
+</script>
+
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin', 'config'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var config = layui.config;
+        var mRoles = [];  // 全部角色
+
+        form.render('select');
+
+        // 渲染表格
+        table.render({
+            elem: '#studentTable',
+            url: config.base_server + 'student',
+            where: {
+                access_token: config.getToken()
+            },
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'numbers'},
+                {field: 'studentId', title: '账号'},
+                {field: 'studentName', title: '真实姓名'},
+                {field: 'nickname', title: '昵称'},
+                {field: 'gender', title: '性别'},
+                {field: 'education', title: '受教育程度'},
+                {field: 'country', title: '国家'},
+                {field: 'province', title: '省份'},
+                {field: 'city', title: '城市'},
+                {align: 'center', toolbar: '#studentTableBar', title: '操作', unresize: true, width: 100}
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        $('#studentBtnSearch').click(function () {
+            var key = $('#studentSltKey').val();
+            var value = $('#studentEdtSearch').val();
+            table.reload('studentTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 添加按钮点击事件
+        $('#studentBtnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 工具条点击事件
+        table.on('tool(studentTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') { // 删除
+                layer.confirm('确定删除此用户吗？', {
+                    skin: 'layui-layer-admin'
+                }, function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('student/' + obj.data.studentId, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'DELETE');
+                });
+            } else if (layEvent === 'reset') { // 重置密码
+                layer.confirm('确定重置此用户的密码吗？<br><span style="color: red;">（初始密码为123456）</span>', {
+                    skin: 'layui-layer-admin'
+                }, function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('student/psw/' + obj.data.studentId, {}, function (data) {
+                        layer.closeAll('loading');
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                    }, 'PUT');
+                });
+            } else if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }
+        });
+    });
+</script>

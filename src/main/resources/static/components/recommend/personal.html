@@ -471,7 +471,7 @@
             $.ajax({
                 type: "get",
                 async: true,
-                url: config.base_server + 'message?access_token=' + config.getToken() + "&id=" + studentId,
+                url: config.base_server + 'student/message?access_token=' + config.getToken() + "&id=" + studentId,
                 data: {},
                 dataType: "json",
                 success: function (data) {

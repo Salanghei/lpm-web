@@ -1,0 +1,75 @@
+<style>
+    .layui-badge-rim + .layui-badge-rim {
+        margin-left: 5px;
+    }
+</style>
+<script id="demo" type="text/html">
+    <!--<h3>{{ d.title }}</h3>-->
+    {{# layui.each(d.data, function(index, item){ }}
+    <div class="layui-col-md4">
+        <div class="layui-card">
+            <div class="layui-card-header" style="font-size: 25px;">
+                <a href=""> {{ item.courseName }}</a>
+            </div>
+            <div class="layui-card-body" style="height: 100px">
+                <div>
+                    <p>讲师：<span class="layuiadmin-span-color">{{ item.teacher }}</span></p>
+                    <p>开课机构：<span class="layuiadmin-span-color">{{ item.courseSchool }}</span></p>
+                    <p>课程类型: <span class="layuiadmin-span-color">{{ item.courseType || '' }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{# }); }}
+    {{# if(d.data.length === 0){ }}
+    无数据
+    {{# } }}
+
+</script>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15" style="width: 100%; margin: 20px auto;" id="view">
+    </div>
+</div>
+
+<script>
+    layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function () {
+        var laytpl = layui.laytpl;
+        var $ = layui.jquery;
+        var config = layui.config;
+        $.get(config.base_server + 'course?page=0&limit=10&access_token=' + config.getToken(), function (data) {
+            //第三步：渲染模版
+            var courses = { //数据
+                //"title": "Layui常用模块",
+                "list": [
+                    {"courseName": "计算机网络", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"},
+                    {"courseName": "数据结构", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"},
+                    {"courseName": "编译原理", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"},
+                    {"courseName": "C语言", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"},
+                    {"courseName": "狂暴的宇宙", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"},
+                    {"courseName": "量子力学与量子计算", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"},
+                    {"courseName": "云计算与软件工程", "teacher": "Paul Francis、Brian Schmidt", "courseSchool": "澳洲国立大学", "courseType": "计算机"}]
+            }
+            if(data==null) data = courses;
+            var getTpl = demo.innerHTML
+                , view = document.getElementById('view');
+            laytpl(getTpl).render(data, function (html) {
+                view.innerHTML = html;
+            });
+        });
+
+    });
+
+</script>
+<style id="LAY_layadmin_theme">.layui-side-menu, .layadmin-pagetabs .layui-tab-title li:after, .layadmin-pagetabs .layui-tab-title li.layui-this:after, .layui-layer-admin .layui-layer-title, .layadmin-side-shrink .layui-side-menu .layui-nav > .layui-nav-item > .layui-nav-child {
+    background-color: #20222A !important;
+}
+
+.layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a {
+    background-color: #009688 !important;
+}
+
+.layui-layout-admin .layui-logo {
+    background-color: #20222A !important;
+}</style>
+
