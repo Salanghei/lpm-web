@@ -73,4 +73,10 @@ public class StringUtil {
     public static boolean isWord(String str) {
         return str.matches("[\\u4E00-\\u9FA5a-zA-Z]+");
     }
+    public static boolean isChineseWord(String str) {
+        return str.matches("[\\u4E00-\\u9FA5]+");
+    }
+    public static boolean isEnglishWord(String str) {
+        return str.matches("[a-zA-Z]+");
+    }
 }

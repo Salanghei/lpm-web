@@ -5,7 +5,7 @@
         select student_id from lpm_student order by rand() limit #{n};
     </select>
 
-    <select id="selectRandomStudentInfo" resultType="com.hit.lpm.potrait.model.Student">
+    <select id="selectRandomStudentInfo" resultType="com.hit.lpm.portrait.model.Student">
         select * from lpm_student order by rand() limit 3;
     </select>
 </mapper>
