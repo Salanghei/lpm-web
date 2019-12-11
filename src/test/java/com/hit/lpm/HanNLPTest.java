@@ -3,8 +3,8 @@ package com.hit.lpm;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hit.lpm.common.utils.StringUtil;
-import com.hit.lpm.potrait.model.Topic;
-import com.hit.lpm.potrait.service.TopicService;
+import com.hit.lpm.portrait.model.Topic;
+import com.hit.lpm.portrait.service.TopicService;
 import org.junit.Test;
 
 import java.io.*;
