@@ -13,6 +13,8 @@ import com.hit.lpm.recommend.model.ResourceStudentAuth;
 import com.hit.lpm.recommend.service.RecResourceApplyService;
 import com.hit.lpm.recommend.service.RecResourceService;
 import com.hit.lpm.recommend.service.ResourceStudentAuthService;
+import com.hit.lpm.system.model.User;
+import com.hit.lpm.system.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,13 +38,14 @@ import java.util.*;
 @Api(value = "资源相关功能", tags = "resource")
 @RestController
 @RequestMapping("${api.version}/resource")
-public class ResourceController {
+public class ResourceController extends BaseController {
     @Autowired
     private RecResourceService recResourceService;
 
     @Autowired
     private StudentService studentService;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private ResourceStudentAuthService resourceStudentAuthService;
 
@@ -89,7 +92,7 @@ public class ResourceController {
     @GetMapping("/getResource")
     @ResponseBody
     public JSONObject getResource(String resourceid, String uploaderid, HttpServletRequest request){
-        Integer userId = baseController.getLoginUserId(request);
+        Integer userId = getLoginUserId(request);
         JSONObject result = new JSONObject();
         RecResource resource = recResourceService.selectOne(
                 new EntityWrapper<RecResource>().eq("resource_id", Integer.valueOf(resourceid)).eq("student_id", Integer.valueOf(uploaderid)));
@@ -134,9 +137,12 @@ public class ResourceController {
     @GetMapping("/getUserResource")
     @ResponseBody
     public JSONArray getUserTopassResource(String state, HttpServletRequest request){
-        Integer userId = baseController.getLoginUserId(request);
+        Integer userId = getLoginUserId(request);
+        User user = userService.selectById(userId);
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         List<RecResource> resourceList = recResourceService.selectList(
-                new EntityWrapper<RecResource>().eq("student_id", userId).eq("state", state));
+                new EntityWrapper<RecResource>().eq("student_id", stuId).eq("state", state));
         JSONArray result = new JSONArray();
         for(RecResource resource : resourceList){
             JSONObject resultCell = new JSONObject();

@@ -3,9 +3,13 @@ package com.hit.lpm;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hit.lpm.common.utils.StringUtil;
+
+import com.hit.lpm.portrait.service.TopicService;
+
 import com.hit.lpm.portrait.model.Topic;
 import com.hit.lpm.portrait.service.TopicService;
 import org.junit.Test;
+
 
 import java.io.*;
 import java.util.*;
@@ -24,21 +28,21 @@ public class HanNLPTest {
     private TopicService topicService;
 
     //写入数据库
-    @Test
-    public void insertTopic() throws IOException {
-        generateShortFile();
-        testSegment();
-        File file = new File("terms.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String str = null;
-        while ((str = reader.readLine()) != null) {
-            Topic topic = new Topic();
-            topic.setTopicName(str.split(":")[0]);
-            topic.setCount(Integer.valueOf(str.split(":")[1]));
-            topicService.insert(topic);
-        }
-        reader.close();
-    }
+//    @Test
+//    public void insertTopic() throws IOException {
+//        generateShortFile();
+//        testSegment();
+//        File file = new File("terms.txt");
+//        BufferedReader reader = new BufferedReader(new FileReader(file));
+//        String str = null;
+//        while ((str = reader.readLine()) != null) {
+//            Topic topic = new Topic();
+//            topic.setTopicName(str.split(":")[0]);
+//            topic.setCount(Integer.valueOf(str.split(":")[1]));
+//            topicService.insert(topic);
+//        }
+//        reader.close();
+//    }
 
     //通过课程文件生成领域关键词
     public static void segmentDomain() throws IOException {
@@ -49,7 +53,7 @@ public class HanNLPTest {
         BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
         String str = null;
         while ((str = reader.readLine()) != null) {
-            String[] words = str.split("[^\\dA-Za-z\\u3007\\u4E00-\\u9FCB\\uE815-\\uE864]");
+            String[] words = StringUtil.spilt(str);
             List<String> termList = new ArrayList<String>(Arrays.asList(words));
             for (String term : termList) {
                 wordMap.put(term, wordMap.getOrDefault(term, 0) + 1);
