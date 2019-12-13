@@ -34,6 +34,8 @@ public class StudentPortrait implements Serializable {
     private String province;
     private String city;
     private List<Topic> topics;
+    private List<Course> courses;
+
 
     public StudentPortrait() {
     }
@@ -137,5 +139,13 @@ public class StudentPortrait implements Serializable {
 
     public void setTopics(List<Topic> topics) {
         this.topics = topics;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 }

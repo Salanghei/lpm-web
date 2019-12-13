@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hit.lpm.common.BaseController;
 import com.hit.lpm.common.PageResult;
+import com.hit.lpm.portrait.model.Course;
 import com.hit.lpm.portrait.model.Student;
+import com.hit.lpm.portrait.model.StudentPortrait;
 import com.hit.lpm.portrait.service.StudentService;
 import com.hit.lpm.system.model.User;
 import com.hit.lpm.system.service.UserService;
@@ -14,13 +16,18 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.wf.jwtp.annotation.RequiresPermissions;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: lmp-web
@@ -36,6 +43,20 @@ public class StudentController extends BaseController {
     private StudentService studentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @ApiOperation(value = "查询画像")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "stuId", value = "ID", required = true, dataType = "Integer", paramType = "query")
+    })
+    @GetMapping("/portrait")
+    @ResponseBody
+    public StudentPortrait studentPortrait(Integer stuId, HttpServletRequest request) {
+        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class);
+        return studentPortrait;
+    }
 
     @ApiOperation(value = "查询个人信息")
     @ApiImplicitParams({

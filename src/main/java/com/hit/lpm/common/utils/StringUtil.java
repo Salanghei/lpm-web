@@ -79,4 +79,7 @@ public class StringUtil {
     public static boolean isEnglishWord(String str) {
         return str.matches("[a-zA-Z]+");
     }
+    public static String[] spilt(String str){
+        return str.split("[^\\dA-Za-z\\u3007\\u4E00-\\u9FCB\\uE815-\\uE864]");
+    }
 }

@@ -3,6 +3,7 @@ package com.hit.lpm.portrait.model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.hit.lpm.common.utils.StringUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,6 +32,16 @@ public class Course implements Serializable {
     private String courseType;
     private String prerequisites;
     private String courseSchool;
+
+    public String[] getDomains() {
+
+        String[] domains = {"其他"};
+        if (courseType != null && !courseType.isEmpty()) {
+            domains = StringUtil.spilt(courseType);
+        }
+        return domains;
+
+    }
 
     public String getCourseId() {
         return courseId;
