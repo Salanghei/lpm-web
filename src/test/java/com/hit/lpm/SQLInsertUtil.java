@@ -1,14 +1,14 @@
 package com.hit.lpm;
 
-import com.hankcs.hanlp.seg.common.Term;
-import com.hankcs.hanlp.tokenizer.StandardTokenizer;
-import com.hit.lpm.common.utils.StringUtil;
-import com.hit.lpm.potrait.model.Course;
-import com.hit.lpm.potrait.model.Student;
-import com.hit.lpm.potrait.model.Topic;
-import com.hit.lpm.potrait.service.CourseService;
-import com.hit.lpm.potrait.service.StudentService;
-import com.hit.lpm.potrait.service.TopicService;
+import com.hit.lpm.common.nlp.NLPUtil;
+import com.hit.lpm.portrait.model.Course;
+import com.hit.lpm.portrait.model.Student;
+import com.hit.lpm.portrait.model.StudentCourseRelation;
+import com.hit.lpm.portrait.model.Topic;
+import com.hit.lpm.portrait.service.CourseService;
+import com.hit.lpm.portrait.service.StudentCourseRelationService;
+import com.hit.lpm.portrait.service.StudentService;
+import com.hit.lpm.portrait.service.TopicService;
 import com.hit.lpm.system.model.User;
 import com.hit.lpm.system.service.UserRoleService;
 import com.hit.lpm.system.service.UserService;
@@ -37,10 +37,12 @@ public class SQLInsertUtil {
 
     //@Autowired
     CourseService courseService;
-    //Autowired
+    @Autowired
     TopicService topicService;
     @Autowired
     StudentService studentService;
+    @Autowired
+    StudentCourseRelationService studentCourseRelationService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -50,7 +52,7 @@ public class SQLInsertUtil {
         courseSegment();
     }
 
-    //@Test
+    @Test
     public void insertTopic() throws IOException {
         List<Topic> topics = courseSegment();
         topicService.insertBatch(topics);
@@ -59,7 +61,7 @@ public class SQLInsertUtil {
     //对课程信息进行分词
     private static List<Topic> courseSegment() throws IOException {
         Map<String, Topic> wordMap = new TreeMap<>();
-        File file = new File("D:\\doc\\实验室\\教育大数据\\科委数据20160101-20181231\\1_课程信息\\1_课程信息_0.csv");//搜索日志
+        File file = new File("D:\\doc\\实验室\\教育大数据\\科委数据20160101-20181231\\1_课程信息\\1_课程信息_0.csv");//课程信息
         File outFile = new File("termsFromCourse.txt");
         BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
@@ -71,35 +73,36 @@ public class SQLInsertUtil {
                 //课程id,课程名称,课程类别,授课教师,开课机构org,开课机构名称,开课时间,结课时间,先修要求,课程介绍
                 String[] cols = iterator.next();
                 if (line != 0) {
-                    List<Term> termList = new ArrayList<>();
-                    if (!cols[1].isEmpty()) termList.addAll(StandardTokenizer.segment(cols[1]));//课程名称
-                    if (!cols[9].isEmpty()) termList.addAll(StandardTokenizer.segment(cols[9]));//课程名称
+                    List<String> termList = new ArrayList<>();
+                    if (!cols[1].isEmpty())
+                        termList.addAll(NLPUtil.segment(cols[1]));//课程名称
+                    if (!cols[3].isEmpty())
+                        termList.addAll(NLPUtil.segment(cols[3]));//授课教师
+                    if (!cols[9].isEmpty())
+                        termList.addAll(NLPUtil.segment(cols[9]));//课程介绍
                     String[] domains = {"其他"};
                     if (!cols[2].isEmpty())
                         domains = cols[2].split("[^\\dA-Za-z\\u3007\\u4E00-\\u9FCB\\uE815-\\uE864]");//课程类别
-                    for (Term term : termList) {
+                    for (String term : termList) {
                         Topic topic;
-                        if (StringUtil.isWord(term.word) && term.word.length() >= 2) {
-                            if (wordMap.get(term.word) != null) {
-                                topic = wordMap.get(term.word);
-                                topic.setCount(topic.getCount() + 1);
-                                Map<String, Integer> domainMap = topic.getDomainMap();
-                                for (String domain : domains) {
-                                    domainMap.put(domain, domainMap.getOrDefault(domain, 0) + 1);
-                                }
-                            } else {
-                                topic = new Topic();
-                                topic.setTopicName(term.word);
-                                topic.setCount(1);
-                                Map<String, Integer> domainMap = new HashMap<>();
-                                for (String domain : domains) {
-                                    domainMap.put(domain, 1);
-                                }
-                                topic.setDomainMap(domainMap);
-                                wordMap.put(term.word, topic);
+                        if (wordMap.get(term) != null) {
+                            topic = wordMap.get(term);
+                            topic.setCount(topic.getCount() + 1);
+                            Map<String, Integer> domainMap = topic.getDomainMap();
+                            for (String domain : domains) {
+                                domainMap.put(domain, domainMap.getOrDefault(domain, 0) + 1);
                             }
+                        } else {
+                            topic = new Topic();
+                            topic.setTopicName(term);
+                            topic.setCount(1);
+                            Map<String, Integer> domainMap = new HashMap<>();
+                            for (String domain : domains) {
+                                domainMap.put(domain, 1);
+                            }
+                            topic.setDomainMap(domainMap);
+                            wordMap.put(term, topic);
                         }
-
                     }
                 }
                 line++;
@@ -120,8 +123,7 @@ public class SQLInsertUtil {
             }
         });
         for (Topic topic : topics) {
-            if (topic.getDomainMap().size() < 10)
-                writer.write(topic.getTopicName() + ":" + topic.getDomain() + " " + topic.getCount() + " " + topic.getDomainMap() + "\n");
+            writer.write(topic.getTopicName() + ":" + topic.getDomain() + " " + topic.getCount() + " " + topic.getDomainMap() + "\n");
         }
         reader.close();
         writer.flush();
@@ -158,6 +160,61 @@ public class SQLInsertUtil {
                 }
                 line++;
                 if (line % 100 == 0) System.out.println("当前执行到" + line + "行！");
+            }
+            System.out.println(line);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //将学生选课信息导入数据库
+    @Test
+    public void insertSC() throws FileNotFoundException {
+        File file = new File("D:\\doc\\实验室\\教育大数据\\科委数据20160101-20181231\\4_用户选退课信息\\4_用户选退课信息_0.csv");//课程信息
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        int line = 0;
+        String charset = "utf-8";
+        try (CSVReader csvReader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))).build()) {
+            Iterator<String[]> iterator = csvReader.iterator();
+            List<StudentCourseRelation> scrs = new ArrayList<>();
+            while (iterator.hasNext() && line < 100000000) {
+                //课程id,用户id,是否处在选课状态,选课时间,退课时间,视频观看率,是否获得证书,获得证书日期,成绩,成绩级别（F为未通过）
+                String[] cols = iterator.next();
+                if (line != 0) {
+                    String courseId = cols[0];
+                    Integer stuId = Integer.valueOf(cols[1]);
+                    StudentCourseRelation scr = new StudentCourseRelation();
+                    scr.setCourseId(courseId);
+                    scr.setStudentId(stuId);
+                    scrs.add(scr);
+                }
+                line++;
+                if (line % 10000 == 0) {
+                    System.out.println("当前执行到" + line + "行！");
+                    if (scrs.size() > 0) studentCourseRelationService.insertBatch(scrs);
+                    scrs.clear();
+                }
+            }
+            if (scrs.size() > 0) studentCourseRelationService.insertBatch(scrs);
+            System.out.println(line);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void count() {
+        File file = new File("D:\\doc\\实验室\\教育大数据\\科委数据20160101-20181231\\12_用户信息\\12_用户信息_0.csv");
+        String str = null;
+        int line = 0;//3704497
+        String charset = "utf-8";
+        try (CSVReader csvReader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))).build()) {
+            Iterator<String[]> iterator = csvReader.iterator();
+            while (iterator.hasNext()) {
+                //用户id,姓名,昵称,性别,出生日期,教育程度,所在国家,所在省份,所在城市
+                String[] cols = iterator.next();
+                line++;
             }
             System.out.println(line);
         } catch (Exception e) {

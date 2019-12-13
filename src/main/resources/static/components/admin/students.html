@@ -2,6 +2,26 @@
     .layui-badge-rim + .layui-badge-rim {
         margin-left: 5px;
     }
+
+    .layui-card-img-box img {
+        width: 70%;
+    }
+
+    .loading-box p {
+        line-height: 250px;
+    }
+
+    .self-mes-img-box {
+        text-align: center;
+    }
+
+    .self-mes-img-box img {
+        width: 50%;
+    }
+
+    .self-mes p {
+        margin: 10px 0;
+    }
 </style>
 <div class="layui-fluid">
     <div class="layui-card">
@@ -34,23 +54,89 @@
 
 </div>
 
-<!-- 表格操作列 -->
-<script type="text/html" id="studentTableBar">
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">详情</a>
+<!-- 弹出层：用户详情 -->
+<div id="student-details" style="display: none; margin: 30px 50px">
+    <div style="padding: 50px 100px;" id="student-details-content">
+    </div>
+    <!--<div class="layui-container">-->
+        <div class="layui-row layui-col-space12">
+            <div class="layui-col-md8">
+                <div class="layui-card" style="min-height: 500px;">
+                    <div class="layui-card-body ">
+                        <div class="layui-row">
+                            <div class="layui-col-md6" name="感兴趣领域">
+                                <div id="domain-graph" style="width: 100%;height:250px;"></div>
+                            </div>
+                            <div class="layui-col-md6" name="感兴趣话题">
+                                <div id="topic-graph" style="width: 100%;height:250px;"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4" id="right-card">
+                <div class="layui-card" id="interest-courses">
+                    <div class="layui-card-header">感兴趣的课程</div>
+                    <div class="layui-card-body layadmin-takerates" id="course-box">
+                        <!--模板引擎,id="recommend-course" -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <!--</div>-->
+</div>
+
+<!--用户详细信息-->
+<script id="student-message" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4 self-mes-img-box">
+            <img src="../../assets/images/head.png" class="layui-card-img"/>
+        </div>
+        <div class="layui-col-md8 self-mes">
+            <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
+            <p>真实姓名：{{ d.studentName }}</p>
+            <p>性别：{{ d.gender }}</p>
+            <p>生日：{{ d.birthday }}</p>
+            <p>最高学历：{{ d.education }}</p>
+            <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+            <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理</p>
+            <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+        </div>
+    </div>
+</script>
+<!--感兴趣的课程-->
+<script id="course" type="text/html">
+    {{# layui.each(d, function(index, item){ }}
+    <div class="layui-res reco-res-box">
+        <h3><b><a href="#">{{ item.courseName }}</a></b></h3>
+        <p class="layui-word-aux">主讲老师：{{ item.teacher }}</p>
+        <p class="layui-word-aux">开课院校：{{ item.courseSchool }}</p>
+    </div>
+    {{# }); }}
 </script>
 
+<!-- 表格操作列 -->
+<script type="text/html" id="studentTableBar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info">详情</a>
+    <!-- lay-event="del"-->
+</script>
 
+<!-- js部分 -->
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+<script src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin', 'config'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin', 'config', 'laytpl', 'element'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
-        var util = layui.util;
-        var formSelects = layui.formSelects;
-        var admin = layui.admin;
+
         var config = layui.config;
-        var mRoles = [];  // 全部角色
+        var laytpl = layui.laytpl;
+        var element = layui.element;
 
         form.render('select');
 
@@ -84,50 +170,131 @@
             table.reload('studentTable', {where: {searchKey: key, searchValue: value}});
         });
 
-        // 添加按钮点击事件
-        $('#studentBtnAdd').click(function () {
-            showEditModel();
-        });
-
         // 工具条点击事件
         table.on('tool(studentTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
+           // console.log(obj);
+            $.ajax({
+                type: "get",
+                async: true,
+                url: config.base_server + 'student/portrait?access_token=' + config.getToken() + "&stuId=" + data.studentId,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    renderPortrait(data);
 
-            if (layEvent === 'del') { // 删除
-                layer.confirm('确定删除此用户吗？', {
-                    skin: 'layui-layer-admin'
-                }, function (i) {
-                    layer.close(i);
-                    layer.load(2);
-                    admin.req('student/' + obj.data.studentId, {}, function (data) {
-                        layer.closeAll('loading');
-                        if (data.code == 200) {
-                            layer.msg(data.msg, {icon: 1});
-                            obj.del();
-                        } else {
-                            layer.msg(data.msg, {icon: 2});
-                        }
-                    }, 'DELETE');
-                });
-            } else if (layEvent === 'reset') { // 重置密码
-                layer.confirm('确定重置此用户的密码吗？<br><span style="color: red;">（初始密码为123456）</span>', {
-                    skin: 'layui-layer-admin'
-                }, function (i) {
-                    layer.close(i);
-                    layer.load(2);
-                    admin.req('student/psw/' + obj.data.studentId, {}, function (data) {
-                        layer.closeAll('loading');
-                        if (data.code == 200) {
-                            layer.msg(data.msg, {icon: 1});
-                        } else {
-                            layer.msg(data.msg, {icon: 2});
-                        }
-                    }, 'PUT');
-                });
-            } else if (layEvent === 'edit') { // 修改
-                showEditModel(data);
-            }
+                },
+                error: function () {
+                    alert("数据加载失败");
+                }
+            });
+            layer.open({
+                type: 1,
+                title: "用户详情",
+                shade: 0,
+                area: ['1072px', '70%'],
+                content: $("#student-details"),
+                end: function () {
+                    $("#student-details").css("display", "none");
+                }
+            });
         });
+
+        function renderPortrait(portrait) {
+            //console.log(portrait);
+            //渲染个人信息
+            var portraitTpl = document.getElementById("student-message").innerHTML;
+            var portraitView = document.getElementById("student-details-content");
+            laytpl(portraitTpl).render(portrait, function (html) {
+                portraitView.innerHTML = html;
+                element.render();
+            });
+
+            //渲染课程
+            var courseTpl = document.getElementById("course").innerHTML;
+            var courseView = document.getElementById("course-box");
+            laytpl(courseTpl).render(portrait.courses, function(html){
+                courseView.innerHTML = html;
+                element.render();
+            });
+
+            //渲染话题和领域
+            // 基于准备好的dom，初始化echarts实例
+            var domainChart = echarts.init(document.getElementById('domain-graph'));
+            var topicChart = echarts.init(document.getElementById('topic-graph'));
+            var domainOption = {
+                title: {
+                    text: '感兴趣的领域',
+                    x: 'center'
+                }
+            };
+            var topicOption = {
+                title: {
+                    text: '感兴趣的话题',
+                    x: 'center'
+                }
+            };
+
+            var topics = new Array();
+            for (i = 0; i < portrait.topics.length; i++) {
+                var topic = new Object();
+                topic.name = portrait.topics[i].topicName;
+                topic.value = portrait.topics[i].count ;
+                topics.push(topic);
+            }
+           // console.log("topics: "+ topics)
+            topicOption.series = [
+                {
+                    type: 'wordCloud',
+                    shape: 'pentagon',
+                    center: ['50%', '50%'],
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: topics
+                }
+            ]
+           // console.log(topicOption);
+            topicChart.setOption(topicOption, true);
+
+            //获取感兴趣领域及渲染
+            $.get(config.base_server + 'interest/domain?access_token=' + config.getToken()+'&stuId='+portrait.studentId, function (data) {
+                var domains = new Array();
+                for (i = 0; i < data.count; i++) {
+                    var domain = new Object();
+                    domain.name = data.data[i].domain;
+                    domain.value = data.data[i].score;
+                    domains.push(domain);
+                }
+                domainOption.series = [
+                    {
+                        name: '感兴趣的领域',
+                        type: 'pie',
+                        radius: [30, 70],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        data: domains
+                    }
+                ]
+                console.log(domainOption);
+                domainChart.setOption(domainOption, true);
+            });
+
+        }
     });
+
+
 </script>
