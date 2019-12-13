@@ -1,5 +1,6 @@
 package com.hit.lpm;
 
+
 import com.hit.lpm.common.nlp.NLPUtil;
 import com.hit.lpm.portrait.model.Course;
 import com.hit.lpm.portrait.model.Student;
@@ -7,6 +8,15 @@ import com.hit.lpm.portrait.model.StudentCourseRelation;
 import com.hit.lpm.portrait.model.Topic;
 import com.hit.lpm.portrait.service.CourseService;
 import com.hit.lpm.portrait.service.StudentCourseRelationService;
+
+import com.hankcs.hanlp.seg.common.Term;
+import com.hankcs.hanlp.tokenizer.StandardTokenizer;
+import com.hit.lpm.common.utils.StringUtil;
+import com.hit.lpm.portrait.model.Course;
+import com.hit.lpm.portrait.model.Student;
+import com.hit.lpm.portrait.model.Topic;
+import com.hit.lpm.portrait.service.CourseService;
+
 import com.hit.lpm.portrait.service.StudentService;
 import com.hit.lpm.portrait.service.TopicService;
 import com.hit.lpm.system.model.User;
