@@ -1,4 +1,41 @@
-<!DOCTYPE html>
+<style>
+    .layui-card-img-box img{
+        width: 70%;
+    }
+    .layadmin-takerates{
+        padding: 10px 50px;
+    }
+    .layui-res{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .details{
+        color: #009688;
+        cursor: pointer;
+    }
+    .my-friend-a{
+        cursor: pointer;
+    }
+    .recommend-friend-a{
+        cursor: pointer;
+    }
+    .loading-box{
+        min-height: 250px;
+        text-align: center;
+    }
+    .loading-box p{
+        line-height: 250px;
+    }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 10px 0;
+    }
+</style>
 
 <html lang="en">
 
@@ -8,7 +45,10 @@
     <script src="../../assets/libs/echarts/echarts.min.js"></script>
 </head>
 <body>
-<div style="width: 1000px; height: 600px" id="relation-chart"></div>
+<div class="layui-card-header">学习路径</div>
+<div class="layui-card-body">
+    <div style="width: 1200px; height: 700px" id="relation-chart"></div>
+</div>
 
 
 <script src="../../assets/libs/echarts/echarts.min.js"></script>
@@ -16,81 +56,158 @@
 
 <script type="text/javascript">
     var $ = layui.jquery;
+    var config = layui.config;
+
     var myChart = echarts.init(document.getElementById("relation-chart"));
     myChart.showLoading();
-    $.get('../../assets/data/les-miserables.gexf', function (xml) {
-        myChart.hideLoading();
-        var graph = echarts.dataTool.gexf.parse(xml);
-        var categories = [];
-        for (var i = 0; i < 9; i++) {
-            categories[i] = {
-                name: '类目' + i
-            };
-        }
-        graph.nodes.forEach(function (node) {
-            node.itemStyle = null;
-            node.value = node.symbolSize;
-            node.symbolSize /= 1.5;
-            node.label = {
-                normal: {
-                    show: node.symbolSize > 30
-                }
-            };
-            node.category = node.attributes.modularity_class;
-        });
-        var option = {
-            title: {
-                text: 'Les Miserables',
-                subtext: 'Default layout',
-                top: 'bottom',
-                left: 'right'
-            },
-            tooltip: {},
-            legend: [{
-                // selectedMode: 'single',
-                data: categories.map(function (a) {
-                    return a.name;
-                })
-            }],
-            animationDuration: 1500,
-            animationEasingUpdate: 'quinticInOut',
-            series : [
-                {
-                    name: 'Les Miserables',
-                    type: 'graph',
-                    layout: 'none',
-                    data: graph.nodes,
-                    links: graph.links,
-                    categories: categories,
-                    roam: true,
-                    focusNodeAdjacency: true,
-                    itemStyle: {
-                        normal: {
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.3)'
-                        }
-                    },
-                    label: {
-                        position: 'right',
-                        formatter: '{b}'
-                    },
-                    lineStyle: {
-                        color: 'source',
-                        curveness: 0.3
-                    },
-                    emphasis: {
+    $.ajax({
+        type: "get",
+        async: true,
+        url: config.base_server + 'learningpath/getLearningPath?access_token=' + config.getToken(),
+        data: {},
+        dataType: "json",
+        success: function (result) {
+            myChart.hideLoading();
+            var categories = [
+                {name: "已学习"},
+                {name: "即将学习"},
+                {name: "待学习"},
+                {name: "推荐学习"}
+            ];
+            console.log(result["node"]);
+            console.log(result["edge"]);
+            var option = {
+                title: {
+                    text: result['courseName'],
+                    subtext: 'Default layout',
+                    top: 'bottom',
+                    left: 'right'
+                },
+                tooltip: {},
+                legend: [{
+                    // selectedMode: 'single',
+                    data: categories.map(function (a) {
+                        return a.name;
+                    })
+                }],
+                animationDuration: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                series : [
+                    {
+                        name: result['courseName'],
+                        type: 'graph',
+                        layout: 'none',
+                        data: result["node"],
+                        links: result["edge"],
+                        categories: categories,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        itemStyle: {
+                            normal: {
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.3)'
+                            }
+                        },
+                        label: {
+                            position: 'right',
+                            formatter: '{b}'
+                        },
                         lineStyle: {
-                            width: 10
+                            color: 'source',
+                            curveness: 0.1
+                        },
+                        emphasis: {
+                            lineStyle: {
+                                width: 10
+                            }
                         }
                     }
-                }
-            ]
-        };
+                ]
+            };
 
-        myChart.setOption(option);
-    }, 'xml');
+            myChart.setOption(option);
+        },
+        error: function (){
+            alert("数据加载失败");
+        }
+    });
+    // $.get('../../assets/data/les-miserables.gexf', function (xml) {
+    //     myChart.hideLoading();
+    //     var graph = echarts.dataTool.gexf.parse(xml);
+    //     console.log(graph.nodes);
+    //     console.log(graph.links);
+    //     var categories = [];
+    //     for (var i = 0; i < 9; i++) {
+    //         categories[i] = {
+    //             name: '类目' + i
+    //         };
+    //     }
+    //     graph.nodes.forEach(function (node) {
+    //         node.itemStyle = null;
+    //         node.value = node.symbolSize;
+    //         node.symbolSize /= 1.5;
+    //         node.label = {
+    //             normal: {
+    //                 show: node.symbolSize > 30
+    //             }
+    //         };
+    //         node.category = node.attributes.modularity_class;
+    //     });
+    //     var option = {
+    //         title: {
+    //             text: 'Les Miserables',
+    //             subtext: 'Default layout',
+    //             top: 'bottom',
+    //             left: 'right'
+    //         },
+    //         tooltip: {},
+    //         legend: [{
+    //             // selectedMode: 'single',
+    //             data: categories.map(function (a) {
+    //                 return a.name;
+    //             })
+    //         }],
+    //         animationDuration: 1500,
+    //         animationEasingUpdate: 'quinticInOut',
+    //         series : [
+    //             {
+    //                 name: 'Les Miserables',
+    //                 type: 'graph',
+    //                 layout: 'none',
+    //                 data: graph.nodes,
+    //                 links: graph.links,
+    //                 categories: categories,
+    //                 roam: true,
+    //                 focusNodeAdjacency: true,
+    //                 itemStyle: {
+    //                     normal: {
+    //                         borderColor: '#fff',
+    //                         borderWidth: 1,
+    //                         shadowBlur: 10,
+    //                         shadowColor: 'rgba(0, 0, 0, 0.3)'
+    //                     }
+    //                 },
+    //                 label: {
+    //                     position: 'right',
+    //                     formatter: '{b}'
+    //                 },
+    //                 lineStyle: {
+    //                     color: 'source',
+    //                     curveness: 0.3
+    //                 },
+    //                 emphasis: {
+    //                     lineStyle: {
+    //                         width: 10
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     };
+    //
+    //     myChart.setOption(option);
+    // }, 'xml');
 </script>
 </body>
 </html>
