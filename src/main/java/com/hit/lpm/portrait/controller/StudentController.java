@@ -46,6 +46,7 @@ public class StudentController extends BaseController {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    //@RequiresPermissions("get:/v1/student/portrait")
     @ApiOperation(value = "查询画像")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
