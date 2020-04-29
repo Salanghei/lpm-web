@@ -26,9 +26,11 @@ public class Topic implements Serializable {
 
     private Integer count;
 
+    //tf-idf score
+    private Double score;
     private String topicInfo;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private Map<String, Integer> domainMap;
 
     public Map<String, Integer> getDomainMap() {
@@ -64,6 +66,25 @@ public class Topic implements Serializable {
         this.topicName = topicName;
     }
 
+    public Double getScore() {
+        if (this.domainMap != null) {
+            int max = 0;
+            for (String k : domainMap.keySet()) {
+                if (domainMap.get(k) > max) {
+                    max = domainMap.get(k);
+                    domain = k;
+                }
+            }
+            return (double) max / count;
+        }else {
+            return score;
+        }
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
     public String getDomain() {
         if (this.domain != null && !this.domain.isEmpty()) return domain;
         else {
@@ -91,4 +112,16 @@ public class Topic implements Serializable {
         this.topicInfo = topicInfo;
     }
 
+    @Override
+    public String toString() {
+        return "Topic{" +
+                "topicId=" + topicId +
+                ", topicName='" + topicName + '\'' +
+                ", domain='" + domain + '\'' +
+                ", count=" + count +
+                ", score=" + score +
+                ", topicInfo='" + topicInfo + '\'' +
+                ", domainMap=" + domainMap +
+                '}';
+    }
 }

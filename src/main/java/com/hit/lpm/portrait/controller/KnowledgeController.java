@@ -56,7 +56,7 @@ public class KnowledgeController extends BaseController {
         User user = userService.selectById(userId);
         //Integer stuId = studentService.selectOne(new EntityWrapper<Student>().eq("user_id", user.getUsername())).getStudentId();
         Integer stuId = 1;
-        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
+       if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         List<StudentKnowledgeRelation> sks = studentKnowledgeRelationService
                 .selectList(new EntityWrapper<StudentKnowledgeRelation>().eq("student_id", stuId));
         for (StudentKnowledgeRelation sk : sks) {
@@ -68,7 +68,6 @@ public class KnowledgeController extends BaseController {
             map.put("score", sk.getScore());
             maps.add(map);
         }
-
         return new PageResult<>(maps);
     }
 
