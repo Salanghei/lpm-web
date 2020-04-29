@@ -3,6 +3,9 @@ package com.hit.lpm.situation.model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+/**
+ * 该类为从数据库查询知识图谱的边的查询结果类
+ */
 @TableName("lpm_knowledge_edge")
 public class KnowledgeEdges {
     @TableId

@@ -3,6 +3,9 @@ package com.hit.lpm.situation.model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+/**
+ * 该类为从数据库查询知识点属性的查询结果类
+ */
 @TableName("lpm_knowledge_node")
 public class KnowledgeNodes {
     @TableId
@@ -10,6 +13,15 @@ public class KnowledgeNodes {
     private String courseId;
     private String name;
     private double importance;
+    private int offline;
+
+    public int getOffline() {
+        return offline;
+    }
+
+    public void setOffline(int offline) {
+        this.offline = offline;
+    }
 
     public int getNodeId() {
         return nodeId;

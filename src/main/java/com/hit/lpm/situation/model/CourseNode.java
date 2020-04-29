@@ -1,5 +1,8 @@
 package com.hit.lpm.situation.model;
 
+/**
+ *该类用于构造前端知识图谱的结点
+ */
 public class CourseNode {
     private String courseName;
     private int category;//0-已学习，1-即将学习，2-待学习，

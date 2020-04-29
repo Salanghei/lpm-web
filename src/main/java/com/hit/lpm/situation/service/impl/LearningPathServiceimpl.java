@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.management.relation.RelationNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class LearningPathServiceimpl implements LearningPathService {
@@ -57,6 +54,7 @@ public class LearningPathServiceimpl implements LearningPathService {
 
         List<CourseNode> result = new ArrayList<>();
         Random random = new Random();
+        int[] y = new int[3];
         for(KnowledgeNodes i : nodes){
             CourseNode temp = new CourseNode();
             if(nodeMap.containsKey(i.getNodeId())){
@@ -83,17 +81,26 @@ public class LearningPathServiceimpl implements LearningPathService {
             temp_s = temp_s > 100 ? 100 : temp_s;
             temp.setSymbolSize(temp_s);
             temp.setName(i.getName());
-            temp.setCourseName(i.getName());
+            temp.setCourseName(i.getCourseId());
             temp.setId(i.getNodeId());
             temp.setValue(nodeMap.containsKey(i.getNodeId()) ? nodeMap.get(i.getNodeId()) : 0);
+            result.add(temp);
+        }
+//        result.sort(new Comparator<CourseNode>() {
+//            @Override
+//            public int compare(CourseNode o1, CourseNode o2) {
+//                return (int)(o2.getSymbolSize() - o1.getSymbolSize());
+//            }
+//        });
+        for(CourseNode temp : result){
             int x = 0;
             if(temp.getCategory() == 1)
-                x = 400;
+                x = 300;
             else if(temp.getCategory() == 2)
-                x = 800;
-            temp.setX(random.nextInt(200)+x);
-            temp.setY(random.nextInt(700));
-            result.add(temp);
+                x = 600;
+            temp.setX(x);
+            temp.setY(y[temp.getCategory()]);
+            y[temp.getCategory()] += 65;
         }
         return result;
     }
@@ -101,5 +108,18 @@ public class LearningPathServiceimpl implements LearningPathService {
     @Override
     public String getCourseName(String courseId){
         return learningPathMapper.getCourseNameById(courseId);
+    }
+
+    @Override
+    public KnowledgeNodes getKnowledgeNodeById(int knowledgeNodeId, String courseId) {
+        return learningPathMapper.getKnowledgeNodeById(knowledgeNodeId, courseId).get(0);
+    }
+    @Override
+    public void learnKnowledge(int stuId, int nodeId, String courseId){
+        learningPathMapper.learnKnowledge(stuId, nodeId, courseId);
+    }
+    @Override
+    public int getStudentIdByUserId(String userId){
+        return learningPathMapper.getStudentId(userId);
     }
 }

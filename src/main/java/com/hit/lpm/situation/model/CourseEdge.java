@@ -1,5 +1,8 @@
 package com.hit.lpm.situation.model;
 
+/**
+ * 该类用于构造前端知识图谱的边
+ */
 public class CourseEdge {
     private String courseName;
     private int id;

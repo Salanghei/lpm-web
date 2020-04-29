@@ -3,22 +3,17 @@ package com.hit.lpm.situation.model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+/**
+ * 该类为学生与知识点关系的查询结果类
+ */
 @TableName("lpm_student_knowledge_relation")
 public class KnowledgeRelation {
     @TableId
-    private int skId;
     private int studentId;
     private int nodeId;
     private String courseId;
     private double score;
 
-    public int getSkId() {
-        return skId;
-    }
-
-    public void setSkId(int skId) {
-        this.skId = skId;
-    }
 
     public int getStudentId() {
         return studentId;

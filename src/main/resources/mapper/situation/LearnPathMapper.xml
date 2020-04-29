@@ -16,4 +16,13 @@
     <select id="getLearningSituation" resultType="com.hit.lpm.situation.model.KnowledgeRelation">
         select * from lpm_student_knowledge_relation where student_id = #{studentId} and course_id = #{courseId};
     </select>
+    <select id="getKnowledgeNodeById" resultType="com.hit.lpm.situation.model.KnowledgeNodes">
+        select * from lpm_knowledge_node where node_id = #{knowledgeNodeId} and course_id = #{courseId};
+    </select>
+    <select id="getStudentId" resultType="int">
+        select * from lpm_student where user_id= #{userId};
+    </select>
+    <insert id="learnKnowledge">
+        insert into lpm_student_knowledge_relation(student_id, node_id, course_id, score) values (#{stuId}, #{nodeId}, #{courseId}, 0.8);
+    </insert>
 </mapper>
