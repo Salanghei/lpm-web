@@ -9,7 +9,7 @@
       <attribute id="modularity_class" title="Modularity Class" type="integer"></attribute>
     </attributes>
     <nodes>
-      <node id="0" label="Myriel">
+      <node id="0" label="计算机网络">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -17,7 +17,7 @@
         <viz:position x="-266.82776" y="299.6904" z="0.0"></viz:position>
         <viz:color r="235" g="81" b="72"></viz:color>
       </node>
-      <node id="1" label="Napoleon">
+      <node id="1" label="网络协议">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -25,7 +25,7 @@
         <viz:position x="-418.08344" y="446.8853" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="2" label="MlleBaptistine">
+      <node id="2" label="计算机网络结构">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -33,7 +33,7 @@
         <viz:position x="-212.76357" y="245.29176" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="3" label="MmeMagloire">
+      <node id="3" label="电路交换">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -41,7 +41,7 @@
         <viz:position x="-242.82404" y="235.26283" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="4" label="CountessDeLo">
+      <node id="4" label="多路复用">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -49,7 +49,7 @@
         <viz:position x="-379.30386" y="429.06424" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="5" label="Geborand">
+      <node id="5" label="速率">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -57,7 +57,7 @@
         <viz:position x="-417.26337" y="406.03506" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="6" label="Champtercier">
+      <node id="6" label="贷款">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -65,7 +65,7 @@
         <viz:position x="-332.6012" y="485.16974" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="7" label="Cravatte">
+      <node id="7" label="延迟">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -73,7 +73,7 @@
         <viz:position x="-382.69568" y="475.09113" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="8" label="Count">
+      <node id="8" label="时延带宽积">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -81,7 +81,7 @@
         <viz:position x="-320.384" y="387.17325" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="9" label="OldMan">
+      <node id="9" label="网络体系结构">
         <attvalues>
           <attvalue for="modularity_class" value="0"></attvalue>
         </attvalues>
@@ -89,7 +89,7 @@
         <viz:position x="-344.39832" y="451.16772" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="10" label="Labarre">
+      <node id="10" label="OSI参考模型">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -97,7 +97,7 @@
         <viz:position x="-89.34107" y="234.56128" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="11" label="Valjean">
+      <node id="11" label="Internet发展历史">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -105,7 +105,7 @@
         <viz:position x="-87.93029" y="-6.8120565" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="12" label="Marguerite">
+      <node id="12" label="网络应用">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -113,7 +113,7 @@
         <viz:position x="-339.77908" y="-184.69139" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="13" label="MmeDeR">
+      <node id="13" label="网络应用体系结构">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -121,7 +121,7 @@
         <viz:position x="-194.31313" y="178.55301" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="14" label="Isabeau">
+      <node id="14" label="网络应用通信进程">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -129,7 +129,7 @@
         <viz:position x="-158.05168" y="201.99768" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="15" label="Gervais">
+      <node id="15" label="网络应用需求">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -137,7 +137,7 @@
         <viz:position x="-127.701546" y="242.55057" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="16" label="Tholomyes">
+      <node id="16" label="应用体系结构">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -145,7 +145,7 @@
         <viz:position x="-385.2226" y="-393.5572" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="17" label="Listolier">
+      <node id="17" label="应用进程通信">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -153,7 +153,7 @@
         <viz:position x="-516.55884" y="-393.98975" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="18" label="Fameuil">
+      <node id="18" label="Http连接类型">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -161,7 +161,7 @@
         <viz:position x="-464.79382" y="-493.57944" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="19" label="Blacheville">
+      <node id="19" label="Http消息格式">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -169,7 +169,7 @@
         <viz:position x="-515.1624" y="-456.9891" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="20" label="Favourite">
+      <node id="20" label="Cookie技术">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -177,7 +177,7 @@
         <viz:position x="-408.12122" y="-464.5048" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="21" label="Dahlia">
+      <node id="21" label="Web缓存技术">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -185,7 +185,7 @@
         <viz:position x="-456.44113" y="-425.13303" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="22" label="Zephine">
+      <node id="22" label="Web应用概述">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -193,7 +193,7 @@
         <viz:position x="-459.1107" y="-362.5133" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="23" label="Fantine">
+      <node id="23" label="Email应用概述">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -201,7 +201,7 @@
         <viz:position x="-313.42786" y="-289.44803" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="24" label="MmeThenardier">
+      <node id="24" label="Email消息格式">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -209,7 +209,7 @@
         <viz:position x="4.6313396" y="-273.8517" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="25" label="Thenardier">
+      <node id="25" label="POP协议">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -217,7 +217,7 @@
         <viz:position x="82.80825" y="-203.1144" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="26" label="Cosette">
+      <node id="26" label="DNS概述">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -225,7 +225,7 @@
         <viz:position x="78.64646" y="-31.512747" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="27" label="Javert">
+      <node id="27" label="吞吐量">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -233,7 +233,7 @@
         <viz:position x="-81.46074" y="-204.20204" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="28" label="Fauchelevent">
+      <node id="28" label="P2P索引">
         <attvalues>
           <attvalue for="modularity_class" value="4"></attvalue>
         </attvalues>
@@ -241,7 +241,7 @@
         <viz:position x="-225.73984" y="82.41631" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="29" label="Bamatabois">
+      <node id="29" label="Socket编程">
         <attvalues>
           <attvalue for="modularity_class" value="3"></attvalue>
         </attvalues>
@@ -249,7 +249,7 @@
         <viz:position x="-385.6842" y="-20.206686" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="30" label="Perpetue">
+      <node id="30" label="传输层服务">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -257,7 +257,7 @@
         <viz:position x="-403.92447" y="-197.69823" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="31" label="Simplice">
+      <node id="31" label="复用和分用">
         <attvalues>
           <attvalue for="modularity_class" value="2"></attvalue>
         </attvalues>
@@ -265,7 +265,7 @@
         <viz:position x="-281.4253" y="-158.45137" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="32" label="Scaufflaire">
+      <node id="32" label="无连接传输协议">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -273,7 +273,7 @@
         <viz:position x="-122.41348" y="210.37503" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="33" label="Woman1">
+      <node id="33" label="可靠数据传输">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -281,7 +281,7 @@
         <viz:position x="-234.6001" y="-113.15067" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="34" label="Judge">
+      <node id="34" label="rdt2.0">
         <attvalues>
           <attvalue for="modularity_class" value="3"></attvalue>
         </attvalues>
@@ -289,7 +289,7 @@
         <viz:position x="-387.84915" y="58.7059" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="35" label="Champmathieu">
+      <node id="35" label="rdt2.1">
         <attvalues>
           <attvalue for="modularity_class" value="3"></attvalue>
         </attvalues>
@@ -297,7 +297,7 @@
         <viz:position x="-338.2307" y="87.48405" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="36" label="Brevet">
+      <node id="36" label="web应用概述">
         <attvalues>
           <attvalue for="modularity_class" value="3"></attvalue>
         </attvalues>
@@ -305,7 +305,7 @@
         <viz:position x="-453.26874" y="58.94648" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="37" label="Chenildieu">
+      <node id="37" label="滑动窗口协议">
         <attvalues>
           <attvalue for="modularity_class" value="3"></attvalue>
         </attvalues>
@@ -313,7 +313,7 @@
         <viz:position x="-386.44904" y="140.05937" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="38" label="Cochepaille">
+      <node id="38" label="GBN">
         <attvalues>
           <attvalue for="modularity_class" value="3"></attvalue>
         </attvalues>
@@ -321,7 +321,7 @@
         <viz:position x="-446.7876" y="123.38005" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="39" label="Pontmercy">
+      <node id="39" label="SR">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -329,7 +329,7 @@
         <viz:position x="336.49738" y="-269.55914" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="40" label="Boulatruelle">
+      <node id="40" label="TCP概述">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -337,7 +337,7 @@
         <viz:position x="29.187843" y="-460.13132" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="41" label="Eponine">
+      <node id="41" label="TCP可靠数据传输">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -345,7 +345,7 @@
         <viz:position x="238.36697" y="-210.00926" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="42" label="Anzelma">
+      <node id="42" label="TCP流量控制">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -353,7 +353,7 @@
         <viz:position x="189.69513" y="-346.50662" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="43" label="Woman2">
+      <node id="43" label="TCP连接原理">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -361,7 +361,7 @@
         <viz:position x="-187.00418" y="-145.02663" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="44" label="MotherInnocent">
+      <node id="44" label="TCP连接管理">
         <attvalues>
           <attvalue for="modularity_class" value="4"></attvalue>
         </attvalues>
@@ -369,7 +369,7 @@
         <viz:position x="-252.99521" y="129.87549" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="45" label="Gribier">
+      <node id="45" label="拥塞控制原理">
         <attvalues>
           <attvalue for="modularity_class" value="4"></attvalue>
         </attvalues>
@@ -377,7 +377,7 @@
         <viz:position x="-296.07935" y="163.11964" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="46" label="Jondrette">
+      <node id="46" label="丢包率">
         <attvalues>
           <attvalue for="modularity_class" value="5"></attvalue>
         </attvalues>
@@ -385,7 +385,7 @@
         <viz:position x="550.3201" y="522.4031" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="47" label="MmeBurgon">
+      <node id="47" label="TCP拥塞控制">
         <attvalues>
           <attvalue for="modularity_class" value="5"></attvalue>
         </attvalues>
@@ -393,7 +393,7 @@
         <viz:position x="488.13535" y="356.8573" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="48" label="Gavroche">
+      <node id="48" label="TCP性能分析">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -401,7 +401,7 @@
         <viz:position x="387.89572" y="110.462326" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="49" label="Gillenormand">
+      <node id="49" label="网络层服务">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -409,7 +409,7 @@
         <viz:position x="126.4831" y="68.10622" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="50" label="Magnon">
+      <node id="50" label="虚电路网络">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -417,7 +417,7 @@
         <viz:position x="127.07365" y="-113.05923" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="51" label="MlleGillenormand">
+      <node id="51" label="数据报网络">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -425,7 +425,7 @@
         <viz:position x="162.63559" y="117.6565" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="52" label="MmePontmercy">
+      <node id="52" label="IP数据报">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -433,7 +433,7 @@
         <viz:position x="353.66415" y="-205.89165" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="53" label="MlleVaubois">
+      <node id="53" label="IPv4协议">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -441,7 +441,7 @@
         <viz:position x="165.43939" y="339.7736" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="54" label="LtGillenormand">
+      <node id="54" label="IP数据报分片">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -449,7 +449,7 @@
         <viz:position x="137.69348" y="196.1069" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="55" label="Marius">
+      <node id="55" label="IP编址">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -457,7 +457,7 @@
         <viz:position x="206.44687" y="-13.805411" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="56" label="BaronessT">
+      <node id="56" label="有类IP地址">
         <attvalues>
           <attvalue for="modularity_class" value="6"></attvalue>
         </attvalues>
@@ -465,7 +465,7 @@
         <viz:position x="194.82993" y="224.78036" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="57" label="Mabeuf">
+      <node id="57" label="IP子网">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -473,7 +473,7 @@
         <viz:position x="597.6618" y="135.18481" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="58" label="Enjolras">
+      <node id="58" label="子网划分">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -481,7 +481,7 @@
         <viz:position x="355.78366" y="-74.882454" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="59" label="Combeferre">
+      <node id="59" label="CIDR">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -489,7 +489,7 @@
         <viz:position x="515.2961" y="-46.167564" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="60" label="Prouvaire">
+      <node id="60" label="路由聚集">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -497,7 +497,7 @@
         <viz:position x="614.29285" y="-69.3104" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="61" label="Feuilly">
+      <node id="61" label="DHCP协议">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -505,7 +505,7 @@
         <viz:position x="550.1917" y="-128.17537" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="62" label="Courfeyrac">
+      <node id="62" label="NAT转换">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -513,7 +513,7 @@
         <viz:position x="436.17184" y="-12.7286825" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="63" label="Bahorel">
+      <node id="63" label="DNS记录和消息">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -521,7 +521,7 @@
         <viz:position x="602.55225" y="16.421427" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="64" label="Bossuet">
+      <node id="64" label="ICMP协议">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -529,7 +529,7 @@
         <viz:position x="455.81955" y="-115.45826" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="65" label="Joly">
+      <node id="65" label="IPv6简介">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -537,7 +537,7 @@
         <viz:position x="516.40784" y="47.242233" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="66" label="Grantaire">
+      <node id="66" label="路由算法">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -545,7 +545,7 @@
         <viz:position x="646.4313" y="-151.06331" z="0.0"></viz:position>
         <viz:color r="235" g="81" b="72"></viz:color>
       </node>
-      <node id="67" label="MotherPlutarch">
+      <node id="67" label="数据链路层服务">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -553,7 +553,7 @@
         <viz:position x="668.9568" y="204.65488" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="68" label="Gueulemer">
+      <node id="68" label="差错编码">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -561,7 +561,7 @@
         <viz:position x="78.4799" y="-347.15146" z="0.0"></viz:position>
         <viz:color r="235" g="81" b="72"></viz:color>
       </node>
-      <node id="69" label="Babet">
+      <node id="69" label="多路访问协议">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -569,7 +569,7 @@
         <viz:position x="150.35959" y="-298.50797" z="0.0"></viz:position>
         <viz:color r="235" g="81" b="72"></viz:color>
       </node>
-      <node id="70" label="Claquesous">
+      <node id="70" label="MAC协议">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -577,7 +577,7 @@
         <viz:position x="137.3717" y="-410.2809" z="0.0"></viz:position>
         <viz:color r="235" g="81" b="72"></viz:color>
       </node>
-      <node id="71" label="Montparnasse">
+      <node id="71" label="ARP协议">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -585,7 +585,7 @@
         <viz:position x="234.87747" y="-400.85983" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="72" label="Toussaint">
+      <node id="72" label="以太网">
         <attvalues>
           <attvalue for="modularity_class" value="1"></attvalue>
         </attvalues>
@@ -593,7 +593,7 @@
         <viz:position x="40.942253" y="113.78272" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="73" label="Child1">
+      <node id="73" label="交换机">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -601,7 +601,7 @@
         <viz:position x="437.939" y="291.58234" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="74" label="Child2">
+      <node id="74" label="虚拟局域网">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>
@@ -609,7 +609,7 @@
         <viz:position x="466.04922" y="283.3606" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="75" label="Brujon">
+      <node id="75" label="PPP协议">
         <attvalues>
           <attvalue for="modularity_class" value="7"></attvalue>
         </attvalues>
@@ -617,7 +617,7 @@
         <viz:position x="238.79364" y="-314.06345" z="0.0"></viz:position>
         <viz:color r="236" g="81" b="72"></viz:color>
       </node>
-      <node id="76" label="MmeHucheloup">
+      <node id="76" label="防火墙">
         <attvalues>
           <attvalue for="modularity_class" value="8"></attvalue>
         </attvalues>

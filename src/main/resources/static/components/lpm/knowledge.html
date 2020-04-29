@@ -3,120 +3,251 @@
         margin-left: 5px;
     }
 </style>-->
-<link rel="stylesheet" href="../../assets/module/dtree/dtree.css">
-<link rel="stylesheet" href="../../assets/module/dtree/font/dtreefont.css">
+<link href="../../assets/module/dtree/dtree.css" rel="stylesheet">
+<link href="../../assets/module/dtree/font/dtreefont.css" rel="stylesheet">
 
 <div class="layui-container">
     <div class="layui-card">
         <div class="layui-card-body">
             <div class="layui-row">
-                <div class="layui-col-md3">
-                    <div id="tree" class="dtree" data-id="0"></div>
+                <div class="layui-fluid">
+                    <div class="layui-row layui-col-space1" id="knowledge-table"
+                         style="width: 100%; ">
+                    </div>
                 </div>
-                <div class="layui-col-md9">
-                    <div id="graph" style="width: 100%;height:500px;"></div>
-                </div>
+            </div>
+            <div class="layui-row">
+                <div id="knowledge-tree" style="width: 100%;height:500px;"></div>
+            </div>
+
+            <div class="layui-row">
+                <div id="knowledge-graph" style="width: 100%;height:500px;"></div>
+
             </div>
         </div>
     </div>
 </div>
 
 <!-- js部分 -->
-<script src="../../assets/libs/echarts/echarts.min.js"></script>
-<!-- 知识结构树渲染 -->
+<script id="table" type="text/html">
+    <h2><b>我的知识表格</b></h2>
+
+    {{# layui.each(d, function(index, item){ }}
+    {{# layui.use('rate', function(){ }}
+    {{# var rate = layui.rate  }}
+        <div class="layui-col-md2">
+            <div class="layui-card">
+                <div class="layui-card-body" style="height: 50px">
+                    <div>
+                        <p><span class="layuiadmin-span-color">{{ item.knowledge_node }}</span></p>
+                        <p><span class="layuiadmin-span-color"><div class="rate">{{ item.score || '' }}</div></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{# rate.render({elem: '.rate',value:3 ,half: true }) }}
+        {{# }); }}
+
+        {{# if(d.length === 0){ }}
+        无数据
+        {{# } }}
+    {{# }); }}
+
+</script>
 <script>
-    layui.use(['dtree'], function () {
-        var dtree = layui.dtree;
-        // 渲染，使用data渲染
-        dtree.render({
-            elem: "#tree",
-            dataFormat: "list",  //配置data的风格为list
-            // icon:"-1",
-            // ficon:"-1",
-            skin: "laySimple",
-            data: [
-                {"id": "01", "title": "计算机(10%)", "checkArr": "0", "parentId": "0"},
-                {"id": "001", "title": "数据结构(10%)", "checkArr": "0", "parentId": "01"},
-                {"id": "002", "title": "计算机网络(10%)", "checkArr": "0", "parentId": "01"},
-                {"id": "003", "title": "编译原理(10%)", "checkArr": "0", "parentId": "01"},
-                {"id": "004", "title": "操作系统(10%)", "checkArr": "0", "parentId": "01"},
-                {"id": "005", "title": "算法分析与设计(10%)", "checkArr": "0", "parentId": "01"},
-                {"id": "001001", "title": "线性表(10%)", "checkArr": "0", "parentId": "001"},
-                {"id": "001002", "title": "二叉树(10%)", "checkArr": "0", "parentId": "001"},
-                {"id": "001003", "title": "图(10%)", "checkArr": "0", "parentId": "001"},
-                {"id": "001004", "title": "搜索算法(10%)", "checkArr": "0", "parentId": "001"},
-                {"id": "001005", "title": "排序算法(10%)", "checkArr": "0", "parentId": "001"},
-                {"id": "002001", "title": "http(10%)", "checkArr": "0", "parentId": "002"},
-                {"id": "002002", "title": "tcp(10%)", "checkArr": "0", "parentId": "002"},
-                {"id": "002003", "title": "ip(10%)", "checkArr": "0", "parentId": "002"},
-                {"id": "003001", "title": "词法分析(10%)", "checkArr": "0", "parentId": "003"},
-                {"id": "003002", "title": "语法法分析(10%)", "checkArr": "0", "parentId": "003"},
-                {"id": "003003", "title": "语义分析(10%)", "checkArr": "0", "parentId": "003"},
-                {"id": "004001", "title": "内存管理(10%)", "checkArr": "0", "parentId": "004"},
-                {"id": "005001", "title": "时间复杂度分析(10%)", "checkArr": "0", "parentId": "005"}
-            ]
+    layui.use(['element', 'config', 'laytpl', 'form', 'layer', 'rate'], function () {
+        var laytpl = layui.laytpl;
+        var $ = layui.jquery;
+        var config = layui.config;
+        var rate = layui.rate;
+
+        $.get(config.base_server + 'knowledge?page=0&limit=36&access_token=' + config.getToken(), function (res) {
+            //第三步：渲染模版
+            var nodes = [ //数据
+                {"knowledge_node": "计算机网络", "score": 1.5},
+                {"knowledge_node": "网络协议", "score": 2},
+                {"knowledge_node": "网络体系结构", "score": 3},
+                {"knowledge_node": "计算机网络结构", "score": 3},
+                {"knowledge_node": "电路交换", "score": 3},
+                {"knowledge_node": "多路复用", "score": 3},
+                {"knowledge_node": "速率", "score": 3.5},
+                {"knowledge_node": "带宽", "score": 4},
+                {"knowledge_node": "延迟", "score": 3},
+                {"knowledge_node": "时延带宽积", "score": 2},
+                {"knowledge_node": "OSI参考模型", "score": 3},
+                {"knowledge_node": "Internet发展历史", "score": 3},
+                {"knowledge_node": "网络应用层", "score": 4},
+                {"knowledge_node": "网络应用体系结构", "score": 3},
+                {"knowledge_node": "网络应用进程通信", "score": 3},
+                {"knowledge_node": "网络应用需求", "score": 3},
+                {"knowledge_node": "应用体系结构", "score": 3},
+                {"knowledge_node": "应用进程通信", "score": 3},
+                {"knowledge_node": "HTTP连接类型", "score": 2},
+                {"knowledge_node": "HTTP消息格式", "score": 3},
+                {"knowledge_node": "Cookie技术", "score": 3},
+                {"knowledge_node": "Web缓存技术", "score": 3},
+                {"knowledge_node": "Web应用概述", "score": 3},
+                {"knowledge_node": "Email应用概述", "score": 3},
+                {"knowledge_node": "Email消息格式", "score": 3},
+                {"knowledge_node": "POP协议", "score": 1.5},
+                {"knowledge_node": "DNS概述", "score": 3},
+                {"knowledge_node": "吞吐量", "score": 3},
+                {"knowledge_node": "Socket编程", "score": 3},
+                {"knowledge_node": "传输层服务", "score": 3},
+                {"knowledge_node": "复用和分用", "score": 1.5},
+                {"knowledge_node": "无线连接传输协议", "score": 3},
+                {"knowledge_node": "可靠数据传输", "score": 3},
+                {"knowledge_node": "rdt2.0", "score": 3},
+                {"knowledge_node": "rdt2.1", "score": 3},
+                {"knowledge_node": "web应用概述", "score": 3.5},
+                {"knowledge_node": "TCP概述", "score": 3},
+                {"knowledge_node": "TCP可靠数据传输", "score": 3},
+                {"knowledge_node": "TCP流量控制", "score": 4},
+                {"knowledge_node": "TCP连接管理", "score": 3},
+                {"knowledge_node": "拥塞控制原理", "score": 3},
+                {"knowledge_node": "丢包率", "score": 5}
+            ];
+            if (res.data == null||res.data.length==0) res.data = nodes;
+            var getTpl = table.innerHTML
+                , view = document.getElementById('knowledge-table');
+            laytpl(getTpl).render(res.data, function (html) {
+                view.innerHTML = html;
+                $('.rate').each(function() {
+                    var o = this;
+                    console.log(o.innerHTML);
+                    rate.render({
+                        elem: o,
+                        value:o.innerHTML
+                    });
+                });
+            });
+
         });
 
     });
+
 </script>
-<!-- 知识点结构图渲染 -->
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+<!-- 知识点层次结构图渲染 -->
+<!-- 知识点先修关系图渲染 -->
 <script type="text/javascript">
     layui.use(['util', 'admin', 'config'], function () {
         var $ = layui.jquery;
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('graph'));
-        myChart.showLoading();
-        $.getJSON('../../assets/data/npmdepgraph.min10.json', function (json) {
-            myChart.hideLoading();
-            myChart.setOption(option = {
+        var treeChart = echarts.init(document.getElementById('knowledge-tree'));
+        treeChart.showLoading();
+        $.get('../../assets/data/flare.json', function (data) {
+            treeChart.hideLoading();
+            echarts.util.each(data.children, function (datum, index) {
+                index % 2 === 0 && (datum.collapsed = true);
+            });
+            treeChart.setOption(option = {
                 title: {
-                    text: 'NPM Dependencies'
+                    text: '我的知识结构'
                 },
-                animationDurationUpdate: 1500,
-                animationEasingUpdate: 'quinticInOut',
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
+                },
                 series: [
                     {
-                        type: 'graph',
-                        layout: 'none',
-                        // progressiveThreshold: 700,
-                        data: json.nodes.map(function (node) {
-                            return {
-                                x: node.x,
-                                y: node.y,
-                                id: node.id,
-                                name: node.label,
-                                symbolSize: node.size,
-                                itemStyle: {
-                                    normal: {
-                                        color: node.color
-                                    }
-                                }
-                            };
-                        }),
-                        edges: json.edges.map(function (edge) {
-                            return {
-                                source: edge.sourceID,
-                                target: edge.targetID
-                            };
-                        }),
+                        type: 'tree',
+                        data: [data],
+                        top: '1%',
+                        left: '7%',
+                        bottom: '1%',
+                        right: '20%',
+                        symbolSize: 7,
                         label: {
-                            emphasis: {
+                            position: 'left',
+                            verticalAlign: 'middle',
+                            align: 'right',
+                            fontSize: 9
+                        },
+                        leaves: {
+                            label: {
                                 position: 'right',
-                                show: true
+                                verticalAlign: 'middle',
+                                align: 'left'
                             }
                         },
-                        roam: true,
-                        focusNodeAdjacency: true,
-                        lineStyle: {
-                            normal: {
-                                width: 0.5,
-                                curveness: 0.3,
-                                opacity: 0.7
-                            }
-                        }
+                        expandAndCollapse: true,
+                        animationDuration: 550,
+                        animationDurationUpdate: 750
                     }
                 ]
-            }, true);
+            });
         });
     });
+</script>
+<script src="../../assets/js/dataTool.min.js"></script>
+
+<script type="text/javascript">
+    var $ = layui.jquery;
+    var graphChart = echarts.init(document.getElementById('knowledge-graph'));
+    graphChart.showLoading();
+    $.get('../../assets/data/les-miserables.gexf', function (xml) {
+        graphChart.hideLoading();
+        var graph = echarts.dataTool.gexf.parse(xml);
+        var categories = [];
+        for (var i = 0; i < 9; i++) {
+            categories[i] = {
+                name: '类目' + i
+            };
+        }
+        graph.nodes.forEach(function (node) {
+            node.itemStyle = null;
+            node.value = node.symbolSize;
+            node.symbolSize /= 1.5;
+            node.label = {
+                normal: {
+                    show: node.symbolSize > 30
+                }
+            };
+            node.category = node.attributes.modularity_class;
+        });
+        var option = {
+            title: {
+                text: '我的知识地图'
+            },
+            tooltip: {},
+
+            animationDuration: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            series : [
+                {
+                    name: '知识结点',
+                    type: 'graph',
+                    layout: 'none',
+                    data: graph.nodes,
+                    links: graph.links,
+                    categories: categories,
+                    roam: true,
+                    focusNodeAdjacency: true,
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.3)'
+                        }
+                    },
+                    label: {
+                        position: 'right',
+                        formatter: '{b}'
+                    },
+                    lineStyle: {
+                        color: 'source',
+                        curveness: 0.3
+                    },
+                    emphasis: {
+                        lineStyle: {
+                            width: 10
+                        }
+                    }
+                }
+            ]
+        };
+        graphChart.setOption(option);
+    }, 'xml');
 </script>

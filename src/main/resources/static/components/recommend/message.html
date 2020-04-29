@@ -1,49 +1,60 @@
 <style>
-    .layui-card-img-box img{
+    .layui-card-img-box img {
         width: 70%;
     }
-    .layadmin-takerates{
+
+    .layadmin-takerates {
         padding: 10px 50px;
     }
-    .layui-res{
+
+    .layui-res {
         padding: 10px 0;
         border-bottom: 1px dashed #f6f6f6;
     }
 
-    .loading-box p{
+    .loading-box p {
         line-height: 250px;
     }
-    .self-mes-img-box{
-        text-align: center;
-    }
-    .self-mes-img-box img{
-        width: 50%;
-    }
-    .self-mes p{
-        margin: 10px 0;
-    }
-    .resource-mes-img-box img{
-        width: 30%;
-    }
-    .self-mes-img-box img {
-        width: 50%;
-    }
+
     .self-mes-img-box {
         text-align: center;
     }
+
+    .self-mes-img-box img {
+        width: 50%;
+    }
+
+    .self-mes p {
+        margin: 10px 0;
+    }
+
+    .resource-mes-img-box img {
+        width: 30%;
+    }
+
+    .self-mes-img-box img {
+        width: 50%;
+    }
+
+    .self-mes-img-box {
+        text-align: center;
+    }
+
     .self-mes-img-btn {
         margin-top: 30px;
     }
+
     .self-mes {
         padding-bottom: 30px;
     }
+
     .self-mes p {
         margin: 10px 0;
     }
 </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
-        <div class="layui-col-md8">
+        <div class="layui-col-md9">
             <div class="layui-card" style="min-height: 500px;">
                 <!--<div class="layui-card-header">个人信息</div>-->
                 <div class="layui-card-body ">
@@ -56,181 +67,211 @@
                             <div id="topic-graph" style="width: 100%;height:250px;"></div>
                         </div>
                     </div>
-
-
+                </div>
+            </div>
+            <div class="layui-card" style="min-height: 500px;">
+                <!--<div class="layui-card-header">个人信息</div>-->
+                <div class="layui-card-body ">
+                    <div class="layui-card-header">感兴趣的课程</div>
+                    <div class="layui-fluid">
+                        <div class="layui-row layui-col-space15" id="course-box"
+                             style="width: 100%; margin: 20px auto;">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="layui-col-md4" id="right-card">
-            <div class="layui-card" id="interest-courses">
-                <div class="layui-card-header">感兴趣的课程</div>
-                <div class="layui-card-body layadmin-takerates" id="course-box">
-                    <!--模板引擎,id="recommend-course" -->
+
+        <div class="layui-col-md3">
+            <div class="layui-card" style="min-height: 100px;">
+<!--                <div class="layui-card-header" style="font-size: 20px;">个人信息</div>-->
+                <div class="layui-card-body " style="font-size: 15px;">
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">已选课程</div><div style="float:right;">15门</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">已完成的课程</div><div style="float:right;">3门</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">获赞数</div><div style="float:right;">43</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">学习时长</div><div style="float:right;">78小时53分</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">关注了</div><div style="float:right;">154人</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">粉丝</div><div style="float:right;">78人</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">最近一周学习次数</div><div style="float:right;">5次</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">已完成的作业</div><div style="float:right;">12</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">未完成的作业</div><div style="float:right;">4</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">已完成的考试</div><div style="float:right;">5</div></div>
+                    <div class="layui-row" style="min-height: 35px;"><div style="float:left;">未完成的考试</div><div style="float:right;">2</div></div>
                 </div>
             </div>
         </div>
 
     </div>
-</div>
 
-<!-- 弹出层：结伴申请 -->
-<div id="friend-apply" style="display: none; margin: 30px 50px">
-    <!--模板引擎：结伴申请表格-->
-</div>
+    <!-- 弹出层：结伴申请 -->
+    <div id="friend-apply" style="display: none; margin: 30px 50px">
+        <!--模板引擎：结伴申请表格-->
+    </div>
 
-<!--具体信息-->
-<script id="message" type="text/html">
-    <div class="layui-col-md4 self-mes-img-box">
-        <img src="../../assets/images/head.png" class="layui-card-img"/>
-        <div class="self-mes-img-btn">
-            <button class="layui-btn layui-btn-primary">修改头像</button>
-            <!--<a href="changeMes" class="layui-btn">修改资料</a>-->
+    <!--具体信息-->
+    <script id="message" type="text/html">
+        <div class="layui-col-md4 self-mes-img-box">
+            <img src="../../assets/images/head.png" class="layui-card-img"/>
+            <div class="self-mes-img-btn">
+                <button class="layui-btn layui-btn-primary">修改头像</button>
+                <!--<a href="changeMes" class="layui-btn">修改资料</a>-->
+            </div>
         </div>
-    </div>
-    <div class="layui-col-md8 self-mes">
-        <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
-        <p>真实姓名：{{ d.studentName }}</p>
-        <p>性别：{{ d.gender }}</p>
-        <p>生日：{{ d.birthday }}</p>
-        <p>最高学历：{{ d.education }}</p>
-        <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
-        <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
-    </div>
-</script>
-<!--感兴趣的课程-->
-<script id="course" type="text/html">
-    {{# layui.each(d, function(index, item){ }}
-    <div class="layui-res reco-res-box">
-        <h3><b><a href="#">{{ item.courseName }}</a></b></h3>
-        <p class="layui-word-aux">主讲老师：{{ item.teacher }}</p>
-        <p class="layui-word-aux">开课院校：{{ item.courseSchool }}</p>
-    </div>
-    {{# }); }}
-</script>
-<script type="text/javascript">
-    layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function () {
-        var $ = layui.jquery;
-        var config = layui.config;
-        var laytpl = layui.laytpl;
-        var element = layui.element;
-        // 获取页面信息
-        console.log('access_token=' + config.getToken());
-        $.get(config.base_server + 'student/message?access_token=' + config.getToken() + "&id=", function (data) {
-            console.log(data);
-            var getTpl = message.innerHTML;
-            var view = document.getElementById("message-box");
-            laytpl(getTpl).render(data, function (html) {
-                view.innerHTML = html;
-                element.render();
-            });
-        });
-    });
-</script>
-<!-- js部分 -->
-<script src="../../assets/libs/echarts/echarts.min.js"></script>
-<script src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
-
-<!-- 感兴趣的领域饼图渲染 感兴趣的话题词图渲染 -->
-<script type="text/javascript">
-    layui.use(['util', 'admin', 'config', 'element', 'laytpl', 'layer'], function () {
-        var $ = layui.jquery;
-        var config = layui.config;
-        var laytpl = layui.laytpl;
-        var element = layui.element;
-        // 基于准备好的dom，初始化echarts实例
-        var domainChart = echarts.init(document.getElementById('domain-graph'));
-        var topicChart = echarts.init(document.getElementById('topic-graph'));
-        var option0 = {
-            title: {
-                text: '感兴趣的领域',
-                x: 'center'
-            }
-        };
-        var option1 = {
-            title: {
-                text: '感兴趣的话题',
-                x: 'center'
-            }
-        };
-
-        //获取感兴趣的话题及渲染
-        $.get(config.base_server + 'interest/topic?access_token=' + config.getToken(), function (data) {
-            var topics = new Array();
-            for (i = 0; i < data.count; i++) {
-                var topic = new Object();
-                topic.name = data.data[i].topicName;
-                topic.value = data.data[i].count ;
-                topics.push(topic);
-            }
-            option1.series = [
-                {
-                    type: 'wordCloud',
-                    shape: 'pentagon',
-                    center: ['50%', '50%'],
-                    textStyle: {
-                        normal: {
-                            color: function () {
-                                return 'rgb(' + [
-                                    Math.round(Math.random() * 160),
-                                    Math.round(Math.random() * 160),
-                                    Math.round(Math.random() * 160)
-                                ].join(',') + ')';
-                            }
-                        },
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowColor: '#333'
-                        }
-                    },
-                    data: topics
-                }
-            ]
-           // console.log(option1);
-            topicChart.setOption(option1, true);
-        });
-
-        //获取感兴趣领域及渲染
-        $.get(config.base_server + 'interest/domain?access_token=' + config.getToken(), function (data) {
-            var domains = new Array();
-            for (i = 0; i < data.count; i++) {
-                var domain = new Object();
-                domain.name = data.data[i].domain;
-                domain.value = data.data[i].score;
-                domains.push(domain);
-            }
-            option0.series = [
-                {
-                    name: '感兴趣的领域',
-                    type: 'pie',
-                    radius: [30, 70],
-                    center: ['50%', '50%'],
-                    roseType: 'area',
-                    data: domains
-                }
-            ]
-            //console.log(option0);
-            domainChart.setOption(option0, true);
-        });
-
-        // 获取感兴趣的课程
-        $.ajax({
-            type: "get",
-            async: true,
-            url: config.base_server + 'interest/course?access_token=' + config.getToken(),
-            data: {},
-            dataType: "json",
-            success: function (data) {
-                //console.log(data);
-                var getCourseTpl = document.getElementById("course").innerHTML;
-                var courseView = document.getElementById("course-box");
-                laytpl(getCourseTpl).render(data, function(html){
-                    courseView.innerHTML = html;
+        <div class="layui-col-md8 self-mes">
+            <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
+            <p>真实姓名：{{ d.studentName }}</p>
+            <p>性别：{{ d.gender }}</p>
+            <p>生日：{{ d.birthday }}</p>
+            <p>最高学历：{{ d.education }}</p>
+            <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+            <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
+        </div>
+    </script>
+    <!--感兴趣的课程-->
+    <script id="course" type="text/html">
+        {{# layui.each(d, function(index, item){ }}
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header" style="font-size: 15px;">
+                    <a href="">
+                        {{ item.courseName.substring(0, 14) }}
+                    </a>
+                </div>
+                <div class="layui-card-body" style="height:70px;font-size: 12px;">
+                    <div>
+                        <p>讲师：<span class="layuiadmin-span-color">{{ item.teacher }}</span></p>
+                        <p>开课机构：<span class="layuiadmin-span-color">{{ item.courseSchool }}</span></p>
+                        <p>课程类型: <span class="layuiadmin-span-color">{{ item.courseType || '' }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{# }); }}
+    </script>
+    <script type="text/javascript">
+        layui.use(['element', 'config', 'laytpl', 'form', 'layer'], function () {
+            var $ = layui.jquery;
+            var config = layui.config;
+            var laytpl = layui.laytpl;
+            var element = layui.element;
+            // 获取页面信息
+            console.log('access_token=' + config.getToken());
+            $.get(config.base_server + 'student/message?access_token=' + config.getToken() + "&id=", function (data) {
+                console.log(data);
+                var getTpl = message.innerHTML;
+                var view = document.getElementById("message-box");
+                laytpl(getTpl).render(data, function (html) {
+                    view.innerHTML = html;
                     element.render();
                 });
-            },
-            error: function (){
-                alert("数据加载失败");
-            }
+            });
         });
-    });
-</script>
+    </script>
+    <!-- js部分 -->
+    <script src="../../assets/libs/echarts/echarts.min.js"></script>
+    <script src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+
+    <!-- 感兴趣的领域饼图渲染 感兴趣的话题词图渲染 -->
+    <script type="text/javascript">
+        layui.use(['util', 'admin', 'config', 'element', 'laytpl', 'layer'], function () {
+            var $ = layui.jquery;
+            var config = layui.config;
+            var laytpl = layui.laytpl;
+            var element = layui.element;
+            // 基于准备好的dom，初始化echarts实例
+            var domainChart = echarts.init(document.getElementById('domain-graph'));
+            var topicChart = echarts.init(document.getElementById('topic-graph'));
+            var option0 = {
+                title: {
+                    text: '感兴趣的领域',
+                    x: 'center'
+                }
+            };
+            var option1 = {
+                title: {
+                    text: '感兴趣的话题',
+                    x: 'center'
+                }
+            };
+
+            //获取感兴趣的话题及渲染
+            $.get(config.base_server + 'interest/topic?access_token=' + config.getToken(), function (data) {
+                var topics = new Array();
+                for (i = 0; i < data.count; i++) {
+                    var topic = new Object();
+                    topic.name = data.data[i].topicName;
+                    topic.value = data.data[i].count;
+                    topics.push(topic);
+                }
+                option1.series = [
+                    {
+                        type: 'wordCloud',
+                        shape: 'pentagon',
+                        center: ['50%', '50%'],
+                        textStyle: {
+                            normal: {
+                                color: function () {
+                                    return 'rgb(' + [
+                                        Math.round(Math.random() * 160),
+                                        Math.round(Math.random() * 160),
+                                        Math.round(Math.random() * 160)
+                                    ].join(',') + ')';
+                                }
+                            },
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowColor: '#333'
+                            }
+                        },
+                        data: topics
+                    }
+                ]
+                // console.log(option1);
+                topicChart.setOption(option1, true);
+            });
+
+            //获取感兴趣领域及渲染
+            $.get(config.base_server + 'interest/domain?access_token=' + config.getToken(), function (data) {
+                var domains = new Array();
+                for (i = 0; i < data.count; i++) {
+                    var domain = new Object();
+                    domain.name = data.data[i].domain;
+                    domain.value = data.data[i].score;
+                    domains.push(domain);
+                }
+                option0.series = [
+                    {
+                        name: '感兴趣的领域',
+                        type: 'pie',
+                        radius: [30, 70],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        data: domains
+                    }
+                ]
+                //console.log(option0);
+                domainChart.setOption(option0, true);
+            });
+
+            // 获取感兴趣的课程
+            $.ajax({
+                type: "get",
+                async: true,
+                url: config.base_server + 'interest/course?access_token=' + config.getToken(),
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    var getCourseTpl = document.getElementById("course").innerHTML;
+                    var courseView = document.getElementById("course-box");
+                    laytpl(getCourseTpl).render(data, function (html) {
+                        courseView.innerHTML = html;
+                        element.render();
+                    });
+                },
+                error: function () {
+                    alert("数据加载失败");
+                }
+            });
+        });
+    </script>
