@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hit.lpm.situation.dao.LearningPathMapper">
+    <select id="getCourseNameById" resultType="java.lang.String">
+        select course_name from lpm_course where course_id = #{courseId};
+    </select>
+    <select id="getPathNode" resultType="com.hit.lpm.situation.model.KnowledgeNodes">
+        select * from lpm_knowledge_node where course_id = #{courseId};
+    </select>
+    <select id="getPathEdge" resultType="com.hit.lpm.situation.model.KnowledgeEdges">
+        select * from lpm_knowledge_edge where course_id = #{courseId};
+    </select>
+    <select id="getStudentIdByUserId" parameterType="int" resultType="int">
+        select student_id from lpm_student where user_id = #{userid};
+    </select>
+    <select id="getLearningSituation" resultType="com.hit.lpm.situation.model.KnowledgeRelation">
+        select * from lpm_student_knowledge_relation where student_id = #{studentId} and course_id = #{courseId};
+    </select>
+    <select id="getKnowledgeNodeById" resultType="com.hit.lpm.situation.model.KnowledgeNodes">
+        select * from lpm_knowledge_node where node_id = #{knowledgeNodeId} and course_id = #{courseId};
+    </select>
+    <select id="getStudentId" resultType="int">
+        select * from lpm_student where user_id= #{userId};
+    </select>
+    <insert id="learnKnowledge">
+        insert into lpm_student_knowledge_relation(student_id, node_id, course_id, score) values (#{stuId}, #{nodeId}, #{courseId}, 0.8);
+    </insert>
+</mapper>

@@ -1,14 +1,144 @@
-<!DOCTYPE html>
+<style>
+    .layui-card-img-box img{
+        width: 70%;
+    }
+    .layadmin-takerates{
+        padding: 10px 50px;
+    }
+    .layui-res{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .details{
+        color: #009688;
+        cursor: pointer;
+    }
+    .my-friend-a{
+        cursor: pointer;
+    }
+    .recommend-friend-a{
+        cursor: pointer;
+    }
+    .loading-box{
+        min-height: 250px;
+        text-align: center;
+    }
+    .loading-box p{
+        line-height: 250px;
+    }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 10px 0;
+    }
+</style>
 
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>学习路径规划</title>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=B4mkLy82s0FWKosc6Qb3R1gY2oZYlQ4K&s=1"> </script>-->
     <script src="../../assets/libs/echarts/echarts.min.js"></script>
+
 </head>
 <body>
-<div style="width: 1000px; height: 600px" id="relation-chart"></div>
+
+<!--知识点弹出窗口-->
+<div id="knowledge-details" style="display: none; margin: 30px 50px">
+    <div style="padding: 50px 100px;" id="knowledge-details-content">
+
+    </div>
+</div>
+<!--知识点详情页面-->
+<script id="knowledge-message" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md8 self-mes">
+            <p style="font-size: 20px;"><b>{{ d.name }}</b></p>
+            <p>课程名：{{ d.courseName }}</p>
+            <p>推荐指数：{{ d.importance }}</p>
+            <p>状态：{{ d.category}}</p>
+            <p>掌握程度：{{ d.score }}</p>
+            <p>相关视频时长：{{ d.videoTime }} 分钟</p>
+            <p>线下资源：{{ d.offline }}</p>
+        </div>
+    </div>
+    <!--地图位置显示容器-->
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">地图</div>
+                <div class="layui-card-body">
+                    <div style="width: 400px; height: 300px;" id="container"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">线下授课地点</div>
+                <div class="layui-card-body">
+                    <div style="width: 100px; height: 300px" id="offline_node">
+                        <div class="layui-res reco-res-box">
+                            <h3><b><a href="#">测试地点2</a></b></h3>
+                            <p class="layui-word-aux">综合评价：0.85</p>
+                        </div>
+                        <div class="layui-res reco-res-box">
+                            <h3><b><a href="#">测试地点3</a></b></h3>
+                            <p class="layui-word-aux">综合评价：0.63</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 30px;">
+        <div id="apply-form">
+            <input type="text" name="nodeId" value="{{ d.nodeId }}" style="display: none;">
+            <input type="text" name="courseId" value="{{ d.courseId }}" style="display: none;">
+            <input type="text" name="category" value="{{ d.category }}" style="display: none;">
+            <input type="text" name="offline" value="{{ d.offline }}" style="display: none;">
+            <div style="margin-top: 20px;">
+                <button class="layui-btn" id="submit-learn-knowledge" name="learn">开始学习</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">学习路径</div>
+                <div class="layui-card-body">
+                    <div style="width: 700px; height: 700px" id="learnpath"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">课程</div>
+                <div class="layui-card-body">
+                    <div style="width: 100px; height: 700px" id="course-choose">
+                        <div class="layui-res reco-res-box">
+                            <h3><b><a href="#">数据库系统</a></b></h3>
+                            <p class="layui-word-aux">学习进度：0%</p>
+                        </div>
+                        <div class="layui-res reco-res-box">
+                            <h3><b><a href="#">数据结构</a></b></h3>
+                            <p class="layui-word-aux">学习进度：0%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <script src="../../assets/libs/echarts/echarts.min.js"></script>
@@ -16,81 +146,203 @@
 
 <script type="text/javascript">
     var $ = layui.jquery;
-    var myChart = echarts.init(document.getElementById("relation-chart"));
+    var config = layui.config;
+    var laytpl = layui.laytpl;
+    var element = layui.element;
+    var layer = layui.layer;
+    var myChart = echarts.init(document.getElementById("learnpath"));
     myChart.showLoading();
-    $.get('../../assets/data/les-miserables.gexf', function (xml) {
-        myChart.hideLoading();
-        var graph = echarts.dataTool.gexf.parse(xml);
-        var categories = [];
-        for (var i = 0; i < 9; i++) {
-            categories[i] = {
-                name: '类目' + i
-            };
-        }
-        graph.nodes.forEach(function (node) {
-            node.itemStyle = null;
-            node.value = node.symbolSize;
-            node.symbolSize /= 1.5;
-            node.label = {
-                normal: {
-                    show: node.symbolSize > 30
-                }
-            };
-            node.category = node.attributes.modularity_class;
-        });
-        var option = {
-            title: {
-                text: 'Les Miserables',
-                subtext: 'Default layout',
-                top: 'bottom',
-                left: 'right'
-            },
-            tooltip: {},
-            legend: [{
-                // selectedMode: 'single',
-                data: categories.map(function (a) {
-                    return a.name;
-                })
-            }],
-            animationDuration: 1500,
-            animationEasingUpdate: 'quinticInOut',
-            series : [
-                {
-                    name: 'Les Miserables',
-                    type: 'graph',
-                    layout: 'none',
-                    data: graph.nodes,
-                    links: graph.links,
-                    categories: categories,
-                    roam: true,
-                    focusNodeAdjacency: true,
-                    itemStyle: {
-                        normal: {
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.3)'
-                        }
-                    },
-                    label: {
-                        position: 'right',
-                        formatter: '{b}'
-                    },
-                    lineStyle: {
-                        color: 'source',
-                        curveness: 0.3
-                    },
-                    emphasis: {
+    $.ajax({
+        type: "get",
+        async: true,
+        url: config.base_server + 'learningpath/getLearningPath?access_token=' + config.getToken(),
+        data: {},
+        dataType: "json",
+        success: function (result) {
+            myChart.hideLoading();
+            var categories = [
+                {name: "已学习"},
+                {name: "即将学习"},
+                {name: "待学习"},
+            ];
+            console.log(result["node"]);
+            console.log(result["edge"]);
+            var option = {
+                title: {
+                    text: result['courseName'],
+                    subtext: result['courseId'],
+                    top: 'bottom',
+                    left: 'right'
+                },
+                tooltip: {},
+                legend: [{
+                    // selectedMode: 'single',
+                    data: categories.map(function (a) {
+                        return a.name;
+                    })
+                }],
+                animationDuration: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                series : [
+                    {
+                        name: result['courseName'],
+                        type: 'graph',
+                        layout: 'none',
+                        data: result["node"],
+                        links: result["edge"],
+                        categories: categories,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        itemStyle: {
+                            normal: {
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.3)'
+                            }
+                        },
+                        label: {
+                            show:'true',
+                            position: 'right',
+                            formatter: '{b}'
+                        },
                         lineStyle: {
-                            width: 10
+                            color: 'source',
+                            curveness: 0.1
+                        },
+                        emphasis: {
+                            lineStyle: {
+                                width: 10
+                            }
                         }
                     }
-                }
-            ]
-        };
+                ]
+            };
 
-        myChart.setOption(option);
-    }, 'xml');
+            myChart.setOption(option);
+
+        },
+        error: function (){
+            alert("数据加载失败");
+        }
+    });
+    myChart.on('click', function (param){
+
+        loadScript();
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'learningpath/getKnowledgeDetail?access_token=' + config.getToken() +
+                "&category=" + param.data.category +
+                "&knowledgeId=" + param.data.id +
+                "&courseId=" + param.data.courseName +
+                "&score=" + param.data.value,
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                var getStudentDetailsTpl = document.getElementById("knowledge-message").innerHTML;
+                var studentDetailsView = document.getElementById("knowledge-details-content");
+                laytpl(getStudentDetailsTpl).render(data, function(html){
+                    studentDetailsView.innerHTML = html;
+                    element.render();
+                });
+            },
+            error: function (){
+                alert("数据加载失败");
+            }
+        });
+
+        layer.open({
+            type: 1,
+            title:"知识点详情",
+            shade: 0,
+            area: ['1072px','70%'],
+            content: $("#knowledge-details"),
+            end: function(){
+                $("#knowledge-details").css("display", "none");
+            }
+        });
+    });
+
+
+    $("#knowledge-details-content").on("click", "#submit-learn-knowledge", function(){
+        var postData = {};
+        var judge = $("input[name='category']").val();
+        postData["access_token"] = config.getToken();
+        postData["nodeId"] = $("input[name='nodeId']").val();
+        postData["courseId"] = $("input[name='courseId']").val();
+        //console.log(postData);
+        if(judge === "可以开始学习") {
+            $.ajax({
+                type: "post",
+                async: true,
+                url: config.base_server + 'learningpath/learnKnowledge',
+                data: postData,
+                success: function (result) {
+                    if (result.msg === "success") {
+                        layer.msg("成功跳转至学习界面");
+                        layer.close(layer.index - 1);  // 关闭弹出层
+                    }
+                },
+                error: function (errorMes) {
+                    layer.msg("学习失败");
+                }
+            });
+        }
+        else if(judge === "已完成学习"){
+            layer.msg("进行了一次复习");
+        }
+        else {
+            layer.msg("该知识点的前置存在盲区，不建议提前学习");
+        }
+        return false;
+    });
+</script>
+
+<script type="text/javascript">
+
+    function initialize() {
+        // if (param.data.offline === "无"){
+        //     //document.getElementById("offline")
+        //     return
+        // }
+
+        var map = new BMap.Map("container");
+        var point = new BMap.Point(116.404, 39.915);
+        map.centerAndZoom(point, 15);
+        var marker = new BMap.Marker(point);        // 创建标注
+        map.addOverlay(marker);
+
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                map.addOverlay(mk);
+                map.panTo(r.point);
+                var marker = new BMap.Marker(point);        // 创建标注
+                map.addOverlay(marker);
+                point = new BMap.Point(r.point.lng, r.point.lat);
+                map.centerAndZoom(point, 15);
+                marker = new BMap.Marker(point);        // 创建标注
+                map.addOverlay(marker);
+
+                // alert('您的位置：'+r.point.lng+','+r.point.lat);
+            }
+            else {
+                alert('failed'+this.getStatus());
+            }
+        });
+    }
+
+    function loadScript() {
+        console.log("开始加载");
+        var script = document.createElement("script");
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=B4mkLy82s0FWKosc6Qb3R1gY2oZYlQ4K&callback=initialize";
+        document.body.appendChild(script);
+        console.log("加载完成");
+    }
+
+    window.onload = loadScript;
 </script>
 </body>
 </html>
