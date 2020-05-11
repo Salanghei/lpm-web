@@ -1,0 +1,225 @@
+<div style="padding: 20px; background-color: #F2F2F2;">
+    <div class="layui-card">
+        <div class="layui-card-header">课程领域划分统计</div>
+        <div class="layui-card-body">
+            <div id="main" style="width: 1000px;height:300px;"></div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">开课机构统计</div>
+                <div class="layui-card-body">
+                    <div id="course_school_histogram" style="width: 500px;height:700px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+<!--            <div class="layui-card">-->
+<!--                <div class="layui-card-header">开课机构具体数据</div>-->
+<!--                <div class="layui-card-body">-->
+<!--                    -->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+
+    </div>
+    <p>ok2</p>
+
+</div>
+<script>
+    layui.use(['form', 'element', 'config', 'laytpl', 'table'], function () {
+        var form = layui.form;
+        var element = layui.element;
+
+        var config = layui.config;
+
+        var table = layui.table;
+
+        var $ = layui.jquery;
+
+        //初始化课程领域统计柱状图
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            color: ['#3398DB'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+
+                    type: 'category',
+                    data: ['正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                    ],
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLabel: {
+
+                        rotate: 45,//倾斜度 -90 至 90 默认为0
+
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+                        100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,]
+                }
+            ]
+        };
+        myChart.setOption(option);
+
+
+        //初始化开课机构统计柱状图
+        var myChart2 = echarts.init(document.getElementById('course_school_histogram'));
+        option = {
+            color: ['#3398DB'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            yAxis: [
+                {
+
+                    type: 'category',
+                    data: ['正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                        '正在读取', '正在读取', '正在读取', '正在读取',
+                    ],
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '数量',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: [100, 100, 100, 100, 100,
+                        100, 100, 100, 100, 100,
+                        100, 100, 100, 100, 100,
+                        100, 100, 100, 100, 100,
+                    ]
+                }
+            ]
+        };
+        myChart2.setOption(option);
+
+
+        //加载课程领域统计柱状图的数据
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'courMgt/getCourType?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data)
+
+                var nameArr = new Array();
+                var countArr = new Array();
+                for (var key in data) {
+                    nameArr.push(key);
+                    countArr.push(data[key]);
+                }
+                option = {
+
+                    xAxis: [
+                        {
+                            data: nameArr
+                        }
+                    ],
+
+                    series: [
+                        {
+                            data: countArr
+                        }
+                    ]
+                };
+                myChart.setOption(option);
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+
+        //加载开课机构统计柱状图的数据
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'courMgt/getCourSch?access_token=' + config.getToken(),
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                //console.log(data)
+                var nameArr = new Array();
+                var countArr = new Array();
+                for (var key in data) {
+                    nameArr.push(key);
+                    countArr.push(data[key]);
+                }
+                option = {
+
+                    yAxis: [
+                        {
+                            data: nameArr
+
+                        }
+                    ],
+
+                    series: [
+                        {
+                            data: countArr
+                        }
+                    ]
+                };
+                myChart2.setOption(option);
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+
+    })
+</script>

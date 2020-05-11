@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hit.lpm.management.dao.Course2Mapper">
+
+        <select id="selectAllTypeAndCount" resultType="java.util.Map">
+            SELECT course_type,count(*) FROM lpm_course GROUP BY course_type ORDER BY count(*) DESC;
+        </select>
+
+        <select id="selectAllSchAndCount" resultType="java.util.Map">
+            SELECT course_school,count(*) FROM lpm_course GROUP BY course_school ORDER BY count(*) DESC;
+        </select>
+</mapper>
+
+
