@@ -1,0 +1,677 @@
+<div style="padding: 20px; background-color: #F2F2F2;">
+
+
+    <div class="layui-card">
+        <div class="layui-card-header">课程管理表格</div>
+        <div class="layui-card-body">
+            <!--            查找条件选择-->
+            <form class="layui-form" action="" lay-filter="my_form_to_search">
+                <label class="layui-form-label">筛选条件：</label>
+                <div class="layui-form-item">
+                    <select name="select_condition" lay-verify="" lay-filter="my_select1">
+                        <option value="-1">请选择搜索条件</option>
+                        <option value="course_name">课程名</option>
+                        <option value="teacher">教师</option>
+                        <option value="course_type">课程领域</option>
+                        <option value="course_school">开课机构</option>
+
+                    </select>
+                    <input type="text" name="title" id="my_input1_to_search" required lay-verify="required"
+                           placeholder="请输入查找内容" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </form>
+
+            <!--            表格-->
+            <table id="my_cour_table_1" lay-filter="lay_filter_table1"></table>
+        </div>
+    </div>
+
+</div>
+<!--课程管理表格的工具栏-->
+<script type="text/html" id="my_cour_toolbar1">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="search">搜索</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete">批量删除</button>
+    </div>
+</script>
+<!--课程管理表格每行的工具栏-->
+<script type="text/html" id="my_cour_tool_one_line">
+    <a class="layui-btn layui-btn-xs" lay-event="single_details">详情</a>
+    <a class="layui-btn layui-btn-xs" lay-event="single_update">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="single_delete">删除</a>
+</script>
+<script type="text/javascript">
+
+
+    layui.use(['table', 'form', 'element', 'config', 'layer'], function () {
+        var form = layui.form;
+        var element = layui.element;
+        var table = layui.table;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+
+
+        //课程管理表格
+        table.render({
+            elem: '#my_cour_table_1'
+
+            , url: config.base_server + '/courMgt/getInfAll?access_token=' + config.getToken() //数据接口
+            , page: true //开启分页
+
+            , cols: [[ //表头
+                {type: 'checkbox'}
+                , {field: 'courseId', title: '课程ID',}
+                , {field: 'courseName', title: '课程名',}
+                , {field: 'domainId', title: '领域id',}
+                , {field: 'teacher', title: '教师',}
+                , {field: 'courseInfo', title: '课程介绍',}
+                , {field: 'courseUrl', title: '课程url',}
+                , {field: 'startTime', title: '开始时间',}
+                , {field: 'endTime', title: '结束时间',}
+                , {field: 'courseType', title: '课程类型',}
+                , {field: 'prerequisites', title: '前置课程',}
+                , {field: 'courseSchool', title: '开课机构',}
+                , {fixed: 'right', title: '操作', toolbar: '#my_cour_tool_one_line', width: 170}
+
+            ]]
+            , toolbar: '#my_cour_toolbar1'
+
+        });
+        //监听筛选条件表单的变化,并将变化后的值存储到变量中
+        var condition_what;
+        var condition_where;
+        form.on('select(my_select1)', function (data) {
+            condition_where = data.value; //得到被选中的值
+            condition_what = document.getElementById('my_input1_to_search').value;
+
+        });
+
+        // 监听头部工具栏点击
+        table.on('toolbar(lay_filter_table1)', function (obj) {
+
+            switch (obj.event) {
+
+                case 'search':
+                    condition_what = document.getElementById('my_input1_to_search').value;
+                    table.reload('my_cour_table_1', {where: {searchKey: condition_where, searchValue: condition_what}});
+                    break;
+                case 'add':
+                    layer.open({
+                        type: 1,
+                        shadeClose: true,
+                        content:
+
+                        '<div>\n' +
+                            '    <form class="layui-form" action="">\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <label class="layui-form-label">输入框</label>\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <input type="text" name="courseId" required  lay-verify="required" placeholder="请输入课程ID" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="courseName" required  lay-verify="required" placeholder="请输入课程名" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="domainId" required  lay-verify="required" placeholder="请输入领域id" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="teacher" required  lay-verify="required" placeholder="请输入教师" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="courseInfo" required  lay-verify="required" placeholder="请输入课程介绍" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="courseUrl" required  lay-verify="required" placeholder="请输入课程地址" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="courseType" required  lay-verify="required" placeholder="请输入课程类别" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="prerequisites" required  lay-verify="required" placeholder="请输入前置课程" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="courseSchool" required  lay-verify="required" placeholder="请输入开课机构" autocomplete="off" class="layui-input">\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>\n' +
+                            '\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '    </form>\n' +
+                            '\n' +
+                            '\n' +
+                            '</div>\n' +
+                            '<script>\n' +
+                            '    layui.use([\'form\', \'element\', \'config\', \'laytpl\'], function () {\n' +
+                            '        var form = layui.form;\n' +
+                            '        var element = layui.element;\n' +
+                            '\n' +
+                            '        var config = layui.config;\n' +
+                            '        var $ = layui.jquery;\n' +
+                            '        form.on(\'submit(formDemo)\', function(data){\n' +
+                            '            var temp=data.field;\n' +
+                            '\n' +
+                            '            $.post(config.base_server + \'/courMgt/addCour?access_token=\' + config.getToken(),\n' +
+                            '\n' +
+                            '                temp\n' +
+                            '                ,\n' +
+                            '                function (data,status) {\n' +
+                            '                    if (data.ifDone) {\n' +
+                            '                        layer.msg(\'添加成功\');\n' +
+                            '                    } else {\n' +
+                            '                        layer.msg(\'id重复，添加失败\');\n' +
+                            '                    }\n' +
+                            '                }\n' +
+                            '\n' +
+                            '            );\n' +
+                            '            return false;\n' +
+                            '        });\n' +
+                            '    })\n' +
+                             '</scrip'+'t>'
+
+                    });
+                    break;
+                case 'delete':
+                    alert('目前请使用每行后面的删除按钮');
+                    // $.post(config.base_server + '/stuMgt/delStu?access_token=' + config.getToken(),
+                    //     {
+                    //         studentId:11
+                    //     },
+                    //     function (data,status) {
+                    //         if (data.ifDone) {
+                    //             layer.msg('删除成功');
+                    //         } else {
+                    //             layer.msg('删除失败');
+                    //         }
+                    //     }
+                    //
+                    // );
+                    break;
+
+            }
+            ;
+        });
+        // 监听每一行的工具栏点击
+        table.on('tool(lay_filter_table1)', function (obj) {
+
+            switch (obj.event) {
+                case 'single_details':
+
+                    //当点击详情按钮时，弹出下面的页面
+                    //目前正在实现弹出的界面功能
+                    layer.open({
+                        type: 1,
+                        closeBtn: 0,
+                        area: ['800px', '500px'],
+                        shadeClose: true,
+                        content:
+                            '<div style="padding: 20px; background-color: #F2F2F2;">\n' +
+                            '    <div class="layui-card">\n' +
+                            '        <div class="layui-card-header">卡片面板</div>\n' +
+                            '        <div class="layui-card-body">\n' +
+                            '            <img src="./notfind.png" class="layui-nav-img"\n' +
+                            '                 style="height: 200px;width:200px">\n' +
+                            '            <br/>\n' +
+                            '            <br/>\n' +
+                            '            <h1>基本人体生物学：细胞和组织</h1>\n' +
+                            '            <br/>\n' +
+                            '            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">生命科学</button>\n' +
+                            '            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">阿德莱德大学</button>\n' +
+                            '\n' +
+                            '            <br/>\n' +
+                            '            <br/>\n' +
+                            '            <h3>教师：Rachel Gibson、Catherine Snelling、Femke Buisman-Pijlman、Mario Ricci、Sophie Karanicolas</h3>\n' +
+                            '            <br/>\n' +
+                            '            <h3>开课时间：2016-10-15 00:00:00--6-12-15 23:30:00</h3>\n' +
+                            '            <br/>\n' +
+                            '            <fieldset class="layui-elem-field">\n' +
+                            '                <legend>简介</legend>\n' +
+                            '                <div class="layui-field-box">\n' +
+                            '                    <p>你是否准备从事与健康相关的职业，或是想要学习健康科学？或许你是想要了解更多的人体的奥妙？我们的身体是奇妙而复杂的生物机器。本门课程会为你学习人体解剖学和生理学打下良好的基础。</p><p>你会更全面地了解人体细胞和组织在健康或疾病状态下的正常结构与功能。在课程中也会清晰阐述身体四种主要类型组织：上皮细胞，结缔组织，肌肉细胞和神经细胞。</p><p>本课程采用多种有趣的学习方式，包括短视频、动画、互动和综合测验。课程通过对核心概念进行引导，使你进行相关学习。</p><p>你将学到：</p><p>● 人体细胞和组织的结构和功能知识</p><p>● 基本人体解剖和生理学知识</p><p>● 健康科学以及健康职业的知识准备</p>\n' +
+                            '                </div>\n' +
+                            '            </fieldset>\n' +
+                            '\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '    <div class="layui-card">\n' +
+                            '        <div class="layui-card-header">学习者列表信息</div>\n' +
+                            '        <div class="layui-card-body">\n' +
+                            '            <table class="layui-table">\n' +
+                            '                <colgroup>\n' +
+                            '                    <col width="150">\n' +
+                            '                    <col width="200">\n' +
+                            '                    <col>\n' +
+                            '                </colgroup>\n' +
+                            '                <thead>\n' +
+                            '                <tr>\n' +
+                            '                    <th>id</th>\n' +
+                            '                    <th>姓名</th>\n' +
+                            '                    <th>昵称</th>\n' +
+                            '                    <th>性别</th>\n' +
+                            '                    <th>生日</th>\n' +
+                            '                    <th>学历</th>\n' +
+                            '                    <th>省份</th>\n' +
+                            '                    <th>管理</th>\n' +
+                            '                </tr>\n' +
+                            '                </thead>\n' +
+                            '                <tbody>\n' +
+                            '                <tr>\n' +
+                            '                    <td>183</td>\n' +
+                            '                    <td>朱叶霜</td>\n' +
+                            '                    <td>ZYShin</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>133</td>\n' +
+                            '                    <td>阳文礼</td>\n' +
+                            '                    <td>ywlloo</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1982-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>189</td>\n' +
+                            '                    <td>武韬</td>\n' +
+                            '                    <td>Tao</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1993-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>184</td>\n' +
+                            '                    <td>颜柳江</td>\n' +
+                            '                    <td>yanliujiang</td>\n' +
+                            '                    <td>女</td>\n' +
+                            '                    <td>1992-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>233</td>\n' +
+                            '                    <td>吴华锐</td>\n' +
+                            '                    <td>ZYShin</td>\n' +
+                            '                    <td>女</td>\n' +
+                            '                    <td>1993-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>183</td>\n' +
+                            '                    <td>段勇倩</td>\n' +
+                            '                    <td>Dooola</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>山东</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>134</td>\n' +
+                            '                    <td>杨元</td>\n' +
+                            '                    <td>Yangyuan</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>硕士</td>\n' +
+                            '                    <td>济南</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>183</td>\n' +
+                            '                    <td>侯廷政</td>\n' +
+                            '                    <td>Jack</td>\n' +
+                            '                    <td>女</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>183</td>\n' +
+                            '                    <td>朱叶霜</td>\n' +
+                            '                    <td>ZYShin</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>153</td>\n' +
+                            '                    <td>杨佳霖</td>\n' +
+                            '                    <td>yangyuan</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '                <tr>\n' +
+                            '                    <td>183</td>\n' +
+                            '                    <td>武哲书</td>\n' +
+                            '                    <td>Dreamer</td>\n' +
+                            '                    <td>男</td>\n' +
+                            '                    <td>1990-01-01</td>\n' +
+                            '                    <td>本科</td>\n' +
+                            '                    <td>北京</td>\n' +
+                            '                    <td>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">详情</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm">修改</button>\n' +
+                            '                        <br/>\n' +
+                            '                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">删除</button>\n' +
+                            '                    </td>\n' +
+                            '                </tr>\n' +
+                            '\n' +
+                            '                </tbody>\n' +
+                            '            </table>\n' +
+                            '\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '    <div class="layui-card">\n' +
+                            '        <div class="layui-card-header">分时登录人数统计</div>\n' +
+                            '        <div class="layui-card-body">\n' +
+                            '            <div id="loginTime" style="width: 600px;height:400px;"></div>\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '    <div class="layui-card">\n' +
+                            '        <div class="layui-card-header">省份分布</div>\n' +
+                            '        <div class="layui-card-body " style="width: 700px;height:500px;">\n' +
+                            '            <div style="background-image:url(../../assets/images/ChinaMap.png);background-size: 700px 500px">\n' +
+                            '                <div id="stuProvinceMap" style="width: 700px;height:500px;"></div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '        </div>\n' +
+                            '    </div>\n' +
+                            '</div>\n' +
+                            '\n' +
+                            '\n' +
+                            '\n' +
+                            '<script>\n' +
+                            '    layui.use(\'table\', function () {\n' +
+                            '        var table = layui.table;\n' +
+                            '\n' +
+                            '        var myChartLT = echarts.init(document.getElementById(\'loginTime\'));\n' +
+                            '        var base = +new Date(1968, 9, 3);\n' +
+                            '        var oneDay = 24 * 3600 * 1000;\n' +
+                            '        var date = [];\n' +
+                            '\n' +
+                            '        var data = [Math.random() * 300];\n' +
+                            '\n' +
+                            '        for (var i = 1; i < 20000; i++) {\n' +
+                            '            var now = new Date(base += oneDay);\n' +
+                            '            date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join(\'/\'));\n' +
+                            '            data.push(Math.abs(Math.round((Math.random() - 0.5) * 20 + data[i - 1])));\n' +
+                            '        }\n' +
+                            '\n' +
+                            '        var  option1 = {\n' +
+                            '            tooltip: {\n' +
+                            '                trigger: \'axis\',\n' +
+                            '                position: function (pt) {\n' +
+                            '                    return [pt[0], \'10%\'];\n' +
+                            '                }\n' +
+                            '            },\n' +
+                            '            title: {\n' +
+                            '                left: \'center\',\n' +
+                            '                text: \'登录人数统计\',\n' +
+                            '            },\n' +
+                            '            toolbox: {\n' +
+                            '                feature: {\n' +
+                            '                    dataZoom: {\n' +
+                            '                        yAxisIndex: \'none\'\n' +
+                            '                    },\n' +
+                            '                    restore: {},\n' +
+                            '                    saveAsImage: {}\n' +
+                            '                }\n' +
+                            '            },\n' +
+                            '            xAxis: {\n' +
+                            '                type: \'category\',\n' +
+                            '                boundaryGap: false,\n' +
+                            '                data: date\n' +
+                            '            },\n' +
+                            '            yAxis: {\n' +
+                            '                type: \'value\',\n' +
+                            '                boundaryGap: [0, \'100%\']\n' +
+                            '            },\n' +
+                            '            dataZoom: [{\n' +
+                            '                type: \'inside\',\n' +
+                            '                start: 0,\n' +
+                            '                end: 10\n' +
+                            '            }, {\n' +
+                            '                start: 0,\n' +
+                            '                end: 10,\n' +
+                            '                handleIcon: \'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z\',\n' +
+                            '                handleSize: \'80%\',\n' +
+                            '                handleStyle: {\n' +
+                            '                    color: \'#fff\',\n' +
+                            '                    shadowBlur: 3,\n' +
+                            '                    shadowColor: \'rgba(0, 0, 0, 0.6)\',\n' +
+                            '                    shadowOffsetX: 2,\n' +
+                            '                    shadowOffsetY: 2\n' +
+                            '                }\n' +
+                            '            }],\n' +
+                            '            series: [\n' +
+                            '                {\n' +
+                            '                    name: \'模拟数据\',\n' +
+                            '                    type: \'line\',\n' +
+                            '                    smooth: true,\n' +
+                            '                    symbol: \'none\',\n' +
+                            '                    sampling: \'average\',\n' +
+                            '                    itemStyle: {\n' +
+                            '                        color: \'rgb(255, 70, 131)\'\n' +
+                            '                    },\n' +
+                            '                    areaStyle: {\n' +
+                            '                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{\n' +
+                            '                            offset: 0,\n' +
+                            '                            color: \'rgb(255, 158, 68)\'\n' +
+                            '                        }, {\n' +
+                            '                            offset: 1,\n' +
+                            '                            color: \'rgb(255, 70, 131)\'\n' +
+                            '                        }])\n' +
+                            '                    },\n' +
+                            '                    data: data\n' +
+                            '                }\n' +
+                            '            ]\n' +
+                            '        };\n' +
+                            '\n' +
+                            '\n' +
+                            '        //男女比例并饼状图\n' +
+                            '        // 指定图表的配置项和数据\n' +
+                            '\n' +
+                            '\n' +
+                            '        // 使用刚指定的配置项和数据显示图表。\n' +
+                            '        myChartLT.setOption(option1);\n' +
+                            '\n' +
+                            '\n' +
+                            '\n' +
+                            '        var myChartPMap = echarts.init(document.getElementById(\'stuProvinceMap\'));\n' +
+                            '        var data =\n' +
+                            '            [[90,80,30000,\'黑龙江\'],\n' +
+                            '                [90,70,120246,\'吉林\'],\n' +
+                            '                [85,60,25468,\'辽宁\'],\n' +
+                            '                [75,70,52146,\'内蒙古\'],\n' +
+                            '                [72,57,145781,\'北京\'],\n' +
+                            '                [72,50,85781,\'天津\'],\n' +
+                            '                [70,53,85781,\'河北\'],\n' +
+                            '                [75,40,35781,\'山东\'],\n' +
+                            '                [65,45,25781,\'山西\'],\n' +
+                            '                [65,35,5781,\'河南\'],\n' +
+                            '                [78,32,105781,\'江苏\'],\n' +
+                            '                [74,25,8578,\'安徽\'],\n' +
+                            '                [78,18,85781,\'浙江\'],\n' +
+                            '                [75,5,12468,\'福建\'],\n' +
+                            '                [67,2,72468,\'广东\'],\n' +
+                            '                [70,15,12468,\'江西\'],\n' +
+                            '                [65,15,12568,\'湖南\'],\n' +
+                            '                [65,25,47586,\'湖北\'],\n' +
+                            '                [60,2,1254,\'广西\'],\n' +
+                            '                [57,22,1254,\'重庆\'],\n' +
+                            '                [55,10,1254,\'贵州\'],\n' +
+                            '                [45,5,3254,\'云南\'],\n' +
+                            '\n' +
+                            '                [48,25,41254,\'四川\'],\n' +
+                            '\n' +
+                            '\n' +
+                            '\n' +
+                            '\n' +
+                            '\n' +
+                            '            ];\n' +
+                            '\n' +
+                            '        var option2 = {\n' +
+                            '            backgroundColor: \'rgba(255, 255, 255, 0)\',\n' +
+                            '            title: {\n' +
+                            '                text: \'不同省份人数分布情况\'\n' +
+                            '            },\n' +
+                            '            legend: {\n' +
+                            '                right: 10,\n' +
+                            '                data: [\'不同省份人数\']\n' +
+                            '            },\n' +
+                            '            xAxis: {\n' +
+                            '                splitLine: {\n' +
+                            '                    lineStyle: {\n' +
+                            '                        type: \'dashed\'\n' +
+                            '                    }\n' +
+                            '                },\n' +
+                            '                min: 0,\n' +
+                            '                max: 100,\n' +
+                            '                interval:10,\n' +
+                            '                show : false,\n' +
+                            '            },\n' +
+                            '            yAxis: {\n' +
+                            '                splitLine: {\n' +
+                            '                    lineStyle: {\n' +
+                            '                        type: \'dashed\'\n' +
+                            '                    }\n' +
+                            '                },\n' +
+                            '                min: 0,\n' +
+                            '                max: 100,\n' +
+                            '                scale: true,\n' +
+                            '                interval:10,\n' +
+                            '                show : false,\n' +
+                            '            },\n' +
+                            '            series: [{\n' +
+                            '                name: \'2015\',\n' +
+                            '                data: data,\n' +
+                            '                type: \'scatter\',\n' +
+                            '                symbolSize: function (data) {\n' +
+                            '                    return Math.sqrt(data[2])/10 ;\n' +
+                            '                },\n' +
+                            '                emphasis: {\n' +
+                            '                    label: {\n' +
+                            '                        show: true,\n' +
+                            '                        formatter: function (param) {\n' +
+                            '                            return param.data[3]+\':\'+param.data[2];\n' +
+                            '                        },\n' +
+                            '                        position: \'top\'\n' +
+                            '                    }\n' +
+                            '                },\n' +
+                            '                itemStyle: {\n' +
+                            '                    shadowBlur: 10,\n' +
+                            '                    shadowColor: \'rgba(25, 100, 150, 0.5)\',\n' +
+                            '                    shadowOffsetY: 5,\n' +
+                            '                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{\n' +
+                            '                        offset: 0,\n' +
+                            '                        color: \'rgb(129, 227, 238)\'\n' +
+                            '                    }, {\n' +
+                            '                        offset: 1,\n' +
+                            '                        color: \'rgb(25, 183, 207)\'\n' +
+                            '                    }])\n' +
+                            '                }\n' +
+                            '            }]\n' +
+                            '        };\n' +
+                            '        myChartPMap.setOption(option2);\n' +
+                            '    });\n' +
+                            '</scrip'+'t>'
+
+                    });
+
+                    break;
+                case 'single_delete':
+
+                    console.log(obj.data.courseId);
+                    $.post(config.base_server + '/courMgt/delCour?access_token=' + config.getToken(),
+                        {
+                            courseId:obj.data.courseId
+                        },
+                        function (data,status) {
+                            if (data.ifDone) {
+                                layer.msg('删除成功');
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+
+                    );
+                    break;
+                case 'single_update':
+                    alert('目前正在实现');
+                    break;
+
+            }
+            ;
+        });
+    });
+
+</script>

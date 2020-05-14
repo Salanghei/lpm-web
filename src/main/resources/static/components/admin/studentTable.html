@@ -1,0 +1,374 @@
+<div style="padding: 20px; background-color: #F2F2F2;">
+
+
+    <div class="layui-card">
+        <div class="layui-card-header">学生管理表格</div>
+        <div class="layui-card-body">
+            <!--            查找条件选择-->
+            <form class="layui-form" action="" lay-filter="my_form_to_search">
+                <label class="layui-form-label">筛选条件：</label>
+                <div class="layui-form-item">
+                    <select name="select_condition" lay-verify="" lay-filter="my_select1">
+                        <option value="-1">请选择搜索条件</option>
+                        <option value="student_id">ID</option>
+                        <option value="student_name">用户名</option>
+                        <option value="nickname">昵称</option>
+                        <option value="gender">性别</option>
+                        <option value="education">教育</option>
+                        <option value="province">省份</option>
+                    </select>
+                    <input type="text" name="title" id="my_input1_to_search" required lay-verify="required"
+                           placeholder="请输入查找内容" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </form>
+
+            <!--            表格-->
+            <table id="my_stu_table_1" lay-filter="lay_filter_table1"></table>
+        </div>
+    </div>
+
+</div>
+<!--学生管理表格的工具栏-->
+<script type="text/html" id="my_stu_toolbar1">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="search">搜索</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete">批量删除</button>
+    </div>
+</script>
+<!--学生管理表格每行的工具栏-->
+<script type="text/html" id="my_stu_tool_one_line">
+    <a class="layui-btn layui-btn-xs" lay-event="single_details">详情</a>
+    <a class="layui-btn layui-btn-xs" lay-event="single_update">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="single_delete">删除</a>
+</script>
+<script type="text/javascript">
+    // var $ = layui.jquery;
+    // var config = layui.config;
+    // var bbb=document.getElementById('bbb');
+    // var ccc=document.getElementById('ccc');
+    // bbb.onclick=function(){
+    //     ccc.innerHTML= "start";
+    //     $.ajax({
+    //         type: "get",
+    //         async: true,
+    //         url: config.base_server + '/stuMgt/getInfAll?access_token=' + config.getToken(),
+    //         data: {},
+    //         dataType: "json",
+    //         success: function (data) {
+    //             console.log(data);
+    //
+    //
+    //         },
+    //         error: function () {
+    //             alert("数据加载失败");
+    //         }
+    //     });
+    //     ccc.innerHTML= "end";
+    // }
+
+    layui.use(['table', 'form', 'element', 'config', 'layer'], function () {
+        var form = layui.form;
+        var element = layui.element;
+        var table = layui.table;
+        var config = layui.config;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        var jsonTable;
+        // $.ajax({
+        //     type: "get",
+        //     async: true,
+        //     url: config.base_server + '/stuMgt/getInfAll?access_token=' + config.getToken(),
+        //     data: {},
+        //     dataType: "json",
+        //     success: function (data) {
+        //         console.log(data);
+        //         jsonTable=data;
+        //
+        //     },
+        //     error: function () {
+        //         alert("数据加载失败");
+        //     }
+        // });
+
+
+        //学生管理表格
+        table.render({
+            elem: '#my_stu_table_1'
+
+            , url: config.base_server + '/stuMgt/getInfAll?access_token=' + config.getToken() //数据接口
+            , page: true //开启分页
+            //student_id,student_name,nickname,gender,birthday,education,province
+            , cols: [[ //表头
+                {type: 'checkbox'}
+                , {field: 'studentId', title: 'ID',}
+                , {field: 'studentName', title: '用户名',}
+                , {field: 'nickname', title: '昵称',}
+                , {field: 'gender', title: '性别',}
+                , {field: 'birthday', title: '生日',}
+                , {field: 'education', title: '教育',}
+                , {field: 'province', title: '省份',}
+                , {fixed: 'right', title: '操作', toolbar: '#my_stu_tool_one_line', width: 170}
+
+            ]]
+            , toolbar: '#my_stu_toolbar1'
+
+        });
+        //监听筛选条件表单的变化,并将变化后的值存储到变量中
+        var condition_what;
+        var condition_where;
+        form.on('select(my_select1)', function (data) {
+            condition_where = data.value; //得到被选中的值
+            condition_what = document.getElementById('my_input1_to_search').value;
+
+        });
+
+        // 监听头部工具栏点击
+        table.on('toolbar(lay_filter_table1)', function (obj) {
+
+            switch (obj.event) {
+
+                case 'search':
+                    condition_what = document.getElementById('my_input1_to_search').value;
+                    table.reload('my_stu_table_1', {where: {searchKey: condition_where, searchValue: condition_what}});
+                    break;
+                case 'add':
+                    layer.open({
+                        type: 1,
+                        shadeClose: true,
+                        content:
+                        // '<div >\n' +
+                        //     '    <form id="add_new_student" class="layui-form" action="" lay-filter="example">\n' +
+                        //     '        <div class="layui-form-item">\n' +
+                        //     '            <label class="layui-form-label">ID</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '            <label class="layui-form-label">用户名</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '            <label class="layui-form-label">昵称</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '            <label class="layui-form-label">性别</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '            <label class="layui-form-label">生日</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '            <label class="layui-form-label">教育</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '            <label class="layui-form-label">省份</label>\n' +
+                        //     '            <div class="layui-input-block">\n' +
+                        //     '                <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="请输入" class="layui-input">\n' +
+                        //     '            </div>\n' +
+                        //     '        </div>\n' +
+                        //     '    </form>\n' +
+                        //     '</div>'//这里content是一个普通的String
+                        '<div>\n' +
+                            '    <form class="layui-form" action="">\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <label class="layui-form-label">输入框</label>\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <input type="text" name="studentId" required  lay-verify="required" placeholder="请输入学生ID" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="userId" required  lay-verify="required" placeholder="请输入账号ID" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="studentName" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="nickname" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="gender" required  lay-verify="required" placeholder="请输入性别" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="education" required  lay-verify="required" placeholder="请输入学历" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="country" required  lay-verify="required" placeholder="请输入国家" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="province" required  lay-verify="required" placeholder="请输入省份" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="city" required  lay-verify="required" placeholder="请输入城市" autocomplete="off" class="layui-input">\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>\n' +
+                            '\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '    </form>\n' +
+                            '\n' +
+                            '\n' +
+                            '</div>\n' +
+                            '<script>\n' +
+                            '    layui.use([\'form\', \'element\', \'config\', \'laytpl\'], function () {\n' +
+                            '        var form = layui.form;\n' +
+                            '        var element = layui.element;\n' +
+                            '\n' +
+                            '        var config = layui.config;\n' +
+                            '        var $ = layui.jquery;\n' +
+                            '        form.on(\'submit(formDemo)\', function(data){\n' +
+                            '            var temp=data.field;\n' +
+                            '\n' +
+                            '            $.post(config.base_server + \'/stuMgt/addStu?access_token=\' + config.getToken(),\n' +
+                            '\n' +
+                            '                temp\n' +
+                            '                ,\n' +
+                            '                function (data,status) {\n' +
+                            '                    if (data.ifDone) {\n' +
+                            '                        layer.msg(\'添加成功\');\n' +
+                            '                    } else {\n' +
+                            '                        layer.msg(\'id重复，添加失败\');\n' +
+                            '                    }\n' +
+                            '                }\n' +
+                            '\n' +
+                            '            );\n' +
+                            '            return false;\n' +
+                            '        });\n' +
+                            '    })\n' +
+                             '</scrip'+'t>'
+
+                    });
+                    break;
+                case 'delete':
+                    alert('目前请使用每行后面的删除按钮');
+                    // $.post(config.base_server + '/stuMgt/delStu?access_token=' + config.getToken(),
+                    //     {
+                    //         studentId:11
+                    //     },
+                    //     function (data,status) {
+                    //         if (data.ifDone) {
+                    //             layer.msg('删除成功');
+                    //         } else {
+                    //             layer.msg('删除失败');
+                    //         }
+                    //     }
+                    //
+                    // );
+                    break;
+
+            }
+            ;
+        });
+        // 监听每一行的工具栏点击
+        table.on('tool(lay_filter_table1)', function (obj) {
+
+            switch (obj.event) {
+                case 'single_details':
+
+                    //当点击详情按钮时，弹出下面的页面
+                    //目前正在实现弹出的界面功能
+                    layer.open({
+                        type: 1,
+                        closeBtn: 0,
+                        area: ['500px', '500px'],
+                        shadeClose: true,
+                        content:
+                            '    <div class="layui-card">\n' +
+                            '        <div class="layui-card-header">当前选中者信息</div>\n' +
+                            '        <div class="layui-card-body">\n' +
+                            '            <div class="layui-row layui-col-space10">\n' +
+                            '                <div class="layui-col-md4">\n' +
+                            '                    <img src="../../assets/images/head.png" class="layui-nav-img"\n' +
+                            '                         style="height: 100px;width:100px">\n' +
+                            '                </div>\n' +
+                            '                <div class="layui-col-md8">\n' +
+                            '                    <p>姓名：武哲书</p>\n' +
+                            '                    <p>id:959</p>\n' +
+                            '                    <p>昵称：Dreamer</p>\n' +
+                            '                    <p>性别：男</p>\n' +
+                            '                    <p>生日：1995-01-01</p>\n' +
+                            '                    <p>学历：高中</p>\n' +
+                            '                    <p>省份：山东</p>\n' +
+                            '\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <span>用户标签：</span>\n' +
+                            '            <span class="layui-badge layui-bg-orange">活跃</span>\n' +
+                            '            <span class="layui-badge layui-bg-orange">积极</span>\n' +
+                            '            <span class="layui-badge layui-bg-green">通过率高</span>\n' +
+                            '            <p>.</p>\n' +
+                            '            <div class="layui-row layui-col-space10">\n' +
+                            '                <div class="layui-col-md6">\n' +
+                            '                    <div class="layui-card" style="background-color: #F2F2F2;">\n' +
+                            '                        <div class="layui-card-header">学习伙伴</div>\n' +
+                            '                        <div class="layui-card-body">\n' +
+                            '                            <h2>1</h2>\n' +
+                            '                            <p>查看学习伙伴详情</p>\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="layui-card" style="background-color: #F2F2F2;">\n' +
+                            '                        <div class="layui-card-header">上传资料数</div>\n' +
+                            '                        <div class="layui-card-body">\n' +
+                            '                            <h2>2</h2>\n' +
+                            '                            <p>查看上传资料详情</p>\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '                <div class="layui-col-md6">\n' +
+                            '                    <div class="layui-card" style="background-color: #F2F2F2;">\n' +
+                            '                        <div class="layui-card-header">课程通过率</div>\n' +
+                            '                        <div class="layui-card-body">\n' +
+                            '                            <h2>2</h2>\n' +
+                            '                            <p>查看课程学习情况详情</p>\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="layui-card" style="background-color: #F2F2F2;">\n' +
+                            '                        <div class="layui-card-header">更多信息</div>\n' +
+                            '                        <div class="layui-card-body">\n' +
+                            '                            <h2>...</h2>\n' +
+                            '                            <p>查看更多信息</p>\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '    </div>\n' +
+                            '\n' +
+                            '\n' +
+                            '</div>\n' +
+                            '\n' +
+                            '\n' +
+
+                            '<script type="text/javascript">\n' +
+                            '    layui.use(\'table\', function () {\n' +
+                            '        var table = layui.table;\n' +
+                            '\n' +
+                            '\n' +
+                            '    });\n' +
+                            '</scrip'+'t>'
+
+                    });
+
+                    break;
+                case 'single_delete':
+
+                    //console.log(obj.data.studentId);
+                    $.post(config.base_server + '/stuMgt/delStu?access_token=' + config.getToken(),
+                        {
+                            studentId:obj.data.studentId
+                        },
+                        function (data,status) {
+                            if (data.ifDone) {
+                                layer.msg('删除成功');
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+
+                    );
+                    break;
+                case 'single_update':
+                    alert('目前正在实现');
+                    break;
+
+            }
+            ;
+        });
+    });
+
+</script>
