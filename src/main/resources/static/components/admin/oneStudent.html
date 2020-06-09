@@ -1,6 +1,4 @@
 <div style="padding: 20px; background-color: #F2F2F2;">
-
-
     <div class="layui-card">
         <div class="layui-card-header">当前选中者信息</div>
         <div class="layui-card-body">
@@ -10,20 +8,17 @@
                          style="height: 100px;width:100px">
                 </div>
                 <div class="layui-col-md8">
-                    <p>姓名：武哲书</p>
-                    <p>id:959</p>
-                    <p>昵称：Dreamer</p>
-                    <p>性别：男</p>
-                    <p>生日：1995-01-01</p>
-                    <p>学历：高中</p>
-                    <p>省份：山东</p>
+                    <p id="stuInf1">姓名：武哲书</p>
+                    <p id="stuInf2">id:959</p>
+                    <p id="stuInf3">昵称：Dreamer</p>
+                    <p id="stuInf4">性别：男</p>
+                    <p id="stuInf5">生日：1995-01-01</p>
+                    <p id="stuInf6">学历：高中</p>
+                    <p id="stuInf7">省份：山东</p>
 
                 </div>
             </div>
-            <span>用户标签：</span>
-            <span class="layui-badge layui-bg-orange">活跃</span>
-            <span class="layui-badge layui-bg-orange">积极</span>
-            <span class="layui-badge layui-bg-green">通过率高</span>
+
             <p>.</p>
             <div class="layui-row layui-col-space10">
                 <div class="layui-col-md6">
@@ -31,14 +26,14 @@
                         <div class="layui-card-header">学习伙伴</div>
                         <div class="layui-card-body">
                             <h2>1</h2>
-                            <p>查看学习伙伴详情</p>
+
                         </div>
                     </div>
                     <div class="layui-card" style="background-color: #F2F2F2;">
                         <div class="layui-card-header">上传资料数</div>
                         <div class="layui-card-body">
                             <h2>2</h2>
-                            <p>查看上传资料详情</p>
+
                         </div>
                     </div>
                 </div>
@@ -47,14 +42,15 @@
                         <div class="layui-card-header">课程通过率</div>
                         <div class="layui-card-body">
                             <h2>2</h2>
-                            <p>查看课程学习情况详情</p>
+
                         </div>
                     </div>
                     <div class="layui-card" style="background-color: #F2F2F2;">
-                        <div class="layui-card-header">更多信息</div>
+                        <div class="layui-card-header">用户标签</div>
                         <div class="layui-card-body">
-                            <h2>...</h2>
-                            <p>查看更多信息</p>
+                            <span class="layui-badge layui-bg-orange">活跃</span>
+                            <span class="layui-badge layui-bg-orange">积极</span>
+                            <span class="layui-badge layui-bg-green">通过率高</span>
                         </div>
                     </div>
                 </div>
@@ -63,20 +59,844 @@
         </div>
 
     </div>
+    <div class="layui-card">
+        <div class="layui-card-header">详细信息</div>
+        <div class="layui-card-body">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">兴趣意图分析</li>
+                    <li>学习风格和状态</li>
+                    <li>好友和课程管理</li>
+                    <li>推荐课程和学习伙伴</li>
 
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-row layui-col-space10">
+                            <div class="layui-col-md6">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>感兴趣领域</legend>
+                                    <div class="layui-field-box">
+                                        <div id="echarts_interest" style="width: 300px;height:400px;"></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="layui-col-md6">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>感兴趣话题</legend>
+                                    <div class="layui-field-box">
+                                        <div id="echarts_topic" style="width: 300px;height:400px;"></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title">
+                            <legend>感兴趣课程</legend>
+                            <div class="layui-field-box">
+                                <table id="my_interest_course_table_1" lay-filter="lay_filter_my_interest_course_table"></table>
+
+                            </div>
+                        </fieldset>
+
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-row layui-col-space10">
+                            <div class="layui-col-md6">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>成绩分布图</legend>
+                                    <div class="layui-field-box">
+                                        <div id="echarts_grade" style="width: 400px;height:300px;"></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="layui-col-md6">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>课堂参与讨论度</legend>
+                                    <div class="layui-field-box">
+                                        <div id="echarts_join" style="width: 400px;height:300px;"></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <div class="layui-row layui-col-space10">
+                            <div class="layui-col-md6">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>学习进度</legend>
+                                    <div class="layui-field-box">
+                                        <div id="echart_progess" style="width: 400px;height:300px;"></div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="layui-col-md6">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>学习风格</legend>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <div class="layui-field-box">
+                                        <button type="button" class="layui-btn layui-btn-warm">积极活跃</button>
+                                        <button type="button" class="layui-btn layui-btn-warm">通过率高</button>
+                                        <button type="button" class="layui-btn layui-btn-warm">勤奋好学</button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table id="my_stu_fri_table_1" lay-filter="lay_filter_my_stu_fri_table_1"></table>
+                        <br/>
+                        <table id="my_course_table_1" lay-filter="lay_filter_my_course_table"></table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <fieldset class="layui-elem-field layui-field-title">
+                            <legend>推荐课程</legend>
+                            <div class="layui-field-box">
+                                <div class="layui-carousel" id="course_carousel">
+                                    <div carousel-item>
+                                        <div class="layui-bg-green">
+                                            <p style="text-align: center">课程名：太阳系天文学导论</p>
+                                            <p style="text-align: center">详情：在这门课程中，我们将探索太阳系和前太阳系行星系统的起源、结构、范围和演化过程。同时，也会涉及到天文学发展史、光的特性、航天仪器，对太阳系及其周围星系的研究。</p>
+                                            <p style="text-align: center">课程ID：ASUx/ast111/_</p>
+                                        </div>
+                                        <div class="layui-bg-cyan">
+                                            <p style="text-align: center">课程名：太阳系天文学导论</p>
+                                            <p style="text-align: center">详情：在这门课程中，我们将探索太阳系和前太阳系行星系统的起源、结构、范围和演化过程。同时，也会涉及到天文学发展史、光的特性、航天仪器，对太阳系及其周围星系的研究。</p>
+                                            <p style="text-align: center">课程ID：ASUx/ast111/_</p>
+                                        </div>
+                                        <div class="layui-bg-blue">
+                                            <p style="text-align: center">课程名：太阳系天文学导论</p>
+                                            <p style="text-align: center">详情：在这门课程中，我们将探索太阳系和前太阳系行星系统的起源、结构、范围和演化过程。同时，也会涉及到天文学发展史、光的特性、航天仪器，对太阳系及其周围星系的研究。</p>
+                                            <p style="text-align: center">课程ID：ASUx/ast111/_</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="layui-elem-field layui-field-title">
+                            <legend>推荐学习伙伴</legend>
+                            <div class="layui-field-box">
+                                <div class="layui-carousel" id="friend_carousel">
+                                    <div carousel-item>
+                                        <div class="layui-bg-green">
+                                            <p style="text-align: center">姓名：贺博</p>
+                                            <p style="text-align: center">中国 安徽</p>
+                                            <p style="text-align: center">感兴趣话题：计算机, 电子, 文学, 数学, 工程, 哲学, 化学, 建筑</p>
+                                            <p style="text-align: center">ID:2118</p>
+                                        </div>
+                                        <div class="layui-bg-cyan">
+                                            <p style="text-align: center">姓名：贺博</p>
+                                            <p style="text-align: center">中国 安徽</p>
+                                            <p style="text-align: center">感兴趣话题：计算机, 电子, 文学, 数学, 工程, 哲学, 化学, 建筑</p>
+                                            <p style="text-align: center">ID:2118</p>
+                                        </div>
+                                        <div class="layui-bg-blue">
+                                            <p style="text-align: center">姓名：贺博</p>
+                                            <p style="text-align: center">中国 安徽</p>
+                                            <p style="text-align: center">感兴趣话题：计算机, 电子, 文学, 数学, 工程, 哲学, 化学, 建筑</p>
+                                            <p style="text-align: center">ID:2118</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
+<!--课程管理表格每行的工具栏-->
+<script type="text/html" id="my_cour_tool_one_line">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="course_single_delete">退选</a>
+</script>
+<!--课程管理表格表头的工具栏-->
+<script type="text/html" id="my_cour_toolbar1">
+    <div class="layui-btn-container">
 
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
 
-</div>
-
-
-
-
-<script type="text/javascript">
-    layui.use('table', function () {
+    </div>
+</script>
+<!--好友管理表格的工具栏-->
+<script type="text/html" id="my_stu_fri_toolbar1">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add_fri">添加</button>
+    </div>
+</script>
+<!--好友管理表格每行的工具栏-->
+<script type="text/html" id="my_stu_fri_tool_one_line">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="single_delete_fri">删除</a>
+</script>
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+<script src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+<script>
+    layui.use(['table', 'element','carousel'], function () {
         var table = layui.table;
+        var element = layui.element;
+        var carousel = layui.carousel;
 
+        var interestChart = echarts.init(document.getElementById('echarts_interest'));
+        var topicChart = echarts.init(document.getElementById('echarts_topic'));
+        var gracdChart = echarts.init(document.getElementById('echarts_grade'));
+        var joinChart = echarts.init(document.getElementById('echarts_join'));
+        var progessChart = echarts.init(document.getElementById('echart_progess'));
+        var $ = layui.jquery;
+        var config = layui.config;
+
+        //当前页面表示的学习者的id
+        //959
+        var oneStudentId=959;
+
+        //学习者基本信息获取
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'stuMgt/getStuOneInf?access_token=' + config.getToken(),
+            data: {'stuId':oneStudentId},
+            dataType: "json",
+            success: function (data) {
+                document.getElementById('stuInf1').innerHTML = data["1"];
+                document.getElementById('stuInf2').innerHTML = data["2"];
+                document.getElementById('stuInf3').innerHTML = data["3"];
+                document.getElementById('stuInf4').innerHTML = data["4"];
+                document.getElementById('stuInf5').innerHTML = data["5"];
+                document.getElementById('stuInf6').innerHTML = data["6"];
+                document.getElementById('stuInf7').innerHTML = data["7"];
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+
+
+
+
+        //获取学习风格标签和
+
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'stuMgt/getStuStyle?access_token=' + config.getToken(),
+            data: {'stuId':oneStudentId},
+            dataType: "json",
+            success: function (data) {
+                style1=data['style'];
+                style1=style1.split(",");
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+
+
+
+
+        //感兴趣领域图
+        var optionOfInterestChart = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                left: 'center',
+                top: 'bottom',
+                data: ['计算机', '电子', '文学', '数学', '工程', '哲学', '化学', '建筑']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '感兴趣领域',
+                    type: 'pie',
+                    radius: [20, 110],
+                    center: ['50%', '50%'],
+                    roseType: 'radius',
+                    label: {
+                        show: false
+                    },
+                    emphasis: {
+                        label: {
+                            show: true
+                        }
+                    },
+                    data: [
+
+                    ]
+                    // ['计算机', '电子', '文学', '数学', '工程', '哲学', '化学', '建筑']
+                    // data: [
+                    //     {value: 10, name: '计算机'},
+                    //     {value: 5, name: '电子'},
+                    //     {value: 15, name: '文学'},
+                    //     {value: 25, name: '数学'},
+                    //     {value: 20, name: '工程'},
+                    //     {value: 35, name: '哲学'},
+                    //     {value: 30, name: '化学'},
+                    //     {value: 40, name: '建筑'}
+                    // ]
+                }
+
+            ]
+        };
+
+
+        interestChart.setOption(optionOfInterestChart);
+
+
+        //感兴趣话题
+
+        var optionOfTopicChart = {
+            series: [
+                {
+                    type: 'wordCloud',
+                    shape: 'pentagon',
+                    center: ['50%', '50%'],
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {
+                                show: true,
+                                type: ['pie', 'funnel']
+                            },
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: [
+
+                    ]
+                    // data: [
+                    //     {value: 10, name: '计算机'},
+                    //     {value: 5, name: '理工补习'},
+                    //     {value: 15, name: '英语口语'},
+                    //     {value: 25, name: '外语'},
+                    //     {value: 20, name: '哲学'},
+                    //     {value: 35, name: '人工智能'},
+                    //     {value: 30, name: '医药卫生'},
+                    //     {value: 40, name: '深度学习'}
+                    // ]
+                }
+            ]
+        };
+        topicChart.setOption(optionOfTopicChart);
+
+        //成绩分布图
+        var optionOfGradeChart = {
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['基本人体生物学', '大学物理—电磁学']
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1单元', '2单元', '3单元', '4单元', '5单元', '6单元', '期末',]
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: []
+        };
+        gracdChart.setOption(optionOfGradeChart);
+
+        //课堂讨论参与度
+        var optionOfJoinChart = {
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['基本人体生物学', '大学物理—电磁学']
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1单元', '2单元', '3单元', '4单元', '5单元', '6单元', '期末',]
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: []
+        };
+        joinChart.setOption(optionOfJoinChart);
+        //学习进度
+        var optionOfProgesChart = {
+
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['课件观看进度', '课堂讨论进度', '测试测验进度']
+            },
+
+            yAxis: {
+                type: 'value',
+                name: '%'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['基本人体生物学', '电磁学', '大学物理实验']
+            },
+            series: []
+        };
+        progessChart.setOption(optionOfProgesChart);
+        //课程推荐轮播
+        carousel.render({
+            elem: '#course_carousel'
+            ,height: '140px'
+            ,arrow: 'always' //始终显示箭头
+            ,anim: 'default'
+            ,autoplay: true
+            ,interval: 3000
+        });
+
+
+        //学习伙伴推荐轮播
+        carousel.render({
+            elem: '#friend_carousel'
+            ,height: '140px'
+            ,arrow: 'always' //始终显示箭头
+            ,anim: 'default'
+            ,autoplay: true
+            ,interval: 3000
+        });
+
+
+
+
+        //获取感兴趣话题
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'stuMgt/getStuTopic?access_token=' + config.getToken(),
+            data: {'stuId':oneStudentId},
+            dataType: "json",
+            success: function (data) {
+                var interestTopic=new Array();
+                for(temp in  data){
+                    interestTopic.push({
+                        'value':data[temp]['score'],
+                        'name':data[temp]['topic']
+                    });
+                }
+                var optionOfTopicChart = {
+                    series: [
+                        {
+                            data: interestTopic
+                        }
+                    ]
+                };
+                topicChart.setOption(optionOfTopicChart);
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+
+        //获取所有学生感兴趣领域数据
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'stuMgt/getStuDomain?access_token=' + config.getToken(),
+            data: {'stuId':oneStudentId},
+            dataType: "json",
+            success: function (data) {
+                var interestDomain=new Array();
+                var domainArr=new Array();
+                for(temp in  data){
+                    console.log(temp)
+                    interestDomain.push({
+                        'value':data[temp]['score'],
+                        'name':data[temp]['domain'],
+                    });
+                    domainArr.push(data[temp]['domain']);
+                }
+                //感兴趣领域图
+                var optionOfInterestChart = {
+                    legend: {
+                        data:  domainArr
+                    },
+
+                    series: [{
+                            data: interestDomain
+                        }]
+                };
+                interestChart.setOption(optionOfInterestChart);
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+
+        //获取感兴趣课程，并以表格形式展示
+        table.render({
+            elem: '#my_interest_course_table_1'
+
+            , url: config.base_server + '/stuMgt/getStuIntCour?access_token=' + config.getToken() //数据接口
+            , page: true //开启分页
+
+            , cols: [[ //表头
+                , {field: 'courseName', title: '课程名',}
+                , {field: 'teacher', title: '教师',}
+                , {field: 'startTime', title: '开始时间',}
+                , {field: 'courseSchool', title: '开课机构',}
+            ]]
+        });
+        table.reload('my_interest_course_table_1', {where: {stuId: oneStudentId+""}});
+
+
+
+        //课程管理表格
+        table.render({
+            elem: '#my_course_table_1'
+            ,where: {stuId: ""+oneStudentId}
+            , url: config.base_server + '/stuMgt/getStuCour?access_token=' + config.getToken() //数据接口
+            , page: true //开启分页
+
+            , cols: [[ //表头
+                , {field: 'courseName', title: '课程名',}
+                , {field: 'teacher', title: '教师',}
+                , {field: 'startTime', title: '开始时间',}
+                , {field: 'courseSchool', title: '开课机构',}
+                , {field: 'courseId', title: '课程ID',}
+                , {fixed: 'right', title: '操作', toolbar: '#my_cour_tool_one_line', width: 170}
+            ]]
+            , toolbar: '#my_cour_toolbar1'
+        });
+        table.reload('my_course_table_1', {where: {stuId: ""+oneStudentId}});
+        // 监听每一行的工具栏点击
+        table.on('tool(lay_filter_my_course_table)', function (obj) {
+
+            switch (obj.event) {
+                case 'course_single_delete':
+                    $.post(config.base_server + '/stuMgt/delStuCour?access_token=' + config.getToken(),
+                        {
+                            courseId:obj.data.courseId,
+                            stuId: oneStudentId
+                        },
+                        function (data,status) {
+                            if (data.ifDone) {
+                                layer.msg('删除成功');
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+
+                    );
+                    break;
+            }
+
+        });
+        // 监听头部工具栏点击
+        table.on('toolbar(lay_filter_my_course_table)', function (obj) {
+
+            switch (obj.event) {
+
+
+                case 'add':
+                    layer.open({
+                        type: 1,
+                        shadeClose: true,
+                        content:
+
+                            '<div>\n' +
+                            '    <form class="layui-form" action="">\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <label class="layui-form-label">输入框</label>\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <input type="text" name="stuId" disabled="disabled"  lay-verify="required" value="' +
+                            '' + oneStudentId+
+                            '" autocomplete="off" class="layui-input">\n' +
+                            '                <input type="text" name="courseId" required  lay-verify="required" placeholder="请输入课程ID" autocomplete="off" class="layui-input">\n' +
+
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>\n' +
+                            '\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '    </form>\n' +
+                            '\n' +
+                            '\n' +
+                            '</div>\n' +
+                            '<script>\n' +
+                            '    layui.use([\'form\', \'element\', \'config\', \'laytpl\'], function () {\n' +
+                            '        var form = layui.form;\n' +
+                            '        var element = layui.element;\n' +
+                            '\n' +
+                            '        var config = layui.config;\n' +
+                            '        var $ = layui.jquery;\n' +
+                            '        form.on(\'submit(formDemo)\', function(data){\n' +
+                            '            var temp=data.field;\n' +
+                            '\n' +
+                            '            $.post(config.base_server + \'/stuMgt/addStuCour?access_token=\' + config.getToken(),\n' +
+                            '\n' +
+                            '                temp\n' +
+                            '                ,\n' +
+                            '                function (data,status) {\n' +
+                            '                    if (data.ifDone) {\n' +
+                            '                        layer.msg(\'添加成功\');\n' +
+                            '                    } else {\n' +
+                            '                        layer.msg(\'id重复，添加失败\');\n' +
+                            '                    }\n' +
+                            '                }\n' +
+                            '\n' +
+                            '            );\n' +
+                            '            return false;\n' +
+                            '        });\n' +
+                            '    })\n' +
+                            '</scrip'+'t>'
+
+                    });
+                    break;
+
+            };
+        });
+
+
+        //学习进度图表绘制
+        $.ajax({
+            type: "get",
+            async: true,
+            url: config.base_server + 'stuMgt/getStuPro?access_token=' + config.getToken(),
+            data: {'stuId':oneStudentId},
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                //成绩分布图
+                var optionOfGradeChart = {
+                    legend: {
+                        data: data["name"],
+                    },
+                    series: data["chart1"],
+
+                };
+                gracdChart.setOption(optionOfGradeChart);
+
+                //课堂讨论参与度
+                var optionOfJoinChart = {
+
+
+                    legend: {
+                        data: data[name],
+                    },
+
+                    series: data["chart2"],
+                };
+                joinChart.setOption(optionOfJoinChart);
+
+                //学习进度
+                var optionOfProgesChart = {
+
+                    xAxis: {
+                        type: 'category',
+                        data: data["name"],
+                        axisLabel: {
+                            rotate: 45,//倾斜度 -90 至 90 默认为0
+                        }
+                    },
+
+                    series:data["chart3"]
+                };
+                progessChart.setOption(optionOfProgesChart);
+
+
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+        table.render({
+            elem: '#my_stu_fri_table_1'
+            ,where: {stuId: oneStudentId}
+            , url: config.base_server + '/stuMgt/getStuFri?access_token=' + config.getToken() //数据接口
+            , page: true //开启分页
+            //student_id,student_name,nickname,gender,birthday,education,province
+            , cols: [[ //表头
+
+                , {field: 'studentId', title: 'ID',}
+                , {field: 'studentName', title: '用户名',}
+                , {field: 'nickname', title: '昵称',}
+                , {field: 'gender', title: '性别',}
+                , {field: 'birthday', title: '生日',}
+                , {field: 'education', title: '教育',}
+                , {field: 'province', title: '省份',}
+                , {fixed: 'right', title: '操作', toolbar: '#my_stu_fri_tool_one_line', width: 170}
+
+            ]]
+            , toolbar: '#my_stu_fri_toolbar1'
+
+        });
+        table.reload('my_stu_fri_table_1', {where: {stuId: oneStudentId}});
+        // 监听每一行的工具栏点击
+        table.on('tool(lay_filter_my_stu_fri_table_1)', function (obj) {
+
+            switch (obj.event) {
+
+                case 'single_delete_fri':
+
+                    console.log(obj.data.studentId);
+                    $.post(config.base_server + '/stuMgt/delStuFri?access_token=' + config.getToken(),
+                        {
+                            stuId:oneStudentId,
+                            friID:obj.data.studentId
+                        },
+                        function (data,status) {
+                            if (data.ifDone) {
+                                layer.msg('删除成功');
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+
+                    );
+                    break;
+            }
+            ;
+        });
+
+        // 监听头部工具栏点击
+        table.on('toolbar(lay_filter_my_stu_fri_table_1)', function (obj) {
+
+            switch (obj.event) {
+
+
+                case 'add_fri':
+                    layer.open({
+                        type: 1,
+                        shadeClose: true,
+                        content:
+
+                            '<div>\n' +
+                            '    <form class="layui-form" action="">\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <label class="layui-form-label">输入框</label>\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <input type="text" name="stuId" disabled="disabled"  lay-verify="required" value="' +
+                            '' + oneStudentId+
+                            '" autocomplete="off" class="layui-input">\n'+
+                            '                <input type="text" name="friId" required  lay-verify="required" placeholder="请输好友ID" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '\n' +
+                            '        <div class="layui-form-item">\n' +
+                            '            <div class="layui-input-block">\n' +
+                            '                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>\n' +
+                            '\n' +
+                            '            </div>\n' +
+                            '        </div>\n' +
+                            '\n' +
+                            '    </form>\n' +
+                            '\n' +
+                            '\n' +
+                            '</div>\n' +
+                            '<script>\n' +
+                            '    layui.use([\'form\', \'element\', \'config\', \'laytpl\'], function () {\n' +
+                            '        var form = layui.form;\n' +
+                            '        var element = layui.element;\n' +
+                            '\n' +
+                            '        var config = layui.config;\n' +
+                            '        var $ = layui.jquery;\n' +
+                            '        form.on(\'submit(formDemo)\', function(data){\n' +
+                            '            var temp=data.field;\n' +
+                            '\n' +
+                            '            $.post(config.base_server + \'/stuMgt/addStuFri?access_token=\' + config.getToken(),\n' +
+                            '\n' +
+                            '                temp\n' +
+                            '                ,\n' +
+                            '                function (data,status) {\n' +
+                            '                    if (data.ifDone) {\n' +
+                            '                        layer.msg(\'添加成功\');\n' +
+                            '                    } else {\n' +
+                            '                        layer.msg(\'id重复，添加失败\');\n' +
+                            '                    }\n' +
+                            '                }\n' +
+                            '\n' +
+                            '            );\n' +
+                            '            return false;\n' +
+                            '        });\n' +
+                            '    })\n' +
+                            '</scrip'+'t>'
+
+                    });
+                    break;
+
+
+            };
+        });
 
     });
 </script>
