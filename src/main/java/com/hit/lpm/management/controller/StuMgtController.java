@@ -30,7 +30,6 @@ import java.util.Map;
 @Api(value = "学习者管理相关功能", tags = "stuMgt")
 @RestController
 @RequestMapping("${api.version}/stuMgt")
-
 public class StuMgtController {
 
 

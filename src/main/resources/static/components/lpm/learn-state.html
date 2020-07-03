@@ -1,0 +1,551 @@
+
+    <style>
+        body{
+            background-color: #f0f2f5;
+        }
+        .layuiadmin-big-font{
+            font-size: 40px;
+            display: block;
+            margin: 20px 0;
+        }
+        .learn-progress{
+            margin: 15px 20px;
+        }
+        .count-box{
+            text-align: center;
+        }
+        .mid-count-box{
+            border-left: 1px solid #f0f2f5;
+            border-right: 1px solid #f0f2f5;
+        }
+        .count{
+            margin-top: 20px;
+        }
+        .self-mes-img-box{
+            text-align: center;
+        }
+        .self-mes-img-box img{
+            width: 50%;
+        }
+        .self-mes p{
+            margin: 8px 0;
+        }
+        .state-box{
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .state-title-box{
+            text-align: center;
+            margin-top: 10px;
+        }
+        .state-mes-box{
+            border-left: 3px solid #5FB878;
+            padding-left: 20px;
+        }
+        .learn-attitude-count{
+            margin-top: 30px; 
+            margin-bottom: 30px;
+        }
+    </style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    基本信息
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row" style="margin-top: 10px; margin-bottom: 10px;">
+                        <div class="layui-col-sm2 self-mes-img-box">
+                            <img src="../../assets/images/head.png" class="layui-card-img" />
+                        </div>
+                        <div class="layui-col-md8 self-mes">
+                            <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
+                            <div class="layui-row">
+                                <div class="layui-col-sm5">
+                                    <p>真实姓名：{{ d.studentName }}</p>
+                                    <p>性别：{{ d.gender }}</p>
+                                    <p>生日：{{ d.birthday }}</p>
+                                </div>
+                                <div class="layui-col-sm7">
+                                    <p>最高学历：{{ d.education }}</p>
+                                    <p>学校：{{ d.school }}</p>
+                                    <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-tab layui-tab-brief" style="border-top: 1px solid #f0f2f5;" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li>学习历史</li>
+                        <li class="layui-this">个性化分析</li>
+                        <li>知识兴趣</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-row state-box">
+                        <div class="layui-col-sm2 state-title-box">
+                            <p style="font-size: 17px;"><b>学习能力</b></p>
+                        </div>
+                        <div class="layui-col-md9 state-mes-box">
+                            <p>结果：学习能力分析结果（主要针对测验成绩数据）</p>
+                            <p>结果描述：学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    测验难度分布及成绩分布
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="getLeanerTestScore">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习能力变化
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="analyseLearnerAbility">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-row state-box">
+                        <div class="layui-col-sm2 state-title-box">
+                            <p style="font-size: 17px;"><b>学习状态</b></p>
+                        </div>
+                        <div class="layui-col-md9 state-mes-box">
+                            <p>结果：学习状态分析结果（主要针对学习行为数据）</p>
+                            <p>结果描述：学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    视频观看情况
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="getLearnerVideoData">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            学习时长
+                            <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">h</span>
+                        </div>
+                        <div class="layui-card-body">
+                            <p class="layuiadmin-big-font learn-attitude-count">54</p>
+                            <p>
+                                学习者总学习时长
+                                <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-log"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            平台访问
+                            <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">频</span>
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list">
+                            <p class="layuiadmin-big-font learn-attitude-count">109</p>
+                            <p>
+                                学习者访问平台频率
+                                <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-read"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            下载次数
+                            <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">次</span>
+                        </div>
+                        <div class="layui-card-body">
+                            <p class="layuiadmin-big-font learn-attitude-count">12</p>
+                            <p>
+                                学习资料下载次数
+                                <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-download-circle"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            发帖次数
+                            <span class="layui-badge layui-bg-red layuiadmin-badge pull-right">次</span>
+                        </div>
+                        <div class="layui-card-body">
+                            <p class="layuiadmin-big-font learn-attitude-count">22</p>
+                            <p>
+                                提问及回复总次数
+                                <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-survey"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-row state-box">
+                        <div class="layui-col-sm2 state-title-box">
+                            <p style="font-size: 17px;"><b>学习风格</b></p>
+                        </div>
+                        <div class="layui-col-md9 state-mes-box">
+                            <p>结果：学习风格分析结果（主要针对讨论区数据和搜索数据）</p>
+                            <p>结果描述：学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    参与讨论情况
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="getLearnerDiscussData">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习风格分析
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="getLearnerHomeworkData">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-row state-box">
+                        <div class="layui-col-sm2 state-title-box">
+                            <p style="font-size: 17px;"><b>学习习惯</b></p>
+                        </div>
+                        <div class="layui-col-md9 state-mes-box">
+                            <p>结果：学习习惯分析结果</p>
+                            <p>结果描述：学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习者活跃时间（工作日）
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="getLearnerActiveTime1">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习者活跃时间（休息日）
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" style="width: 100%; height: 300px;" id="getLearnerActiveTime2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/main.js"></script>
+<script src="../../assets/libs/echarts/echarts.min.js"></script>
+
+<script type="text/javascript">
+    layui.use(['config', 'element', 'form'], function(){
+        var $ = layui.jquery;
+        var config = layui.config;
+        var element = layui.element;
+        var form = layui.form;
+
+        var myChart1 = echarts.init(document.getElementById('analyseLearnerAbility'));
+        myChart1.showLoading();
+        var option = {
+            backgroundColor: '#ffffff',
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['课程1', '课程2', '课程3']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['10', '20', '30', '40', '50', '60', '70']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '课程1',
+                    type: 'line',
+                    stack: '总量',
+                    data: [120, 132, 101, 134, 90, 230, 210]
+                },
+                {
+                    name: '课程2',
+                    type: 'line',
+                    stack: '总量',
+                    data: [220, 182, 191, 234, 290, 330, 310]
+                },
+                {
+                    name: '课程3',
+                    type: 'line',
+                    stack: '总量',
+                    data: [150, 232, 201, 154, 190, 330, 410]
+                }
+            ]
+        };
+        myChart1.hideLoading();
+        myChart1.setOption(option);
+
+        var myChart0 = echarts.init(document.getElementById('getLeanerTestScore'));
+        myChart0.showLoading();
+        option = {
+            backgroundColor: '#ffffff',
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            legend: {
+                data: ['蒸发量', '降水量', '平均温度']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '水量',
+                    min: 0,
+                    max: 250,
+                    interval: 50,
+                    axisLabel: {
+                        formatter: '{value} ml'
+                    }
+                },
+                {
+                    type: 'value',
+                    name: '温度',
+                    min: 0,
+                    max: 25,
+                    interval: 5,
+                    axisLabel: {
+                        formatter: '{value} °C'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '蒸发量',
+                    type: 'bar',
+                    data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+                },
+                {
+                    name: '降水量',
+                    type: 'bar',
+                    data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+                },
+                {
+                    name: '平均温度',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                }
+            ]
+        };
+        myChart0.hideLoading();
+        myChart0.setOption(option);
+
+        var myChart2 = echarts.init(document.getElementById('getLearnerVideoData'));
+        myChart2.showLoading();
+        myChart2.hideLoading();
+        myChart2.setOption(option);
+
+
+        var myChart6 = echarts.init(document.getElementById('getLearnerDiscussData'));
+        myChart6.showLoading();
+        option = {
+            backgroundColor: '#ffffff',
+            title: {
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} min ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['提问', '回答', '其他']
+            },
+            series: [
+                {
+                    name: '发帖类型',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '50%'],
+                    data: [
+                        {value: 335, name: '提问'},
+                        {value: 310, name: '回答'},
+                        {value: 234, name: '其他'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart6.hideLoading();
+        myChart6.setOption(option);
+
+        var myChart7 = echarts.init(document.getElementById('getLearnerHomeworkData'));
+        myChart7.showLoading();
+        option = {
+                backgroundColor: '#ffffff',
+                tooltip: {},
+                toolbox: {
+                    show : false
+                },
+                calculable : true,
+                legend: {
+                    x: 'left',
+                    y: 'bottom',
+                    data: ['学习风格']
+                },
+                radar : [
+                    {
+                        indicator : [
+                            {text: "外倾型", max: 100},
+                            {text: "严谨型", max: 100},
+                            {text: "经验开放型", max: 100},
+                            {text: "宜人型", max: 100},
+                            {text: "神经质", max: 100}
+                        ]
+                    }
+                ],
+                series: [
+                    {
+                        type: 'radar',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data: [
+                            {
+                                value: [83, 42, 78, 76, 79],
+                                name: '学习风格'
+                            }
+                        ]
+                    }
+                ]
+        };
+        myChart7.hideLoading();
+        myChart7.setOption(option);
+
+        var myChart4 = echarts.init(document.getElementById('getLearnerActiveTime1'));
+        myChart4.showLoading();
+        option = {
+            backgroundColor: '#ffffff',
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line'
+            }]
+        };
+        myChart4.hideLoading();
+        myChart4.setOption(option);
+
+        var myChart5 = echarts.init(document.getElementById('getLearnerActiveTime2'));
+        myChart5.showLoading();
+        myChart5.hideLoading();
+        myChart5.setOption(option);
+    });
+</script>

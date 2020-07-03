@@ -57,7 +57,7 @@ public class InterestController extends BaseController {
         User user = userService.selectById(userId);
         Integer stuId = 1;
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
-        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class);
+        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class, "portrait");
         return new PageResult<>(studentPortrait.getTopics());
     }
 
@@ -72,7 +72,7 @@ public class InterestController extends BaseController {
         User user = userService.selectById(userId);
         Integer stuId = 1;
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
-        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class);
+        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class, "portrait");
         return studentPortrait.getCourses();
     }
 
@@ -90,9 +90,10 @@ public class InterestController extends BaseController {
             stuId = 1;
             if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         }
+        System.out.println(stuId);
         List<StudentCourseRelation> scs = studentCourseRelationService
                 .selectList(new EntityWrapper<StudentCourseRelation>().eq("student_id", stuId));
-        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class);
+        StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class, "portrait");
         Map<String, Integer> domains = new HashMap<>();
         for (Course course : studentPortrait.getCourses()) {
             for (String courseDomain : course.getDomains()) {
