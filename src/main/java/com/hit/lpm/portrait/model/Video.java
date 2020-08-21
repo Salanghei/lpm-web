@@ -2,6 +2,8 @@ package com.hit.lpm.portrait.model;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.io.Serializable;
+
 /**
  * @program: lmp-web
  * @description:
@@ -9,7 +11,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @create: 2020-6-11 21:06
  **/
 @TableName("lpm_video")
-public class Video {
+public class Video implements Serializable {
     private String courseId;
     private String courseName;
     private String videoId;

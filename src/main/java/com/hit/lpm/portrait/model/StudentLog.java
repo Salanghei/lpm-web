@@ -2,8 +2,10 @@ package com.hit.lpm.portrait.model;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.io.Serializable;
+
 @TableName("lpm_student_log")
-public class StudentLog {
+public class StudentLog implements Serializable {
     private Integer studentId;
     private String system;
     private String logTime;

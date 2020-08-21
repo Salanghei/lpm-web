@@ -3,6 +3,7 @@ package com.hit.lpm.portrait.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.google.common.primitives.Ints;
 import com.hit.lpm.common.BaseController;
 import com.hit.lpm.portrait.model.*;
@@ -141,12 +142,26 @@ public class PersonalController extends BaseController {
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         List<StudentLog> studentLogs = studentLogService.selectList(
                 new EntityWrapper<StudentLog>().eq("student_id", stuId));
+        List<StudentPost> studentPosts = studentPostService.selectList(
+                new EntityWrapper<StudentPost>().eq("student_id", stuId));
+        List<StudentVideoRecord> studentVideoRecords = studentVideoRecordService.selectList(
+                new EntityWrapper<StudentVideoRecord>().eq("student_id", stuId));
+        List<String> activeTimeList = new ArrayList<>();
+        for(StudentLog studentLog: studentLogs){
+            activeTimeList.add(studentLog.getLogTime());
+        }
+        for(StudentPost studentPost: studentPosts){
+            activeTimeList.add(studentPost.getTime());
+        }
+        for(StudentVideoRecord studentVideoRecord: studentVideoRecords){
+            activeTimeList.add(studentVideoRecord.getStartTime());
+        }
         int[] workDay = new int[24];
         int[] weekend = new int[24];
-        for(StudentLog studentLog: studentLogs){
-            String[] time = studentLog.getLogTime().split(" ");
-            int hour = Integer.valueOf(time[1].split(":")[0]);
-            String dateStr = time[0];
+        for(String activeTime: activeTimeList){
+            String dateStr = activeTime.substring(0, 10);
+            String time = activeTime.substring(11, activeTime.length());
+            int hour = Integer.valueOf(time.split(":")[0]);
             Calendar cal = Calendar.getInstance();
             Date date;
             try {
@@ -213,5 +228,153 @@ public class PersonalController extends BaseController {
         json.put("value", opn);
         result.add(json);
         return result;
+    }
+
+    @Autowired
+    private StudentHabitService studentHabitService;
+
+    @ApiOperation(value = "学习习惯")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+    })
+    @GetMapping("/habit")
+    @ResponseBody
+    public JSONObject getLearnHabit(HttpServletRequest request){
+        Integer userId = getLoginUserId(request);
+        User user = userService.selectById(userId);
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
+        System.out.println(stuId + "====================================");
+        StudentHabit studentHabit = studentHabitService.selectById(stuId);
+        JSONObject json = new JSONObject();
+        if(studentHabit == null){
+            System.out.println("1111111=========================================");
+            return json;
+        }
+        json.put("activeTime", studentHabit.getTimeslot());
+        json.put("activeDomain", studentHabit.getDiscipline());
+        json.put("activeArea", studentHabit.getArea());
+        json.put("activeSystem", studentHabit.getSystem());
+        System.out.println("2222222============================================");
+        return json;
+    }
+
+    @Autowired
+    private StudentAbilityService studentAbilityService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private CourseStructureService courseStructureService;
+
+    @Autowired
+    private StudentService studentService;
+
+    @ApiOperation(value = "有成绩的课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+    })
+    @GetMapping("/courses")
+    @ResponseBody
+    public JSONObject getCourses(HttpServletRequest request){
+        Integer userId = getLoginUserId(request);
+        User user = userService.selectById(userId);
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
+        List<String> courseIds = studentService.selectStudentCourses(stuId);
+        JSONObject res = new JSONObject();
+        if(courseIds != null){
+            JSONArray courses = new JSONArray();
+            JSONArray ids = new JSONArray();
+            for(String id: courseIds){
+                Course course = courseService.selectById(id);
+                if(course != null) {
+                    ids.add(id);
+                    courses.add(course.getCourseName());
+                }
+            }
+            res.put("ids", ids);
+            res.put("courses", courses);
+        }
+        return res;
+    }
+
+    @ApiOperation(value = "习题成绩")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "courseId", value = "课程ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/score")
+    @ResponseBody
+    public JSONObject getProblemScore(HttpServletRequest request, String courseId) {
+        Integer userId = getLoginUserId(request);
+        User user = userService.selectById(userId);
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
+        if(courseId == null){
+            List<String> courseIds = studentService.selectStudentCourses(stuId);
+            if(courseIds != null) {
+                courseId = courseIds.get(0);
+            }
+        }else {
+            courseId = String.join("+", courseId.split("\\s+"));
+        }
+        System.out.println(courseId);
+        JSONObject res = new JSONObject();
+        if(courseId == null)
+            return res;
+        List<CourseStructure> courseStructures = courseStructureService.selectList(
+                new EntityWrapper<CourseStructure>().eq("course_id", courseId));
+        if(courseStructures != null){
+            JSONArray problems = new JSONArray();
+            JSONArray scores = new JSONArray();
+            JSONArray fullScores = new JSONArray();
+            for(CourseStructure cs: courseStructures){
+                problems.add(cs.getProblemId());
+                fullScores.add(cs.getFullScore());
+                Double score = studentService.selectStudentProblemScore(stuId, cs.getProblemId());
+                if(score != null){
+                    scores.add(score);
+                }else{
+                    scores.add(0);
+                }
+            }
+            res.put("problems", problems);
+            res.put("scores", scores);
+            res.put("fullScores", fullScores);
+        }
+        return res;
+    }
+
+    @ApiOperation(value = "学习能力")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+    })
+    @GetMapping("/ability")
+    @ResponseBody
+    public JSONObject getStudentAbility(HttpServletRequest request){
+        Integer userId = getLoginUserId(request);
+        User user = userService.selectById(userId);
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
+        List<StudentAbility> studentAbilities = studentAbilityService.selectList(
+                new EntityWrapper<StudentAbility>().eq("student_id", stuId));
+        JSONObject res = new JSONObject();
+        if(studentAbilities != null){
+            JSONArray courses = new JSONArray();
+            JSONArray ability = new JSONArray();
+            for(StudentAbility sa: studentAbilities){
+                Course course = courseService.selectById(sa.getCourseId());
+                if(course != null){
+                    courses.add(course.getCourseName());
+                    Double a = new BigDecimal(sa.getAbility()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    ability.add(a);
+                }
+            }
+            res.put("courses", courses);
+            res.put("ability", ability);
+        }
+        return res;
     }
 }

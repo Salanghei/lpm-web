@@ -42,123 +42,193 @@ layui.use(['config', 'element', 'form', 'laytpl'], function(){
         element.render();
     });
 
+    $.ajaxSettings.async = true;
 
+    // 获取学习习惯
+    $.get(config.base_server + 'personal/habit?access_token=' + config.getToken(), function(data){
+        console.log(data);
+        var activeTimeTpl = document.getElementById("active-time").innerHTML;
+        var activeTimeView = document.getElementById("active-time-box");
+        laytpl(activeTimeTpl).render(data.activeTime, function(html){
+            activeTimeView.innerHTML = html;
+        });
+
+        var activeDomainTpl = document.getElementById("active-domain").innerHTML;
+        var activeDomainView = document.getElementById("active-domain-box");
+        laytpl(activeDomainTpl).render(data.activeDomain, function(html){
+            activeDomainView.innerHTML = html;
+        });
+
+        var activeAreaTpl = document.getElementById("active-area").innerHTML;
+        var activeAreaView = document.getElementById("active-area-box");
+        laytpl(activeAreaTpl).render(data.activeArea, function(html){
+            activeAreaView.innerHTML = html;
+        });
+
+        var activeSystemTpl = document.getElementById("active-system").innerHTML;
+        var activeSystemView = document.getElementById("active-system-box");
+        laytpl(activeSystemTpl).render(data.activeSystem, function(html){
+            activeSystemView.innerHTML = html;
+        });
+        element.render();
+    });
+
+    $.get(config.base_server + 'personal/courses?access_token=' + config.getToken(), function(data) {
+        var coursesTpl = document.getElementById("courses").innerHTML;
+        var coursesView = document.getElementById("courses-box");
+        laytpl(coursesTpl).render(data, function(html){
+            coursesView.innerHTML = html;
+        });
+        element.render();
+        form.render();
+    });
+
+    // 学习能力分析
     var myChart1 = echarts.init(document.getElementById('analyseLearnerAbility'));
     myChart1.showLoading();
-    var option = {
-        backgroundColor: '#ffffff',
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: ['课程1', '课程2', '课程3']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['10', '20', '30', '40', '50', '60', '70']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: '课程1',
-                type: 'line',
-                stack: '总量',
-                data: [120, 132, 101, 134, 90, 230, 210]
+    $.get(config.base_server + 'personal/ability?access_token=' + config.getToken(), function(data){
+        console.log(data);
+        var option = {
+            backgroundColor: '#ffffff',
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
             },
-            {
-                name: '课程2',
-                type: 'line',
-                stack: '总量',
-                data: [220, 182, 191, 234, 290, 330, 310]
+            grid: {
+                top: 30,
+                bottom: 30
             },
-            {
-                name: '课程3',
-                type: 'line',
-                stack: '总量',
-                data: [150, 232, 201, 154, 190, 330, 410]
-            }
-        ]
-    };
-    myChart1.hideLoading();
-    myChart1.setOption(option);
+            xAxis: {
+                type: 'value',
+                position: 'top',
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                }
+            },
+            yAxis: {
+                type: 'category',
+                axisLine: {show: false},
+                axisLabel: {show: false},
+                axisTick: {show: false},
+                splitLine: {show: false},
+                data: data.courses
+            },
+            series: [
+                {
+                    name: '学习能力',
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        show: true,
+                        formatter: '{b}'
+                    },
+                    data: data.ability
+                }
+            ]
+        };
+        myChart1.hideLoading();
+        myChart1.setOption(option);
+    });
 
+    // 课程习题成绩
     var myChart0 = echarts.init(document.getElementById('getLeanerTestScore'));
     myChart0.showLoading();
-    option = {
-        backgroundColor: '#ffffff',
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                crossStyle: {
-                    color: '#999'
-                }
-            }
-        },
-        legend: {
-            data: ['蒸发量', '降水量', '平均温度']
-        },
-        xAxis: [
-            {
-                type: 'category',
-                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    $.get(config.base_server + 'personal/score?access_token=' + config.getToken(), function(data) {
+        //console.log("courses");
+        //console.log(data);
+        var option = {
+            backgroundColor: '#ffffff',
+            color: ['#4cabce', '#e5323e'],
+            tooltip: {
+                trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
                 }
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value',
-                name: '水量',
-                min: 0,
-                max: 250,
-                interval: 50,
-                axisLabel: {
-                    formatter: '{value} ml'
+            },
+            legend: {
+                left: "5%",
+                data: ['full score', 'score']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: {show: false},
+                    data: data.problems
                 }
-            },
-            {
-                type: 'value',
-                name: '温度',
-                min: 0,
-                max: 25,
-                interval: 5,
-                axisLabel: {
-                    formatter: '{value} °C'
+            ],
+            yAxis: [
+                {
+                    type: 'value'
                 }
-            }
-        ],
-        series: [
-            {
-                name: '蒸发量',
-                type: 'bar',
-                data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-            },
-            {
-                name: '降水量',
-                type: 'bar',
-                data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-            },
-            {
-                name: '平均温度',
-                type: 'line',
-                yAxisIndex: 1,
-                data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-            }
-        ]
-    };
-    myChart0.hideLoading();
-    myChart0.setOption(option);
+            ],
+            series: [
+                {
+                    name: 'full score',
+                    type: 'bar',
+                    barGap: 0,
+                    data: data.fullScores
+                },
+                {
+                    name: 'score',
+                    type: 'bar',
+                    data: data.scores
+                }
+            ]
+        };
+        myChart0.hideLoading();
+        myChart0.setOption(option);
+    });
+
+    form.on('select(course-select)', function(data){
+        $.get(config.base_server + 'personal/score?access_token=' + config.getToken() + "&courseId=" + data.value, function(data){
+            console.log("courses");
+            console.log(data);
+            var option = {
+                backgroundColor: '#ffffff',
+                color: ['#4cabce', '#e5323e'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    left: "5%",
+                    data: ['full score', 'score']
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {show: false},
+                        data: data.problems
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'full score',
+                        type: 'bar',
+                        barGap: 0,
+                        data: data.fullScores
+                    },
+                    {
+                        name: 'score',
+                        type: 'bar',
+                        data: data.scores
+                    }
+                ]
+            };
+            myChart0.setOption(option);
+        });
+    });
 
     var myChart2 = echarts.init(document.getElementById('getLearnerVideoData'));
     myChart2.showLoading();
@@ -293,7 +363,7 @@ layui.use(['config', 'element', 'form', 'laytpl'], function(){
                 trigger: 'axis'
             },
             legend: {
-                data: ['workday', 'weekend']
+                data: ['工作日', '休息日']
             },
             xAxis: {
                 type: 'category',
@@ -319,9 +389,4 @@ layui.use(['config', 'element', 'form', 'laytpl'], function(){
         myChart4.hideLoading();
         myChart4.setOption(option);
     });
-
-    var myChart5 = echarts.init(document.getElementById('getLearnerActiveTime2'));
-    myChart5.showLoading();
-    myChart5.hideLoading();
-    myChart5.setOption(option);
 });

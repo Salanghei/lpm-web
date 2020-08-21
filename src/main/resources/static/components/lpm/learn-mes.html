@@ -70,6 +70,9 @@
         .table-mes-align{
             text-align: left;
         }
+        .tiny-card-height {
+            height: 107px;
+        }
     </style>
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
@@ -265,10 +268,36 @@
                                 <div class="layui-col-md6">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
-                                            测验难度分布及成绩分布
+                                            课程习题成绩
+                                            <!--<div id="courses-box">
+                                                <script type="text/html" id="courses">
+                                                    <form class="layui-form pull-right" action="">
+                                                        <div class="layui-form-item">
+                                                            <select name="city" lay-verify="">
+                                                                {{# layui.each(d.courses, function(index, item){ }}
+                                                                <option value="{{ d.ids[index] }}">{{ item }}</option>
+                                                                {{# }); }}
+                                                            </select>
+                                                        </div>
+                                                    </form>
+                                                </script>
+                                            </div>-->
                                         </div>
                                         <div class="layui-card-body graph-box">
                                             <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLeanerTestScore">
+                                            </div>
+                                            <div id="courses-box">
+                                                <script type="text/html" id="courses">
+                                                    <form class="layui-form pull-right" style="position: absolute; top: 10px; right: 10px;" action="">
+                                                        <div class="layui-form-item">
+                                                            <select name="city" lay-filter="course-select">
+                                                                {{# layui.each(d.courses, function(index, item){ }}
+                                                                    <option value="{{ d.ids[index] }}">{{ item }}</option>
+                                                                {{# }); }}
+                                                            </select>
+                                                        </div>
+                                                    </form>
+                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -277,7 +306,7 @@
                                 <div class="layui-col-md6">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
-                                            学习能力变化
+                                            学习能力分析
                                         </div>
                                         <div class="layui-card-body graph-box">
                                             <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="analyseLearnerAbility">
@@ -327,7 +356,7 @@
                                                     学习时长
                                                     <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">min</span>
                                                 </div>
-                                                <div class="layui-card-body">
+                                                <div class="layui-card-body tiny-card-height">
                                                     <div id="learn-length-box">
                                                         <!--学习时长-->
                                                         <script type="text/html" id="learn-length">
@@ -348,7 +377,7 @@
                                                     平台访问
                                                     <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">频</span>
                                                 </div>
-                                                <div class="layui-card-body layuiadmin-card-list">
+                                                <div class="layui-card-body tiny-card-height">
                                                     <div id="log-count-box">
                                                         <!--平台访问-->
                                                         <script type="text/html" id="log-count">
@@ -371,7 +400,7 @@
                                                     测验次数
                                                     <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">次</span>
                                                 </div>
-                                                <div class="layui-card-body">
+                                                <div class="layui-card-body tiny-card-height">
                                                     <div id="test-count-box">
                                                         <!--测验次数-->
                                                         <script type="text/html" id="test-count">
@@ -379,7 +408,7 @@
                                                         </script>
                                                     </div>
                                                     <p>
-                                                        学生参与测验的次数
+                                                        学习者参与测验的次数
                                                         <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-download-circle"></i></span>
                                                     </p>
                                                 </div>
@@ -392,7 +421,7 @@
                                                     发帖次数
                                                     <span class="layui-badge layui-bg-red layuiadmin-badge pull-right">次</span>
                                                 </div>
-                                                <div class="layui-card-body">
+                                                <div class="layui-card-body tiny-card-height">
                                                     <div id="post-count-box">
                                                         <!--发帖次数-->
                                                         <script type="text/html" id="post-count">
@@ -517,7 +546,7 @@
                                 <div class="layui-col-md6">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
-                                            学习者活跃时间
+                                            活跃时间
                                         </div>
                                         <div class="layui-card-body graph-box">
                                             <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerActiveTime1">
@@ -527,12 +556,90 @@
                                 </div>
 
                                 <div class="layui-col-md6">
-                                    <div class="layui-card">
-                                        <div class="layui-card-header">
-                                            学习者活跃时间
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md6">
+                                            <div class="layui-card">
+                                                <div class="layui-card-header">
+                                                    活跃时段
+                                                    <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">time</span>
+                                                </div>
+                                                <div class="layui-card-body tiny-card-height">
+                                                    <div id="active-time-box">
+                                                        <!--活跃时段-->
+                                                        <script type="text/html" id="active-time">
+                                                            <p class="learn-attitude-count" style="font-size: 25px;">{{ d }}</p>
+                                                        </script>
+                                                    </div>
+                                                    <p>
+                                                        学习者最活跃时段
+                                                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-log"></i></span>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="layui-card-body graph-box">
-                                            <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerActiveTime2">
+
+                                        <div class="layui-col-md6">
+                                            <div class="layui-card">
+                                                <div class="layui-card-header">
+                                                    活跃领域
+                                                    <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">domain</span>
+                                                </div>
+                                                <div class="layui-card-body tiny-card-height">
+                                                    <div id="active-domain-box">
+                                                        <!--活跃领域-->
+                                                        <script type="text/html" id="active-domain">
+                                                            <p class="learn-attitude-count" style="font-size: 25px;">{{ d }}</p>
+                                                        </script>
+                                                    </div>
+                                                    <p>
+                                                        学习者最活跃领域
+                                                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-read"></i></span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-row layui-col-space15">
+                                        <div class="layui-col-md6">
+                                            <div class="layui-card">
+                                                <div class="layui-card-header">
+                                                    活跃地点
+                                                    <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">area</span>
+                                                </div>
+                                                <div class="layui-card-body tiny-card-height">
+                                                    <div id="active-area-box">
+                                                        <!--活跃地点-->
+                                                        <script type="text/html" id="active-area">
+                                                            <p class="learn-attitude-count" style="font-size: 25px;">{{ d }}</p>
+                                                        </script>
+                                                    </div>
+                                                    <p>
+                                                        学习者最活跃地点
+                                                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-download-circle"></i></span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-col-md6">
+                                            <div class="layui-card">
+                                                <div class="layui-card-header">
+                                                    常用系统
+                                                    <span class="layui-badge layui-bg-red layuiadmin-badge pull-right">system</span>
+                                                </div>
+                                                <div class="layui-card-body tiny-card-height">
+                                                    <div id="active-system-box">
+                                                        <!--常用系统-->
+                                                        <script type="text/html" id="active-system">
+                                                            <p class="learn-attitude-count" style="font-size: 25px;">{{ d }}</p>
+                                                        </script>
+                                                    </div>
+                                                    <p>
+                                                        学习者最常用系统
+                                                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-survey"></i></span>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -666,16 +773,16 @@
                                 <div class="layui-col-md12">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
-                                            知识地图
+                                            知识结构
                                         </div>
                                         <div class="layui-card-body graph-box">
-                                            <div class="layui-carousel layadmin-carousel layadmin-dataview big-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerKnowledgeGraph">
+                                            <div class="layui-carousel layadmin-carousel layadmin-dataview" style="height: 500px; width: 1080px;" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerKnowledgeGraph">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="layui-col-md12">
+                                <!--<div class="layui-col-md12">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
                                             知识表格
@@ -706,7 +813,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
 

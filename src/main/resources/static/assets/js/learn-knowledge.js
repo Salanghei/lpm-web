@@ -6,132 +6,148 @@ layui.use(['config', 'element', 'laytpl', "rate"], function(){
     var rate = layui.rate;
     $.ajaxSettings.async = true;
 
-    // 知识表格
-    $.get(config.base_server + 'knowledge?page=0&limit=36&access_token=' + config.getToken(), function (res) {
-        //第三步：渲染模版
-        var nodes = [ //数据
-            {"knowledge_node": "计算机网络", "score": 1.5},
-            {"knowledge_node": "网络协议", "score": 2},
-            {"knowledge_node": "网络体系结构", "score": 3},
-            {"knowledge_node": "计算机网络结构", "score": 3},
-            {"knowledge_node": "电路交换", "score": 3},
-            {"knowledge_node": "多路复用", "score": 3},
-            {"knowledge_node": "速率", "score": 3.5},
-            {"knowledge_node": "带宽", "score": 4},
-            {"knowledge_node": "延迟", "score": 3},
-            {"knowledge_node": "时延带宽积", "score": 2},
-            {"knowledge_node": "OSI参考模型", "score": 3},
-            {"knowledge_node": "Internet发展历史", "score": 3},
-            {"knowledge_node": "网络应用层", "score": 4},
-            {"knowledge_node": "网络应用体系结构", "score": 3},
-            {"knowledge_node": "网络应用进程通信", "score": 3},
-            {"knowledge_node": "网络应用需求", "score": 3},
-            {"knowledge_node": "应用体系结构", "score": 3},
-            {"knowledge_node": "应用进程通信", "score": 3},
-            {"knowledge_node": "HTTP连接类型", "score": 2},
-            {"knowledge_node": "HTTP消息格式", "score": 3},
-            {"knowledge_node": "Cookie技术", "score": 3},
-            {"knowledge_node": "Web缓存技术", "score": 3},
-            {"knowledge_node": "Web应用概述", "score": 3},
-            {"knowledge_node": "Email应用概述", "score": 3},
-            {"knowledge_node": "Email消息格式", "score": 3},
-            {"knowledge_node": "POP协议", "score": 1.5},
-            {"knowledge_node": "DNS概述", "score": 3},
-            {"knowledge_node": "吞吐量", "score": 3},
-            {"knowledge_node": "Socket编程", "score": 3},
-            {"knowledge_node": "传输层服务", "score": 3},
-            {"knowledge_node": "复用和分用", "score": 1.5},
-            {"knowledge_node": "无线连接传输协议", "score": 3},
-            {"knowledge_node": "可靠数据传输", "score": 3},
-            {"knowledge_node": "rdt2.0", "score": 3},
-            {"knowledge_node": "rdt2.1", "score": 3},
-            {"knowledge_node": "web应用概述", "score": 3.5},
-            {"knowledge_node": "TCP概述", "score": 3},
-            {"knowledge_node": "TCP可靠数据传输", "score": 3},
-            {"knowledge_node": "TCP流量控制", "score": 4},
-            {"knowledge_node": "TCP连接管理", "score": 3},
-            {"knowledge_node": "拥塞控制原理", "score": 3},
-            {"knowledge_node": "丢包率", "score": 5}
-        ];
-        if (res.data == null || res.data.length == 0) res.data = nodes;
-        var getKnowledgeTableTpl = document.getElementById("knowledge-table").innerHTML;
-        var getKnowledgeTableView = document.getElementById("knowledge-table-box");
-        laytpl(getKnowledgeTableTpl).render(res.data, function (html) {
-            getKnowledgeTableView.innerHTML = html;
-            $('.rate').each(function() {
-                var o = this;
-                //console.log(o.innerHTML);
-                rate.render({
-                    elem: o,
-                    value: o.innerHTML,
-                    readonly: true
-                });
-            });
-        });
-    });
-
-    // 获取知识地图
-    var graphChart = echarts.init(document.getElementById("getLearnerKnowledgeGraph"), {width: 900});
+    // 获取知识结构
+    var graphChart = echarts.init(document.getElementById("getLearnerKnowledgeGraph"));
     graphChart.showLoading();
-    $.get('../../assets/data/les-miserables.gexf', function (xml) {
-        var graph = echarts.dataTool.gexf.parse(xml);
-        var categories = [];
-        for (var i = 0; i < 9; i++) {
-            categories[i] = {
-                name: '类目' + i
-            };
+    $.get(config.base_server + 'knowledge/background?access_token=' + config.getToken(), function(data){
+        console.log("知识结构");
+        //data = parseData(data);
+
+        var courses = data.children;
+        for(var i = 0; i < courses.length; i ++){
+            var r = Math.floor(Math.random()*256);
+            var g = Math.floor(Math.random()*256);
+            var b = Math.floor(Math.random()*256);
+            var color = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+            if(courses[i].value != null && courses[i].value > 0){
+                courses[i].itemStyle = {
+                    borderColor: color,
+                    borderWidth: courses[i].value * 5 + 1.5
+                };
+            }else{
+                courses[i].itemStyle = {
+                    borderColor: color,
+                    borderWidth: 1.5
+                };
+            }
+            changeColor(courses[i].children, color);
         }
-        graph.nodes.forEach(function (node) {
-            node.itemStyle = null;
-            node.value = node.symbolSize;
-            node.symbolSize /= 1.5;
-            node.label = {
-                normal: {
-                    show: node.symbolSize > 30
-                }
-            };
-            node.category = node.attributes.modularity_class;
-        });
+        console.log(data);
+
         var option = {
             backgroundColor: '#ffffff',
-            tooltip: {},
-            animationDuration: 1500,
-            animationEasingUpdate: 'quinticInOut',
-            series : [
+            tooltip: {
+                trigger: 'item',
+                triggerOn: 'mousemove'
+            },
+            series: [
                 {
-                    name: '知识结点',
-                    type: 'graph',
-                    layout: 'none',
-                    data: graph.nodes,
-                    links: graph.links,
-                    categories: categories,
-                    roam: true,
-                    focusNodeAdjacency: true,
-                    itemStyle: {
-                        normal: {
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.3)'
-                        }
-                    },
+                    type: 'tree',
+                    data: [data],
+
+                    top: '30',
+                    left: '8%',
+                    bottom: '30',
+                    right: '30%',
+
+                    /*top: '8%',
+                    left: '8%',
+                    bottom: '8%',
+                    right: '8%',*/
+
+                    //layout: 'radial',
+
+                    symbolSize: 7,
+                    initialTreeDepth: 1,
+
                     label: {
-                        position: 'right',
-                        formatter: '{b}'
+                        //show: false,
+                        position: 'left',
+                        verticalAlign: 'middle',
+                        align: 'right'
                     },
-                    lineStyle: {
-                        color: 'source',
-                        curveness: 0.3
-                    },
-                    emphasis: {
-                        lineStyle: {
-                            width: 10
+
+                    leaves: {
+                        label: {
+                            //show: true,
+                            position: 'right',
+                            verticalAlign: 'middle',
+                            align: 'left'
                         }
-                    }
+                    },
+
+                    expandAndCollapse: true,
+                    animationDuration: 550,
+                    animationDurationUpdate: 750
                 }
             ]
         };
         graphChart.hideLoading();
         graphChart.setOption(option);
-    }, 'xml');
+    });
+
+    graphChart.on("click", function(params){
+        console.log(params.data.name);
+        var container = document.getElementById("getLearnerKnowledgeGraph");
+        var allNode = 0;
+        var nodes = graphChart._chartsViews[0]._data._graphicEls;
+        for(var i = 0,count = nodes.length; i < count; i ++){
+            var node = nodes[i];
+            if(node === undefined)
+                continue;
+            allNode++;
+        }
+        //var height = parseInt(container.style.height);
+        var currentHeight = 20 * allNode;
+        var newHeight = Math.max(currentHeight, 500);
+        container.style.height = newHeight + 'px';
+        graphChart.resize();
+    });
+
+    function parseData(data) {
+        var courses = [];
+        $.each(data, function(idx1, obj1){
+            var chapters = [];
+            $.each(obj1.chapters, function(idx2, obj2){
+                var sections = [];
+                $.each(obj2.sections, function(idx3, obj3){
+                    var section = {};
+                    section.name = obj3.section_name;
+                    section.value = 0;
+                    sections.push(section);
+                });
+                var chapter = {};
+                chapter.name = obj2.chapter_name;
+                chapter.children = sections;
+                chapters.push(chapter);
+            });
+            var course = {};
+            course.name = obj1.course_name;
+            course.children = chapters;
+            courses.push(course);
+        });
+        var result = {};
+        result.name = "我";
+        result.children = courses;
+        return result;
+    }
+
+    function changeColor(list, color){
+        $.each(list, function(i, obj){
+            if(obj.value != null && obj.value > 0){
+                obj.itemStyle = {
+                    borderColor: color,
+                    borderWidth: obj.value * 5 + 1.5
+                };
+            }else{
+                obj.itemStyle = {
+                    borderColor: color,
+                    borderWidth: 1.5
+                };
+            }
+            if(obj.children != null && obj.children.length != 0){
+                changeColor(obj.children, color);
+            }
+        });
+    }
 });

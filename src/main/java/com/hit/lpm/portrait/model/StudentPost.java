@@ -2,8 +2,10 @@ package com.hit.lpm.portrait.model;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.io.Serializable;
+
 @TableName("lpm_student_post")
-public class StudentPost {
+public class StudentPost implements Serializable {
     private Integer spId;
     private String courseId;
     private String courseName;
@@ -12,7 +14,7 @@ public class StudentPost {
     private String mainPostId;
     private String postId;
     private String title;
-    private String context;
+    private String content;
     private String time;
 
     public Integer getSpId() {
@@ -80,11 +82,11 @@ public class StudentPost {
     }
 
     public String getContext() {
-        return context;
+        return content;
     }
 
-    public void setContext(String context) {
-        this.context = context;
+    public void setContext(String content) {
+        this.content = content;
     }
 
     public String getTime() {

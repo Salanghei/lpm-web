@@ -3,6 +3,8 @@ package com.hit.lpm.portrait.model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.io.Serializable;
+
 /**
  * @program: lmp-web
  * @description:
@@ -10,7 +12,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @create: 2019-10-13 21:54
  **/
 @TableName("lpm_student_topic_relation")
-public class StudentTopicRelation {
+public class StudentTopicRelation implements Serializable {
     @TableId
     private Integer stId;
 

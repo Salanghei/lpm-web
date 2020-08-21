@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface StudentService extends IService<Student> {
     List<String> selectKeywordsByStuId(Integer stuId);
+
+    Double selectStudentProblemScore(Integer stuId, String problemId);
+
+    List<String> selectStudentCourses(Integer stuId);
 }

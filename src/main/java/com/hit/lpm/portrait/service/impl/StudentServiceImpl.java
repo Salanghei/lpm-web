@@ -23,4 +23,14 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public List<String> selectKeywordsByStuId(Integer stuId) {
         return baseMapper.selectKeywordsByStuId(stuId);
     }
+
+    @Override
+    public Double selectStudentProblemScore(Integer stuId, String problemId){
+        return  baseMapper.selectStudentProblemScore(stuId, problemId);
+    }
+
+    @Override
+    public List<String> selectStudentCourses(Integer stuId){
+        return baseMapper.selectStudentCourses(stuId);
+    }
 }

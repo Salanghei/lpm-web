@@ -4,4 +4,13 @@
     <select id="selectKeywordsByStuId" resultType="java.lang.String">
         select keywords from bs_search_log where student_id = #{stuId};
     </select>
+
+    <select id="selectStudentProblemScore" resultType="java.lang.Double">
+        select score from lpm_student_problem where student_id = #{stuId} and problem_id = #{problemId};
+    </select>
+
+    <select id="selectStudentCourses" resultType="java.lang.String">
+        select distinct course_id from lpm_student_problem where student_id = #{stuId};
+    </select>
+
 </mapper>

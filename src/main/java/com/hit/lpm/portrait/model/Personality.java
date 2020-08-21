@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
+import java.io.Serializable;
+
 @TableName("lpm_student_personality")
-public class Personality {
+public class Personality implements Serializable {
     @TableId(type = IdType.INPUT)
     private Integer studentId;
     private Double ext;

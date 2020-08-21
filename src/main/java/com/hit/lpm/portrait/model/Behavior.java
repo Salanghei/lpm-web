@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
+import java.io.Serializable;
+
 @TableName("lpm_student_behavior")
-public class Behavior {
+public class Behavior implements Serializable {
     @TableId(type = IdType.INPUT)
     private Integer studentId;
     private Double learnHours;
