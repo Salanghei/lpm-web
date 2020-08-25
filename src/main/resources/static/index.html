@@ -28,6 +28,12 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>
+                <a href="http://192.168.43.111:8080/index/loginCheck?userName=jk&password=123" target="_blank" rel="nofollow noreferrer" title="社区"><i class="layui-icon layui-icon-chat"></i></a>
+            </li>
+            <!--<li class="layui-nav-item" lay-unselect>
+                <a id="chat" title="社区"><i class="layui-icon layui-icon-chat"></i></a>
+            </li>-->
+            <li class="layui-nav-item" lay-unselect>
                 <a ew-event="message" title="消息"><i class="layui-icon layui-icon-notice"></i></a>
             </li>
             <li class="layui-nav-item" lay-unselect>
@@ -127,8 +133,34 @@
 </div>
 
 <!-- js部分 -->
+<script type="text/javascript" src="assets/libs/jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="assets/js/main.js"></script>
+<!--<script type="text/javascript">
+    layui.use(['element'], function(){
+        var $ = layui.jquery;
+        var data = new FormData();
+        data.append("userName", "jk");
+        data.append("password", "123");
+        $("#chat").click(function (){
+            console.log(data.get("userName"));
+            console.log(data.get("password"));
+            $.ajax({
+                url: "http://192.168.43.111:8080/index/loginCheck?userName=jk&password=123",
+                type: "GET",
+                dataType : "jsonp",
+                jsonp: "callback",
+                processData: false,
+                contentType: false,
+                success: function(d){
+                    alert(d);
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>-->
+
 </body>
 
 </html>

@@ -1,53 +1,39 @@
 <style>
-    .layui-card-img-box img {
+    .layui-card-img-box img{
         width: 70%;
     }
-
-    .layadmin-takerates {
+    .layadmin-takerates{
         padding: 10px 50px;
     }
-
-    .layui-res {
+    .layui-res{
         padding: 10px 0;
         border-bottom: 1px dashed #f6f6f6;
     }
-
-    .tags {
+    .tags{
         margin: 10px 0 15px 0;
     }
-
-    .loading-box {
+    .loading-box{
         min-height: 250px;
         text-align: center;
     }
-
-    .loading-box p {
+    .loading-box p{
         line-height: 250px;
     }
-
-    .self-mes-img-box {
+    .self-mes-img-box{
         text-align: center;
     }
-
-    .self-mes-img-box img {
+    .self-mes-img-box img{
         width: 50%;
     }
-
-    .self-mes p {
+    .self-mes p{
         margin: 10px 0;
     }
-
-    .resource-mes-img-box {
+    .resource-mes-img-box{
         text-align: center;
         margin-top: 20px;
     }
-
-    .resource-mes-img-box img {
+    .resource-mes-img-box img{
         width: 30%;
-    }
-
-    .recommend-friend-a {
-        cursor: pointer;
     }
 </style>
 <div class="layui-container">
@@ -80,29 +66,12 @@
 
 
             <div class="layui-card">
-                <div class="layui-card-header">学习伙伴推荐
-                    <button type="changeButton"
-                            class="layui-btn layui-btn-normal layui-btn-radius pull-right ">换一批
-                    </button>
-                </div>
+                <div class="layui-card-header">学习伙伴推荐</div>
                 <div class="layui-card-body layadmin-takerates" id="recommend-student-box">
                     <!--模板引擎,id="recommend-student" -->
                     <!--数据加载前显示-->
                     <div class="loading-box">
-                        <p><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading"></i>
-                            Loading</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="layui-card">
-                <div class="layui-card-header">学习群组推荐</div>
-                <div class="layui-card-body layadmin-takerates" id="recommend-cluster-box">
-                    <!--模板引擎,id="recommend-cluster" -->
-                    <!--数据加载前显示-->
-                    <div class="loading-box">
-                        <p><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading"></i>
-                            Loading</p>
+                        <p><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading"></i>  Loading</p>
                     </div>
                 </div>
             </div>
@@ -134,20 +103,19 @@
 
 <!--全部资源-->
 <script id="resource" type="text/html">
-    {{# layui.each(d, function(index, item){ }}
+{{# layui.each(d, function(index, item){ }}
     <div class="layui-row layui-res">
         <div class="layui-col-md2">
-            <a><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon"/></a>
+            <a><img src="../../assets/images/format-icon/{{ item.type }}" class="layui-card-icon" /></a>
         </div>
         <div class="layui-col-md10 layui-card-res-box">
-            <h3><b><a style="cursor: pointer;" class="resource-name" name="{{ item.resourceId }}"
-                      value="{{ item.uploaderId }}">{{ item.name }}</a></b></h3>
+            <h3><b><a style="cursor: pointer;" class="resource-name" name="{{ item.resourceId }}" value="{{ item.uploaderId }}">{{ item.name }}</a></b></h3>
             {{# if(item.tags.length > 0){ }}
-            {{# layui.each(item.tags, function(key, cell){ }}
-            <span class="layui-badge-rim tags">{{ cell }}</span>
-            {{# }); }}
+                {{# layui.each(item.tags, function(key, cell){ }}
+                    <span class="layui-badge-rim tags">{{ cell }}</span>
+                {{# }); }}
             {{# }else{ }}
-            <span class="layui-badge-rim tags">无标签</span>
+                <span class="layui-badge-rim tags">无标签</span>
             {{# } }}
             <p class="layui-word-aux">
                 上传时间：{{ item.time }}
@@ -156,117 +124,99 @@
             </p>
         </div>
     </div>
-    {{# }); }}
+{{# }); }}
 </script>
 
 <!--推荐学习伙伴-->
 <script id="recommend-student" type="text/html">
-    {{# layui.each(d, function(index, item){ }}
+{{# layui.each(d, function(index, item){ }}
     <div class="layui-row layui-res">
         <div class="layui-col-md4 layui-card-img-box">
-            <img src="../../assets/images/head.png" class="layui-card-img"/>
+            <img src="../../assets/images/head.png" class="layui-card-img" />
         </div>
         <div class="layui-col-md8 layui-card-mes-box">
-            <h4><b><a class="recommend-friend-a student-name" name="{{ item.studentId }}">{{ item.name }}</a></b></h4>
-            <p class="layui-word-aux">共同好友数目：{{ item.count }}</p>
-            <p class="layui-word-aux">学历：{{ item.education }}</p>
-            <p class="layui-word-aux">所在地：{{ item.position }}</p>
+            <h4><b><a style="cursor: pointer;" class="student-name" name="{{ item.studentId }}" value="{{ item.trust }}">{{ item.studentName }}</a></b></h4>
+            <p class="layui-word-aux">信任度：{{ item.trust }}</p>
+            <p class="layui-word-aux">已选课程：{{ item.course }}</p>
         </div>
     </div>
-    {{# }); }}
-</script>
-
-<!--推荐学习群组-->
-<script id="recommend-cluster" type="text/html">
-    {{# layui.each(d, function(index, item){ }}
-    <div class="layui-row layui-res">
-        <div class="layui-col-md4 layui-card-img-box">
-            <img src="../../assets/images/cluster.png" class="layui-card-img"/>
-        </div>
-        <div class="layui-col-md8 layui-card-mes-box">
-            <h4><b><a class="recommend-cluster-a" name="{{ item.clusterId }}">{{ item.clusterName }}</a></b></h4>
-            <p class="layui-word-aux" style="display: inline-block;">群组ID：{{ item.clusterId }} </p>
-            <p class="layui-word-aux" style="display: inline-block;">组内学习者数量：{{ item.numsOfStu }} 人</p>
-        </div>
-    </div>
-    {{# }); }}
+{{# }); }}
 </script>
 
 <!--推荐课程-->
 <script id="recommend-course" type="text/html">
-    {{# layui.each(d, function(index, item){ }}
+{{# layui.each(d, function(index, item){ }}
     <div class="layui-res reco-res-box">
         <h3><b><a href="#">{{ item.courseName }}</a></b></h3>
         <p class="layui-word-aux">主讲老师：{{ item.teacher }}</p>
         <p class="layui-word-aux">开课院校：{{ item.courseSchool }}</p>
     </div>
-    {{# }); }}
+{{# }); }}
 </script>
 
 <!--资源信息-->
 <script id="resource-message" type="text/html">
     <div class="layui-row">
         <div class="layui-col-md4 resource-mes-img-box">
-            <img src="../../assets/images/format-icon/{{ d.resource.type }}.svg" class="layui-card-icon"/>
+            <img src="../../assets/images/format-icon/{{ d.resource.type }}.svg" class="layui-card-icon" />
         </div>
         <div class="layui-col-md8 self-mes">
             <p style="font-size: 20px;"><b>{{ d.resource.name }}</b></p>
             {{# if(d.tags.length > 0){ }}
-            {{# layui.each(d.tags, function(key, cell){ }}
-            <span class="layui-badge-rim tags">{{ cell }}</span>
-            {{# }); }}
+                {{# layui.each(d.tags, function(key, cell){ }}
+                    <span class="layui-badge-rim tags">{{ cell }}</span>
+                {{# }); }}
             {{# }else{ }}
-            <span class="layui-badge-rim tags">无标签</span>
+                <span class="layui-badge-rim tags">无标签</span>
             {{# } }}
             <p>上传时间：{{ d.resource.time }}</p>
             <p>上传者：{{ d.uploader }}</p>
             <p>资源描述：{{ d.resource.details }}</p>
 
             {{# if(d.auth === "可下载" || d.auth === "all"){ }}
-            <button class="layui-btn" style="margin-top: 20px;">下载资源</button>
+                <button class="layui-btn" style="margin-top: 20px;">下载资源</button>
             {{# } }}
         </div>
     </div>
     <div style="margin-top: 30px;">
         {{# if(d.auth === "仅查看"){ }}
-        <h3 style="margin: 10px 0;">申请理由：</h3>
-        <div id="resource-apply-form">
-            <input type="text" name="toApplyResourceId" value="{{ d.resource.resourceId }}" style="display: none;">
-            <input type="text" name="toApplyResourceName" value="{{ d.resource.name }}" style="display: none;">
-            <input type="text" name="toApplyResourceUserId" value="{{ d.resource.studentId }}" style="display: none;">
-            <textarea name="resourceDetails" class="layui-textarea"
-                      style="resize:none">同学你好，我很需要这个资源，希望可以得到下载许可，谢谢啦~</textarea>
-            <div style="margin-top: 20px;">
-                <button class="layui-btn" id="submit-resource-apply">申请资源</button>
+            <h3 style="margin: 10px 0;">申请理由：</h3>
+            <div id="resource-apply-form">
+                <input type="text" name="toApplyResourceId" value="{{ d.resource.resourceId }}" style="display: none;">
+                <input type="text" name="toApplyResourceName" value="{{ d.resource.name }}" style="display: none;">
+                <input type="text" name="toApplyResourceUserId" value="{{ d.resource.studentId }}" style="display: none;">
+                <textarea name="resourceDetails" class="layui-textarea" style="resize:none">同学你好，我很需要这个资源，希望可以得到下载许可，谢谢啦~</textarea>
+                <div style="margin-top: 20px;">
+                    <button class="layui-btn" id="submit-resource-apply">申请资源</button>
+                </div>
             </div>
-        </div>
         {{# } }}
         {{# if(d.auth === "all"){ }}
-        <h3 style="margin: 10px 0;">下载许可列表：</h3>
-        <div>
+            <h3 style="margin: 10px 0;">下载许可列表：</h3>
+            <div>
             {{# if(d.authStudentList.length > 0){ }}
-            <table class="layui-table">
-                <thead>
-                <tr>
-                    <th>用户昵称</th>
-                    <th>时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody id="showStudentLst">
-                {{# layui.each(d.authStudentList, function(index, item){ }}
-                <tr>
-                    <td>{{ item.authName }}</td>
-                    <td>{{ item.authTime }}</td>
-                    <td><a style="cursor: pointer;">撤销权限</a></td>
-                </tr>
-                {{# }); }}
-                </tbody>
-            </table>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>用户昵称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="showStudentLst">
+                    {{# layui.each(d.authStudentList, function(index, item){ }}
+                        <tr>
+                            <td>{{ item.authName }}</td>
+                            <td>{{ item.authTime }}</td>
+                            <td><a style="cursor: pointer;">撤销权限</a></td>
+                        </tr>
+                    {{# }); }}
+                    </tbody>
+                </table>
             {{# }else{ }}
-            <p style="margin: 20px;">该资源暂无下载许可列表...</p>
+                <p style="margin: 20px;">该资源暂无下载许可列表...</p>
             {{# } }}
-        </div>
+            </div>
         {{# } }}
     </div>
 </script>
@@ -275,7 +225,7 @@
 <script id="student-message" type="text/html">
     <div class="layui-row">
         <div class="layui-col-md4 self-mes-img-box">
-            <img src="../../assets/images/head.png" class="layui-card-img"/>
+            <img src="../../assets/images/head.png" class="layui-card-img" />
         </div>
         <div class="layui-col-md8 self-mes">
             <p style="font-size: 20px;"><b>昵称：{{ d.nickname }}</b></p>
@@ -284,7 +234,8 @@
             <p>生日：{{ d.birthday }}</p>
             <p>最高学历：{{ d.education }}</p>
             <p>所在地：{{ d.country }} {{ d.province }}省 {{ d.city }}市</p>
-            <p>已选课程：{{ d.course }}</p>
+            <p>已选课程：大学计算机专业导论、计算机组成原理、计算机网络、数据库原理</p>
+            <p>自我介绍：这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍这里是自我介绍...</p>
         </div>
     </div>
     <div style="margin-top: 30px;">
@@ -292,8 +243,7 @@
         <div id="apply-form">
             <input type="text" name="toApplyUserId" value="{{ d.studentId }}" style="display: none;">
             <input type="text" name="trust" value="{{ d.trust }}" style="display: none;">
-            <textarea name="details" class="layui-textarea"
-                      style="resize:none">你好，很高兴认识你，我想和你结为学习伙伴，共同学习共同进步~</textarea>
+            <textarea name="details" class="layui-textarea" style="resize:none">你好，很高兴认识你，我想和你结为学习伙伴，共同学习共同进步~</textarea>
             <div style="margin-top: 20px;">
                 <button class="layui-btn" id="submit-friend-apply">申请结伴</button>
             </div>
@@ -304,13 +254,12 @@
 <script src="../../assets/libs/echarts/echarts.min.js"></script>
 
 <script type="text/javascript">
-    layui.use(['config', 'element', 'laytpl', 'layer'], function () {
+    layui.use(['config', 'element', 'laytpl', 'layer'], function(){
         var $ = layui.jquery;
         var config = layui.config;
         var laytpl = layui.laytpl;
         var element = layui.element;
         var layer = layui.layer;
-        var laypage = layui.laypage;
 
         var myChart = echarts.init(document.getElementById("relation-chart"));
         myChart.showLoading();
@@ -357,7 +306,8 @@
                         formatter: function (params) {
                             if (params.data.weight) {
                                 return params.data.source + '-' + params.data.target + '信任值:' + params.data.weight;
-                            } else {
+                            }
+                            else {
                                 return "学生ID:" + params.name;
                             }
                         }
@@ -409,7 +359,7 @@
                 myChart.hideLoading();
                 myChart.setOption(option);
             },
-            error: function () {
+            error: function(){
                 alert("数据加载失败!");
             }
         });
@@ -425,56 +375,32 @@
                 //console.log(data);
                 var getResourceTpl = document.getElementById("resource").innerHTML;
                 var resourceView = document.getElementById("resource-box");
-                laytpl(getResourceTpl).render(data, function (html) {
+                laytpl(getResourceTpl).render(data, function(html){
                     resourceView.innerHTML = html;
                     element.render();
                 });
             },
-            error: function () {
+            error: function (){
                 alert("数据加载失败");
             }
         });
 
-        //推荐学习伙伴
+        // 获取推荐学生
         $.ajax({
             type: "get",
             async: true,
-            url: config.base_server + 'recommend/getRecommendFriend?access_token=' + config.getToken(),
+            url: config.base_server + 'recommend/recommendStudent?access_token=' + config.getToken(),
             data: {},
             dataType: "json",
             success: function (data) {
-                friendData = data;
-                console.log(friendData.length);
-
                 var getStudentTpl = document.getElementById("recommend-student").innerHTML;
                 var studentView = document.getElementById("recommend-student-box");
-                laytpl(getStudentTpl).render(data, function (html) {
+                laytpl(getStudentTpl).render(data, function(html){
                     studentView.innerHTML = html;
                     element.render();
                 });
             },
-            error: function () {
-                alert("数据加载失败");
-            }
-        });
-
-
-        // 获取推荐学习群组
-        $.ajax({
-            type: "get",
-            async: true,
-            url: config.base_server + 'recommend/recommendCluster?access_token=' + config.getToken(),
-            data: {},
-            dataType: "json",
-            success: function (data) {
-                var getClusterTpl = document.getElementById("recommend-cluster").innerHTML;
-                var clusterView = document.getElementById("recommend-cluster-box");
-                laytpl(getClusterTpl).render(data, function (html) {
-                    clusterView.innerHTML = html;
-                    element.render();
-                });
-            },
-            error: function () {
+            error: function (){
                 alert("数据加载失败");
             }
         });
@@ -490,18 +416,18 @@
                 //console.log(data);
                 var getCourseTpl = document.getElementById("recommend-course").innerHTML;
                 var courseView = document.getElementById("recommend-course-box");
-                laytpl(getCourseTpl).render(data, function (html) {
+                laytpl(getCourseTpl).render(data, function(html){
                     courseView.innerHTML = html;
                     element.render();
                 });
             },
-            error: function () {
+            error: function (){
                 alert("数据加载失败");
             }
         });
 
         // 资源详情弹出层
-        $("#resource-box").on("click", ".resource-name", function () {
+        $("#resource-box").on("click", ".resource-name", function(){
             var resourceId = $(this).attr("name");
             var uploaderId = $(this).attr("value");
             //console.log(resourceId);
@@ -515,37 +441,37 @@
                     //console.log(data);
                     var getResourceDetailsTpl = document.getElementById("resource-message").innerHTML;
                     var resourceDetailsView = document.getElementById("resource-details-content");
-                    laytpl(getResourceDetailsTpl).render(data, function (html) {
+                    laytpl(getResourceDetailsTpl).render(data, function(html){
                         resourceDetailsView.innerHTML = html;
                         element.render();
                     });
                 },
-                error: function () {
+                error: function (){
                     alert("数据加载失败");
                 }
             });
 
             layer.open({
                 type: 1,
-                title: "资源详情",
+                title:"资源详情",
                 shade: 0,
-                area: ['1072px', '70%'],
+                area: ['1072px','70%'],
                 content: $("#resource-details"),
-                end: function () {
+                end: function(){
                     $("#resource-details").css("display", "none");
                 }
             });
         });
 
         // 用户详情弹出层
-        $("#recommend-student-box").on("click", ".student-name", function () {
+        $("#recommend-student-box").on("click", ".student-name", function(){
             var studentId = $(this).attr("name");
             var trust = $(this).attr("value");
-            console.log(studentId);
+            //console.log(studentId);
             $.ajax({
                 type: "get",
                 async: true,
-                url: config.base_server + 'student/messageWithCourse?access_token=' + config.getToken() + "&id=" + studentId,
+                url: config.base_server + 'student/message?access_token=' + config.getToken() + "&id=" + studentId,
                 data: {},
                 dataType: "json",
                 success: function (data) {
@@ -553,30 +479,30 @@
                     //console.log(data);
                     var getStudentDetailsTpl = document.getElementById("student-message").innerHTML;
                     var studentDetailsView = document.getElementById("student-details-content");
-                    laytpl(getStudentDetailsTpl).render(data, function (html) {
+                    laytpl(getStudentDetailsTpl).render(data, function(html){
                         studentDetailsView.innerHTML = html;
                         element.render();
                     });
                 },
-                error: function () {
+                error: function (){
                     alert("数据加载失败");
                 }
             });
 
             layer.open({
                 type: 1,
-                title: "用户详情",
+                title:"用户详情",
                 shade: 0,
-                area: ['1072px', '70%'],
+                area: ['1072px','70%'],
                 content: $("#student-details"),
-                end: function () {
+                end: function(){
                     $("#student-details").css("display", "none");
                 }
             });
         });
 
         // 提交结伴申请
-        $("#student-details-content").on("click", "#submit-friend-apply", function () {
+        $("#student-details-content").on("click", "#submit-friend-apply", function(){
             var postData = {};
             postData["access_token"] = config.getToken();
             postData["toApplyUserId"] = $("input[name='toApplyUserId']").val();
@@ -584,17 +510,17 @@
             postData["details"] = $("textarea[name='details']").val();
             //console.log(postData);
             $.ajax({
-                type: "post",
-                async: true,
-                url: config.base_server + 'friend/applyFriend',
+                type : "post",
+                async : true,
+                url : config.base_server + 'friend/applyFriend',
                 data: postData,
-                success: function (result) {
-                    if (result.msg === "success") {
+                success: function(result){
+                    if(result.msg === "success"){
                         layer.msg("结伴申请已发送");
                         layer.close(layer.index - 1);  // 关闭弹出层
                     }
                 },
-                error: function (errorMes) {
+                error: function(errorMes){
                     layer.msg("申请发送失败");
                 }
             });
@@ -602,7 +528,7 @@
         });
 
         // 提交资源申请
-        $("#resource-details-content").on("click", "#submit-resource-apply", function () {
+        $("#resource-details-content").on("click", "#submit-resource-apply", function(){
             var postData = {};
             postData["access_token"] = config.getToken();
             postData["toApplyResourceId"] = $("input[name='toApplyResourceId']").val();
@@ -611,17 +537,17 @@
             postData["details"] = $("textarea[name='resourceDetails']").val();
             //console.log(postData);
             $.ajax({
-                type: "post",
-                async: true,
-                url: config.base_server + 'resource/applyResource',
+                type : "post",
+                async : true,
+                url : config.base_server + 'resource/applyResource',
                 data: postData,
-                success: function (result) {
-                    if (result.msg === "success") {
+                success: function(result){
+                    if(result.msg === "success"){
                         layer.msg("资源申请已发送");
                         layer.close(layer.index - 1);  // 关闭弹出层
                     }
                 },
-                error: function (errorMes) {
+                error: function(errorMes){
                     layer.msg("申请发送失败");
                 }
             });

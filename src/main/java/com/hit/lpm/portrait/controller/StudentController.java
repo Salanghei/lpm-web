@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hit.lpm.common.BaseController;
 import com.hit.lpm.common.PageResult;
-import com.hit.lpm.portrait.model.Course;
-import com.hit.lpm.portrait.model.Student;
-import com.hit.lpm.portrait.model.StudentPortrait;
+import com.hit.lpm.portrait.model.*;
+import com.hit.lpm.portrait.service.CourseService;
+import com.hit.lpm.portrait.service.StudentSelectCourseService;
 import com.hit.lpm.portrait.service.StudentService;
 import com.hit.lpm.system.model.User;
 import com.hit.lpm.system.service.UserService;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wf.jwtp.annotation.RequiresPermissions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public class StudentController extends BaseController {
     private UserService userService;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private StudentSelectCourseService studentSelectCourseService;
 
     //@RequiresPermissions("get:/v1/student/portrait")
     @ApiOperation(value = "查询画像")
@@ -73,6 +76,40 @@ public class StudentController extends BaseController {
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         if (!id.equals("")) stuId = Integer.valueOf(id);
         return studentService.selectById(stuId);
+    }
+
+    @ApiOperation(value = "查询个人信息（带有所选课程）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "id", value = "ID", required = true, dataType = "String", paramType = "query")
+    })
+    @GetMapping("/messageWithCourse")
+    @ResponseBody
+    public StudentWithCourse stuMsgWithCourse(String id, HttpServletRequest request) {
+        Integer userId = getLoginUserId(request);
+        User user = userService.selectById(userId);
+        Integer stuId = 1;
+        if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
+        if (!id.equals("")) stuId = Integer.valueOf(id);
+        Student student =  studentService.selectById(stuId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("student_id", student.getStudentId());
+        List<StudentSelectCourse> courseList = studentSelectCourseService.selectByMap(map);
+        String courses = "";
+        for(StudentSelectCourse course: courseList){
+            courses += course.getCourseName() + "；";
+        }
+        StudentWithCourse result = new StudentWithCourse();
+        result.setCourse(courses);
+        result.setProvince(student.getProvince());
+        result.setNickname(student.getNickname());
+        result.setGender(student.getGender());
+        result.setCountry(student.getCountry());
+        result.setCity(student.getCity());
+        result.setBirthday(student.getBirthday());
+        result.setEducation(student.getEducation());
+        result.setStudentName(student.getStudentName());
+        return result;
     }
 
     @RequiresPermissions("get:/v1/student")

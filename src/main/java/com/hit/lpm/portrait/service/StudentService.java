@@ -2,6 +2,7 @@ package com.hit.lpm.portrait.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.hit.lpm.portrait.model.Student;
+import com.hit.lpm.portrait.model.StudentWithCourse;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface StudentService extends IService<Student> {
     Double selectStudentProblemScore(Integer stuId, String problemId);
 
     List<String> selectStudentCourses(Integer stuId);
+
+    StudentWithCourse selectSC(Integer stuId);
 }

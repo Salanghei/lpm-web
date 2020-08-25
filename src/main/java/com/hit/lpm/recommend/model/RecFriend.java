@@ -2,7 +2,6 @@ package com.hit.lpm.recommend.model;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import org.omg.CORBA.INTERNAL;
 
 /**
  * @program: lmp-web

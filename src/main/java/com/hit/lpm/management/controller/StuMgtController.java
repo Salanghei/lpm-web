@@ -30,7 +30,7 @@ import java.util.Map;
 @Api(value = "学习者管理相关功能", tags = "stuMgt")
 @RestController
 @RequestMapping("${api.version}/stuMgt")
-public class StuMgtController {
+class StuMgtController {
 
 
     @Autowired
@@ -199,8 +199,8 @@ public class StuMgtController {
     })
     @PostMapping("/addStu")
     public JSONObject addStudent(Integer studentId,Integer userId,String studentName,
-                           String nickname,String gender,String education,
-                           String country, String province,String city){
+                                 String nickname,String gender,String education,
+                                 String country, String province,String city){
         Student2 temp=student2Service.selectById(studentId);
         JSONObject result=new JSONObject();
         if(temp!=null){

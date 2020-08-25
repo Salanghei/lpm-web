@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.hit.lpm.common.BaseController;
+import com.hit.lpm.recommend.model.Friend;
 import com.hit.lpm.portrait.model.Student;
+import com.hit.lpm.recommend.service.FriendService;
 import com.hit.lpm.portrait.service.StudentService;
 import com.hit.lpm.recommend.model.RecFriend;
 import com.hit.lpm.recommend.model.RecFriendApply;
@@ -39,6 +41,8 @@ public class FriendController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private FriendService friendService;
 
     @Autowired
     private RecFriendApplyService recFriendApplyService;
@@ -51,16 +55,16 @@ public class FriendController {
     })
     @GetMapping("/getFriend")
     @ResponseBody
-    public JSONArray getFriend(HttpServletRequest request){
+    public JSONArray getFriend(HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
-        List<RecFriend> friendList = recFriendService.selectList(
-                new EntityWrapper<RecFriend>().eq("user_id", userId));
+        List<Friend> friendList = friendService.selectList(
+                new EntityWrapper<Friend>().eq("student_id", userId));
         JSONArray result = new JSONArray();
-        for(RecFriend friend : friendList){
+        for (Friend friend : friendList) {
             JSONObject resultCell = new JSONObject();
             Student friendInfo = studentService.selectById(friend.getFriendId());
             resultCell.put("friendId", friend.getFriendId());
-            resultCell.put("trust", friend.getTrust());
+//            resultCell.put("trust", friend.getTrust());
             resultCell.put("name", friendInfo.getNickname());
             resultCell.put("education", friendInfo.getEducation());
             resultCell.put("position", friendInfo.getCountry() + " | " + friendInfo.getProvince() + " | " + friendInfo.getCity());
@@ -78,7 +82,7 @@ public class FriendController {
     })
     @PostMapping("/applyFriend")
     @ResponseBody
-    public Map<String, String> applyFriend(String toApplyUserId, String details, String trust, HttpServletRequest request){
+    public Map<String, String> applyFriend(String toApplyUserId, String details, String trust, HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         RecFriendApply newFriendApply = new RecFriendApply();
         newFriendApply.setApplyUserId(userId);
@@ -86,7 +90,8 @@ public class FriendController {
         newFriendApply.setState("toPass");
         Date date = new Date();
         newFriendApply.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
-        newFriendApply.setTrust(Double.valueOf(trust));
+        //TODO 信任值怎么计算的待写清楚
+        newFriendApply.setTrust(Double.valueOf(0.88));
         newFriendApply.setDetails(details);
         recFriendApplyService.insertAllColumn(newFriendApply);
         Map<String, String> map = new HashMap<>();
@@ -100,12 +105,12 @@ public class FriendController {
     })
     @GetMapping("/getFriendApply")
     @ResponseBody
-    public JSONArray getFriendApply(HttpServletRequest request){
+    public JSONArray getFriendApply(HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         List<RecFriendApply> applyList = recFriendApplyService.selectList(
                 new EntityWrapper<RecFriendApply>().eq("user_id", userId).eq("state", "toPass"));
         JSONArray result = new JSONArray();
-        for(RecFriendApply apply : applyList){
+        for (RecFriendApply apply : applyList) {
             JSONObject resultCell = new JSONObject();
             Student applyUser = studentService.selectById(apply.getApplyUserId());
             resultCell.put("apply", apply);
@@ -122,7 +127,7 @@ public class FriendController {
     })
     @GetMapping("/passFriendApply")
     @ResponseBody
-    public JSONObject passFriendApply(String applyId, HttpServletRequest request){
+    public JSONObject passFriendApply(String applyId, HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         JSONObject result = new JSONObject();
         RecFriendApply recFriendApply = recFriendApplyService.selectById(applyId);
@@ -148,7 +153,7 @@ public class FriendController {
     })
     @GetMapping("/refuseFriendApply")
     @ResponseBody
-    public JSONObject refuseFriendApply(String applyId, HttpServletRequest request){
+    public JSONObject refuseFriendApply(String applyId, HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         JSONObject result = new JSONObject();
         RecFriendApply recFriendApply = recFriendApplyService.selectById(applyId);
@@ -165,7 +170,7 @@ public class FriendController {
     })
     @GetMapping("/deleteFriend")
     @ResponseBody
-    public JSONObject deleteFriend(String friendId, HttpServletRequest request){
+    public JSONObject deleteFriend(String friendId, HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         recFriendService.delete(
                 new EntityWrapper<RecFriend>().eq("user_id", userId).eq("friend_id", friendId));

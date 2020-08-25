@@ -112,19 +112,27 @@ public class PersonalController extends BaseController {
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         Behavior behavior = studentBehaviorService.selectById(stuId);
         JSONObject result = new JSONObject();
-        result.put("logCount", String.valueOf(behavior.getFrequency()));
-        result.put("postCount", String.valueOf(behavior.getPostCount() + behavior.getReplyCount()));
-        result.put("learnLength", String.valueOf(behavior.getLearnHours()));
-        result.put("testCount", String.valueOf(behavior.getTestCount()));
-        int kind = behavior.getKind();
-        if(kind == 0){
-            result.put("kind", "拖沓懒散型");
-        }else if(kind == 1){
-            result.put("kind", "敷衍了事型");
-        }else if(kind == 2){
-            result.put("kind", "积极主动型");
+        if(behavior != null) {
+            result.put("logCount", String.valueOf(behavior.getFrequency()));
+            result.put("postCount", String.valueOf(behavior.getPostCount() + behavior.getReplyCount()));
+            result.put("learnLength", String.valueOf(behavior.getLearnHours()));
+            result.put("testCount", String.valueOf(behavior.getTestCount()));
+            int kind = behavior.getKind();
+            if(kind == 0){
+                result.put("kind", "拖沓懒散型");
+            }else if(kind == 1){
+                result.put("kind", "敷衍了事型");
+            }else if(kind == 2){
+                result.put("kind", "积极主动型");
+            }else{
+                result.put("kind", "半途而废型");
+            }
         }else{
-            result.put("kind", "半途而废型");
+            result.put("logCount", 0);
+            result.put("postCount", 0);
+            result.put("learnLength", 0);
+            result.put("testCount", 0);
+            result.put("kind", "未知");
         }
         return result;
     }
@@ -314,7 +322,7 @@ public class PersonalController extends BaseController {
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         if(courseId == null){
             List<String> courseIds = studentService.selectStudentCourses(stuId);
-            if(courseIds != null) {
+            if(courseIds != null && courseIds.size() > 0) {
                 courseId = courseIds.get(0);
             }
         }else {
