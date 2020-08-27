@@ -80,9 +80,12 @@ public class RecommendController {
         Integer userId = baseController.getLoginUserId(request);
         JSONObject result = new JSONObject();
         //一级信任伙伴
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("student_id", userId);
         List<Friend> friendList = friendService.selectByMap(map);
+        if (friendList.size() > 5) {
+            friendList = friendList.subList(0, 5);
+        }
 
 
         // // 随机获取40个学生的id
@@ -117,6 +120,29 @@ public class RecommendController {
             edge.put("weight", String.format("%.2f", weight));
             edges.add(edge);
             weights.add(weight);
+
+            map.put("student_id", friend.getId());
+            List<Friend> friendList1 = friendService.selectByMap(map);
+            if (friendList1.size() > 5) {
+                friendList1 = friendList1.subList(0, 5);
+            }
+            level2 = friendList1.size();
+            for (int j = 0; j < level2; j++) {//第二层节点
+                Friend friend1 = friendList1.get(j);
+                JSONObject node1 = new JSONObject();  // 创建新节点
+                node1.put("category", 2);
+                node1.put("name", String.valueOf(friend1.getFriendId()));
+                node1.put("value", 20);
+                nodes.add(node);
+                JSONObject edge1 = new JSONObject();  // 创建新边
+                edge1.put("source", String.valueOf(friend.getId()));   // 第一层每个节点都与中心节点相连
+                edge1.put("target", String.valueOf(friend1.getFriendId()));
+                BigDecimal weight1 = friend1.getTrust();
+                edge1.put("weight", String.format("%.2f", weight1));
+                edges.add(edge1);
+                weights.add(weight1);
+            }
+
         }
 
 //        for (int i = level1; i < level2; i++) {  // 第二层节点
@@ -263,11 +289,11 @@ public class RecommendController {
 //        map.put("student_id",studentId);
 
         EntityWrapper<RecCourse> wrapper = new EntityWrapper<>();
-        wrapper.eq("student_id",studentId).last("limit 3");
+        wrapper.eq("student_id", studentId).last("limit 3");
 //        List<RecCourse> recCourseList = recCourseService.selectByMap(map);
         List<RecCourse> recCourseList = recCourseService.selectList(wrapper);
         List<Course> result = new ArrayList<>();
-        for(RecCourse one : recCourseList){
+        for (RecCourse one : recCourseList) {
             Course course = courseService.selectById(one.getCourseId());
             result.add(course);
         }
