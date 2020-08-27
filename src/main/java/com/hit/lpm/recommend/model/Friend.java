@@ -3,6 +3,8 @@ package com.hit.lpm.recommend.model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.math.BigDecimal;
+
 /**
  * @program: lmp-web
  * @description:
@@ -15,6 +17,7 @@ public class Friend {
     private Integer id;
     private Integer studentId;
     private Integer friendId;
+    private BigDecimal trust;
 
     public Integer getId() {
         return id;
@@ -38,5 +41,13 @@ public class Friend {
 
     public void setFriendId(Integer friendId) {
         this.friendId = friendId;
+    }
+
+    public BigDecimal getTrust() {
+        return trust;
+    }
+
+    public void setTrust(BigDecimal trust) {
+        this.trust = trust;
     }
 }

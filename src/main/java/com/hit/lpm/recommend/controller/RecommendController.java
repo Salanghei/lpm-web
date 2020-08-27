@@ -12,13 +12,11 @@ import com.hit.lpm.portrait.model.StudentCourseRelation;
 import com.hit.lpm.portrait.service.ClusterService;
 import com.hit.lpm.portrait.service.CourseService;
 import com.hit.lpm.portrait.service.StudentCourseRelationService;
+import com.hit.lpm.recommend.model.Friend;
 import com.hit.lpm.recommend.model.RecCluster;
 import com.hit.lpm.recommend.model.RecCourse;
 import com.hit.lpm.recommend.model.RecFriend;
-import com.hit.lpm.recommend.service.RecClusterService;
-import com.hit.lpm.recommend.service.RecCourseService;
-import com.hit.lpm.recommend.service.RecFriendService;
-import com.hit.lpm.recommend.service.RecStudentService;
+import com.hit.lpm.recommend.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -66,6 +65,9 @@ public class RecommendController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private FriendService friendService;
+
     private BaseController baseController = new BaseController();
 
     @ApiOperation(value = "构建信任关系网络")
@@ -77,14 +79,19 @@ public class RecommendController {
     public JSONObject getRelationNetwork(HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         JSONObject result = new JSONObject();
+        //一级信任伙伴
+        Map<String,Object> map = new HashMap<>();
+        map.put("student_id", userId);
+        List<Friend> friendList = friendService.selectByMap(map);
+
+
         // // 随机获取40个学生的id
-        List<Integer> studentLst = recStudentService.getRandomStudentId(40);
-        //studentLst.set(0, 71361);
+//        List<Integer> studentLst = recStudentService.getRandomStudentId(40);
         JSONArray nodes = new JSONArray();
         JSONArray edges = new JSONArray();
-        int level1 = 5;   // 第一层节点
-        Random r = new Random();
-        int level2 = r.nextInt(5) + 15;  // 第二层节点
+        int level1 = friendList.size();   // 第一层节点
+//        Random r = new Random();
+        int level2 = 0;  // 第二层节点
 
         JSONObject firstNode = new JSONObject();  // 中心节点为已登录的用户
         firstNode.put("category", 0);
@@ -93,69 +100,70 @@ public class RecommendController {
         nodes.add(firstNode);    // 将中心节点加入
 
         List<Integer> recommendIds = new ArrayList<>();
-        List<Double> weights = new ArrayList<>();
+        List<BigDecimal> weights = new ArrayList<>();
 
         for (int i = 0; i < level1; i++) {  // 第一层节点
+            Friend friend = friendList.get(i);
             JSONObject node = new JSONObject();  // 创建新节点
             node.put("category", 1);
-            node.put("name", String.valueOf(studentLst.get(i)));
+            node.put("name", String.valueOf(friend.getFriendId()));
             node.put("value", 30);
             nodes.add(node);
-            recommendIds.add(studentLst.get(i));
+            recommendIds.add(friend.getFriendId());
             JSONObject edge = new JSONObject();  // 创建新边
             edge.put("source", String.valueOf(userId));   // 第一层每个节点都与中心节点相连
-            edge.put("target", String.valueOf(studentLst.get(i)));
-            Double weight = r.nextDouble() * 0.3 + 0.7;
+            edge.put("target", String.valueOf(friend.getFriendId()));
+            BigDecimal weight = friend.getTrust();
             edge.put("weight", String.format("%.2f", weight));
             edges.add(edge);
             weights.add(weight);
         }
 
-        for (int i = level1; i < level2; i++) {  // 第二层节点
-            JSONObject node = new JSONObject();  // 创建新节点
-            node.put("category", 2);
-            node.put("name", String.valueOf(studentLst.get(i)));
-            node.put("value", 20);
-            nodes.add(node);
-            for (int j = 0; j < r.nextInt(2) + 1; j++) {  // 第二层每个节点至少与一个第一层节点相连
-                JSONObject edge = new JSONObject();  // 创建新边
-                edge.put("source", String.valueOf(studentLst.get(r.nextInt(4))));
-                edge.put("target", String.valueOf(studentLst.get(i)));
-                edge.put("weight", String.format("%.2f", r.nextDouble() * 0.3 + 0.7));
-                edges.add(edge);
-            }
-        }
-
-        for (int i = level2; i < 40; i++) {  // 第三层节点
-            JSONObject node = new JSONObject();  // 创建新节点
-            node.put("category", 3);
-            node.put("name", String.valueOf(studentLst.get(i)));
-            node.put("value", 10);
-            nodes.add(node);
-            for (int j = 0; j < r.nextInt(2) + 1; j++) {  // 第三层每个节点至少与一个第二层节点相连
-                JSONObject edge = new JSONObject();
-                edge.put("source", String.valueOf(studentLst.get(r.nextInt(level2 - level1 - 1) + 5)));
-                edge.put("target", String.valueOf(studentLst.get(i)));
-                edge.put("weight", String.format("%.2f", r.nextDouble() * 0.3 + 0.7));
-                edges.add(edge);
-            }
-        }
-
-        // 排序
-        for (int i = 0; i < level1; i++) {
-            for (int j = 0; j < level1 - i - 1; j++) {
-                if (weights.get(j) < weights.get(j + 1)) {
-                    // 交换weights数组中数据位置
-                    Double tempWeight = weights.get(j);
-                    weights.set(j, weights.get(j + 1));
-                    weights.set(j + 1, tempWeight);
-                    // 交换recommendIds数组中数据中位置
-                    Integer tempId = recommendIds.get(j);
-                    recommendIds.set(j, recommendIds.get(j + 1));
-                    recommendIds.set(j + 1, tempId);
-                }
-            }
-        }
+//        for (int i = level1; i < level2; i++) {  // 第二层节点
+//            JSONObject node = new JSONObject();  // 创建新节点
+//            node.put("category", 2);
+//            node.put("name", String.valueOf(studentLst.get(i)));
+//            node.put("value", 20);
+//            nodes.add(node);
+//            for (int j = 0; j < r.nextInt(2) + 1; j++) {  // 第二层每个节点至少与一个第一层节点相连
+//                JSONObject edge = new JSONObject();  // 创建新边
+//                edge.put("source", String.valueOf(studentLst.get(r.nextInt(4))));
+//                edge.put("target", String.valueOf(studentLst.get(i)));
+//                edge.put("weight", String.format("%.2f", r.nextDouble() * 0.3 + 0.7));
+//                edges.add(edge);
+//            }
+//        }
+//
+//        for (int i = level2; i < 40; i++) {  // 第三层节点
+//            JSONObject node = new JSONObject();  // 创建新节点
+//            node.put("category", 3);
+//            node.put("name", String.valueOf(studentLst.get(i)));
+//            node.put("value", 10);
+//            nodes.add(node);
+//            for (int j = 0; j < r.nextInt(2) + 1; j++) {  // 第三层每个节点至少与一个第二层节点相连
+//                JSONObject edge = new JSONObject();
+//                edge.put("source", String.valueOf(studentLst.get(r.nextInt(level2 - level1 - 1) + 5)));
+//                edge.put("target", String.valueOf(studentLst.get(i)));
+//                edge.put("weight", String.format("%.2f", r.nextDouble() * 0.3 + 0.7));
+//                edges.add(edge);
+//            }
+//        }
+//
+//        // 排序
+//        for (int i = 0; i < level1; i++) {
+//            for (int j = 0; j < level1 - i - 1; j++) {
+//                if (weights.get(j) < weights.get(j + 1)) {
+//                    // 交换weights数组中数据位置
+//                    Double tempWeight = weights.get(j);
+//                    weights.set(j, weights.get(j + 1));
+//                    weights.set(j + 1, tempWeight);
+//                    // 交换recommendIds数组中数据中位置
+//                    Integer tempId = recommendIds.get(j);
+//                    recommendIds.set(j, recommendIds.get(j + 1));
+//                    recommendIds.set(j + 1, tempId);
+//                }
+//            }
+//        }
         result.put("nodes", nodes);
         result.put("edges", edges);
         result.put("userId", String.valueOf(userId));
