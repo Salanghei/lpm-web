@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.apdplat.word.vector.F;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,7 +103,7 @@ public class RecommendController {
         firstNode.put("value", 40);
         nodes.add(firstNode);    // 将中心节点加入
 
-        List<Integer> recommendIds = new ArrayList<>();
+//        List<Integer> recommendIds = new ArrayList<>();
         List<BigDecimal> weights = new ArrayList<>();
 
         for (int i = 0; i < level1; i++) {  // 第一层节点
@@ -112,7 +113,7 @@ public class RecommendController {
             node.put("name", String.valueOf(friend.getFriendId()));
             node.put("value", 30);
             nodes.add(node);
-            recommendIds.add(friend.getFriendId());
+//            recommendIds.add(friend.getFriendId());
             JSONObject edge = new JSONObject();  // 创建新边
             edge.put("source", String.valueOf(userId));   // 第一层每个节点都与中心节点相连
             edge.put("target", String.valueOf(friend.getFriendId()));
@@ -121,9 +122,10 @@ public class RecommendController {
             edges.add(edge);
             weights.add(weight);
 
-            map.put("student_id", friend.getId());
+            map.clear();
+            map.put("student_id", friend.getFriendId());
             List<Friend> friendList1 = friendService.selectByMap(map);
-            if (friendList1.size() > 5) {
+            if (friendList1 != null && friendList1.size() > 5) {
                 friendList1 = friendList1.subList(0, 5);
             }
             level2 = friendList1.size();
@@ -133,14 +135,36 @@ public class RecommendController {
                 node1.put("category", 2);
                 node1.put("name", String.valueOf(friend1.getFriendId()));
                 node1.put("value", 20);
-                nodes.add(node);
+                nodes.add(node1);
                 JSONObject edge1 = new JSONObject();  // 创建新边
-                edge1.put("source", String.valueOf(friend.getId()));   // 第一层每个节点都与中心节点相连
+                edge1.put("source", String.valueOf(friend.getStudentId()));   // 第一层每个节点都与中心节点相连
                 edge1.put("target", String.valueOf(friend1.getFriendId()));
                 BigDecimal weight1 = friend1.getTrust();
                 edge1.put("weight", String.format("%.2f", weight1));
                 edges.add(edge1);
                 weights.add(weight1);
+
+                map.clear();
+                map.put("student_id", friend1.getFriendId());
+                List<Friend> friendList2 = friendService.selectByMap(map);
+                if (friendList2 != null && friendList2.size() > 5) {
+                    friendList2 = friendList2.subList(0, 5);
+                }
+                for (int k = 0; k < friendList2.size(); k++) {//第三层节点
+                    Friend friend2 = friendList2.get(k);
+                    JSONObject node2 = new JSONObject();  // 创建新节点
+                    node2.put("category", 3);
+                    node2.put("name", String.valueOf(friend2.getFriendId()));
+                    node2.put("value", 10);
+                    nodes.add(node2);
+                    JSONObject edge2 = new JSONObject();  // 创建新边
+                    edge2.put("source", String.valueOf(friend1.getStudentId()));   // 第一层每个节点都与中心节点相连
+                    edge2.put("target", String.valueOf(friend2.getFriendId()));
+                    BigDecimal weight2 = friend2.getTrust();
+                    edge2.put("weight", String.format("%.2f", weight2));
+                    edges.add(edge2);
+                    weights.add(weight2);
+                }
             }
 
         }
