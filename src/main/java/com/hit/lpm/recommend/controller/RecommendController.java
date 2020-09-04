@@ -12,18 +12,17 @@ import com.hit.lpm.portrait.model.StudentCourseRelation;
 import com.hit.lpm.portrait.service.ClusterService;
 import com.hit.lpm.portrait.service.CourseService;
 import com.hit.lpm.portrait.service.StudentCourseRelationService;
+import com.hit.lpm.recommend.model.Friend;
 import com.hit.lpm.recommend.model.RecCluster;
 import com.hit.lpm.recommend.model.RecCourse;
 import com.hit.lpm.recommend.model.RecFriend;
-import com.hit.lpm.recommend.service.RecClusterService;
-import com.hit.lpm.recommend.service.RecCourseService;
-import com.hit.lpm.recommend.service.RecFriendService;
-import com.hit.lpm.recommend.service.RecStudentService;
+import com.hit.lpm.recommend.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.apdplat.word.vector.F;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -66,6 +66,9 @@ public class RecommendController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private FriendService friendService;
+
     private BaseController baseController = new BaseController();
 
     @ApiOperation(value = "构建信任关系网络")
@@ -77,14 +80,20 @@ public class RecommendController {
     public JSONObject getRelationNetwork(HttpServletRequest request) {
         Integer userId = baseController.getLoginUserId(request);
         JSONObject result = new JSONObject();
-        // // 随机获取40个学生的id
-        List<Integer> studentLst = recStudentService.getRandomStudentId(40);
-        //studentLst.set(0, 71361);
+
+        //查询一级信任伙伴
+        Map<String, Object> map = new HashMap<>();
+        Set<Integer> idSet = new HashSet<>();
+        idSet.add(userId);
+        map.put("student_id", userId);
+        List<Friend> friendList = friendService.selectByMap(map);
+        if (friendList.size() > 5) {
+            friendList = friendList.subList(0, 5);
+        }
+
         JSONArray nodes = new JSONArray();
         JSONArray edges = new JSONArray();
-        int level1 = 5;   // 第一层节点
-        Random r = new Random();
-        int level2 = r.nextInt(5) + 15;  // 第二层节点
+        int level1 = friendList.size();   // 第一层节点
 
         JSONObject firstNode = new JSONObject();  // 中心节点为已登录的用户
         firstNode.put("category", 0);
@@ -92,97 +101,215 @@ public class RecommendController {
         firstNode.put("value", 50);
         nodes.add(firstNode);    // 将中心节点加入
 
-        List<Integer> recommendIds = new ArrayList<>();
-        List<Double> weights = new ArrayList<>();
+        List<BigDecimal> weights = new ArrayList<>();
 
-        for (int i = 0; i < level1; i++) {  // 第一层节点
+        for (int i = 0; i < level1; i++) {//第一层节点
+            Friend friend = friendList.get(i);
+            idSet.add(friend.getFriendId());
             JSONObject node = new JSONObject();  // 创建新节点
             node.put("category", 1);
-            node.put("name", String.valueOf(studentLst.get(i)));
+            node.put("name", String.valueOf(friend.getFriendId()));
             node.put("value", 30);
             nodes.add(node);
-            recommendIds.add(studentLst.get(i));
             JSONObject edge = new JSONObject();  // 创建新边
             edge.put("source", String.valueOf(userId));   // 第一层每个节点都与中心节点相连
-            edge.put("target", String.valueOf(studentLst.get(i)));
-            Double weight = r.nextDouble() * 0.3 + 0.7;
+            edge.put("target", String.valueOf(friend.getFriendId()));
+            BigDecimal weight = friend.getTrust();
             edge.put("weight", String.format("%.2f", weight));
             edges.add(edge);
             weights.add(weight);
         }
 
-        for (int i = level1; i < level2; i++) {  // 第二层节点
-            JSONObject node = new JSONObject();  // 创建新节点
-            node.put("category", 2);
-            node.put("name", String.valueOf(studentLst.get(i)));
-            node.put("value", 20);
-            nodes.add(node);
-            for (int j = 0; j < r.nextInt(2) + 1; j++) {  // 第二层每个节点至少与一个第一层节点相连
-                JSONObject edge = new JSONObject();  // 创建新边
-                edge.put("source", String.valueOf(studentLst.get(r.nextInt(4))));
-                edge.put("target", String.valueOf(studentLst.get(i)));
-                edge.put("weight", String.format("%.2f", r.nextDouble() * 0.3 + 0.7));
-                edges.add(edge);
-            }
-        }
-
-        for (int i = level2; i < 40; i++) {  // 第三层节点
-            JSONObject node = new JSONObject();  // 创建新节点
-            node.put("category", 3);
-            node.put("name", String.valueOf(studentLst.get(i)));
-            node.put("value", 10);
-            nodes.add(node);
-            for (int j = 0; j < r.nextInt(2) + 1; j++) {  // 第三层每个节点至少与一个第二层节点相连
-                JSONObject edge = new JSONObject();
-                edge.put("source", String.valueOf(studentLst.get(r.nextInt(level2 - level1 - 1) + 5)));
-                edge.put("target", String.valueOf(studentLst.get(i)));
-                edge.put("weight", String.format("%.2f", r.nextDouble() * 0.3 + 0.7));
-                edges.add(edge);
-            }
-        }
-
-        // 排序
         for (int i = 0; i < level1; i++) {
-            for (int j = 0; j < level1 - i - 1; j++) {
-                if (weights.get(j) < weights.get(j + 1)) {
-                    // 交换weights数组中数据位置
-                    Double tempWeight = weights.get(j);
-                    weights.set(j, weights.get(j + 1));
-                    weights.set(j + 1, tempWeight);
-                    // 交换recommendIds数组中数据中位置
-                    Integer tempId = recommendIds.get(j);
-                    recommendIds.set(j, recommendIds.get(j + 1));
-                    recommendIds.set(j + 1, tempId);
+            Friend friend = friendList.get(i);
+            map.clear();
+            map.put("student_id", friend.getFriendId());
+            List<Friend> friendList1 = friendService.selectByMap(map);
+            if (friendList1 != null && friendList1.size() > 5) {
+                friendList1 = friendList1.subList(0, 5);
+            }
+            for (int j = 0; j < friendList1.size(); j++) {//第二层节点
+                Friend friend1 = friendList1.get(j);
+
+                JSONObject node1 = new JSONObject();  // 创建新节点
+                node1.put("category", 2);
+                node1.put("name", String.valueOf(friend1.getFriendId()));
+                node1.put("value", 20);
+                if (!idSet.contains(friend1.getFriendId())) {
+                    nodes.add(node1);
+                    idSet.add(friend1.getFriendId());
+                }
+                JSONObject edge1 = new JSONObject();  // 创建新边
+                edge1.put("source", String.valueOf(friend1.getStudentId()));   // 第一层每个节点都与中心节点相连
+                edge1.put("target", String.valueOf(friend1.getFriendId()));
+                BigDecimal weight1 = friend1.getTrust();
+                edge1.put("weight", String.format("%.2f", weight1));
+                edges.add(edge1);
+                weights.add(weight1);
+            }
+        }
+
+        for (int i = 0; i < level1; i++) {
+            Friend friend = friendList.get(i);
+            map.clear();
+            map.put("student_id", friend.getFriendId());
+            List<Friend> friendList1 = friendService.selectByMap(map);
+            if (friendList1 != null && friendList1.size() > 5) {
+                friendList1 = friendList1.subList(0, 5);
+            }
+            for (int j = 0; j < friendList1.size(); j++) {
+                Friend friend1 = friendList1.get(j);
+                map.clear();
+                map.put("student_id", friend1.getFriendId());
+                List<Friend> friendList2 = friendService.selectByMap(map);
+                if (friendList2 != null && friendList2.size() > 5) {
+                    friendList2 = friendList2.subList(0, 5);
+                }
+                for (int k = 0; k < friendList2.size(); k++) {//第三层节点
+                    Friend friend2 = friendList2.get(k);
+
+                    JSONObject node2 = new JSONObject();  // 创建新节点
+                    node2.put("category", 3);
+                    node2.put("name", String.valueOf(friend2.getFriendId()));
+                    node2.put("value", 10);
+                    if (!idSet.contains(friend2.getFriendId())) {
+                        nodes.add(node2);
+                        idSet.add(friend2.getFriendId());
+                    }
+                    JSONObject edge2 = new JSONObject();  // 创建新边
+                    edge2.put("source", String.valueOf(friend2.getStudentId()));   // 第一层每个节点都与中心节点相连
+                    edge2.put("target", String.valueOf(friend2.getFriendId()));
+                    BigDecimal weight2 = friend2.getTrust();
+                    edge2.put("weight", String.format("%.2f", weight2));
+                    edges.add(edge2);
+                    weights.add(weight2);
                 }
             }
         }
         result.put("nodes", nodes);
         result.put("edges", edges);
         result.put("userId", String.valueOf(userId));
+
         return result;
     }
 
-//    @ApiOperation(value = "推荐学习伙伴")
+//    @ApiOperation(value = "构建信任关系网络")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
 //    })
-//    @GetMapping("/recommendStudent")
+//    @GetMapping("/getRelationNetwork")
 //    @ResponseBody
-//    public JSONArray recommendStudent(){
-//        List<Student> studentLst = recStudentService.getRandomStudentInfo();
-//        JSONArray result = new JSONArray();
-//        Random r = new Random();
-//        for(Student student : studentLst){
-//            JSONObject resultCell = new JSONObject();
-//            resultCell.put("studentName", student.getNickname());
-//            resultCell.put("studentId", student.getStudentId());
-//            double trust = r.nextDouble() / 5 + 0.8;
-//            resultCell.put("trust", String.format("%.2f", trust));
-//            resultCell.put("course", "计算机网络");
-//            result.add(resultCell);
+//    public JSONObject getRelationNetwork(HttpServletRequest request) {
+//        Integer userId = baseController.getLoginUserId(request);
+//        JSONObject result = new JSONObject();
+//
+//        //一级信任伙伴
+//        Map<String, Object> map = new HashMap<>();
+//        Set<Integer> idSet = new HashSet<>();
+//        idSet.add(userId);
+//        map.put("student_id", userId);
+//
+//        List<Friend> friendList = friendService.selectByMap(map);
+//        if (friendList.size() > 5) {
+//            friendList = friendList.subList(0, 5);
 //        }
+//
+//        JSONArray nodes = new JSONArray();
+//        JSONArray edges = new JSONArray();
+//        int level1 = friendList.size();   // 第一层节点
+//        int level2 = 0;  // 第二层节点
+//
+//        JSONObject firstNode = new JSONObject();  // 中心节点为已登录的用户
+//        firstNode.put("category", 0);
+//        firstNode.put("name", String.valueOf(userId));
+//        firstNode.put("value", 40);
+//        nodes.add(firstNode);    // 将中心节点加入
+//
+//        List<BigDecimal> weights = new ArrayList<>();
+//
+//        for (int i = 0; i < level1; i++) {
+//            idSet.add(friendList.get(i).getFriendId());
+//        }
+//
+//        for (int i = 0; i < level1; i++) {  // 第一层节点
+//            Friend friend = friendList.get(i);
+//            JSONObject node = new JSONObject();  // 创建新节点
+//            node.put("category", 1);
+//            node.put("name", String.valueOf(friend.getFriendId()));
+//            node.put("value", 30);
+//            nodes.add(node);
+////            recommendIds.add(friend.getFriendId());
+//            JSONObject edge = new JSONObject();  // 创建新边
+//            edge.put("source", String.valueOf(userId));   // 第一层每个节点都与中心节点相连
+//            edge.put("target", String.valueOf(friend.getFriendId()));
+//            BigDecimal weight = friend.getTrust();
+//            edge.put("weight", String.format("%.2f", weight));
+//            edges.add(edge);
+//            weights.add(weight);
+//
+//            map.clear();
+//            map.put("student_id", friend.getFriendId());
+//            List<Friend> friendList1 = friendService.selectByMap(map);
+//            if (friendList1 != null && friendList1.size() > 5) {
+//                friendList1 = friendList1.subList(0, 5);
+//            }
+//            level2 = friendList1.size();
+//
+//            for (int i1 = 0; i1 < level2; i1++) {
+//                int id = friendList1.get(i1).getFriendId();
+//                if (!idSet.contains(id)) idSet.add(id);
+//            }
+//            for (int j = 0; j < level2; j++) {//第二层节点
+//                Friend friend1 = friendList1.get(j);
+//                if (idSet.contains(friend1.getFriendId())) continue;
+//                idSet.add(friend1.getFriendId());
+//                JSONObject node1 = new JSONObject();  // 创建新节点
+//                node1.put("category", 2);
+//                node1.put("name", String.valueOf(friend1.getFriendId()));
+//                node1.put("value", 20);
+//                nodes.add(node1);
+//                JSONObject edge1 = new JSONObject();  // 创建新边
+//                edge1.put("source", String.valueOf(friend1.getStudentId()));   // 第一层每个节点都与中心节点相连
+//                edge1.put("target", String.valueOf(friend1.getFriendId()));
+//                BigDecimal weight1 = friend1.getTrust();
+//                edge1.put("weight", String.format("%.2f", weight1));
+//                edges.add(edge1);
+//                weights.add(weight1);
+//
+//                map.clear();
+//                map.put("student_id", friend1.getFriendId());
+//                List<Friend> friendList2 = friendService.selectByMap(map);
+//                if (friendList2 != null && friendList2.size() > 5) {
+//                    friendList2 = friendList2.subList(0, 5);
+//                }
+//                for (int k = 0; k < friendList2.size(); k++) {//第三层节点
+//                    Friend friend2 = friendList2.get(k);
+//                    if (idSet.contains(friend2.getFriendId())) continue;
+//                    idSet.add(friend2.getFriendId());
+//                    JSONObject node2 = new JSONObject();  // 创建新节点
+//                    node2.put("category", 3);
+//                    node2.put("name", String.valueOf(friend2.getFriendId()));
+//                    node2.put("value", 10);
+//                    nodes.add(node2);
+//                    JSONObject edge2 = new JSONObject();  // 创建新边
+//                    edge2.put("source", String.valueOf(friend2.getStudentId()));   // 第一层每个节点都与中心节点相连
+//                    edge2.put("target", String.valueOf(friend2.getFriendId()));
+//                    BigDecimal weight2 = friend2.getTrust();
+//                    edge2.put("weight", String.format("%.2f", weight2));
+//                    edges.add(edge2);
+//                    weights.add(weight2);
+//                }
+//            }
+//
+//        }
+//
+//        result.put("nodes", nodes);
+//        result.put("edges", edges);
+//        result.put("userId", String.valueOf(userId));
+//
 //        return result;
 //    }
+
 
     @ApiOperation(value = "推荐学习伙伴")
     @ApiImplicitParams({
@@ -255,11 +382,11 @@ public class RecommendController {
 //        map.put("student_id",studentId);
 
         EntityWrapper<RecCourse> wrapper = new EntityWrapper<>();
-        wrapper.eq("student_id",studentId).last("limit 3");
+        wrapper.eq("student_id", studentId).last("limit 3");
 //        List<RecCourse> recCourseList = recCourseService.selectByMap(map);
         List<RecCourse> recCourseList = recCourseService.selectList(wrapper);
         List<Course> result = new ArrayList<>();
-        for(RecCourse one : recCourseList){
+        for (RecCourse one : recCourseList) {
             Course course = courseService.selectById(one.getCourseId());
             result.add(course);
         }
