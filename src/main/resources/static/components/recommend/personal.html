@@ -356,9 +356,9 @@
                         trigger: 'item',
                         formatter: function (params) {
                             if (params.data.weight) {
-                                return params.data.source + '-' + params.data.target + '信任值:' + params.data.weight;
+                                return params.data.source + ' > ' + params.data.target + ' <br/>信任值:' + params.data.weight;
                             } else {
-                                return "学生ID:" + params.name;
+                                return "学生ID: " + params.name;
                             }
                         }
                     },
@@ -366,11 +366,6 @@
                     series: [{
                         type: 'graph',
                         layout: 'force',
-                        lineStyle: {
-                            normal: {
-                                color: 'source'
-                            }
-                        },
                         data: nodes.map(function (node) {
                             node.itemStyle = null;
                             node.symbolSize = node.value;
@@ -396,9 +391,20 @@
                         }),
                         links: links,
                         categories: categories,
-                        label: {
-                            normal: {
-                                position: 'right'
+                        focusNodeAdjacency: true,
+                        itemStyle: {
+                            borderColor: "#fff",
+                            borderWidth: 1,
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.3)'
+                        },
+                        lineStyle: {
+                            color: 'source'
+                            //curveness: 0.3
+                        },
+                        emphasis: {
+                            lineStyle: {
+                                width: 5
                             }
                         },
                         force: {

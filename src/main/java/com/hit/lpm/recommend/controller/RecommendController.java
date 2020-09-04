@@ -89,7 +89,7 @@ public class RecommendController {
         JSONObject firstNode = new JSONObject();  // 中心节点为已登录的用户
         firstNode.put("category", 0);
         firstNode.put("name", String.valueOf(userId));
-        firstNode.put("value", 40);
+        firstNode.put("value", 50);
         nodes.add(firstNode);    // 将中心节点加入
 
         List<Integer> recommendIds = new ArrayList<>();

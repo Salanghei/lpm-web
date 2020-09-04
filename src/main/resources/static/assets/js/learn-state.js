@@ -101,30 +101,24 @@ layui.use(['config', 'element', 'form', 'laytpl'], function(){
                 bottom: 30
             },
             xAxis: {
-                type: 'value',
-                position: 'top',
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed'
-                    }
-                }
-            },
-            yAxis: {
                 type: 'category',
-                axisLine: {show: false},
                 axisLabel: {show: false},
                 axisTick: {show: false},
-                splitLine: {show: false},
                 data: data.courses
+            },
+            yAxis: {
+                type: 'value'
             },
             series: [
                 {
                     name: '学习能力',
                     type: 'bar',
-                    stack: '总量',
+                    //stack: '总量',
                     label: {
                         show: true,
-                        formatter: '{b}'
+                        formatter: '{b}',
+                        position: 'inside',
+                        rotate: 90
                     },
                     data: data.ability
                 }
