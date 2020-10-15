@@ -321,23 +321,13 @@
             data: {},
             dataType: "json",
             success: function (result) {
-                //console.log(result);
+                console.log(result["nodes"]);
                 var categories = [
                     {name: "我"},
                     {name: "一级信任伙伴"},
                     {name: "二级信任伙伴"},
                     {name: "三级信任伙伴"}
                 ];
-                var nodes = [];  // 图中的节点
-                var links = [];  // 图中的边
-                $.each(result["nodes"], function (key, item) {
-                    nodes.push({category: item["category"], name: item["name"], value: item["value"]});
-                });
-                //console.log(nodes);
-                $.each(result["edges"], function (key, item) {
-                    links.push({source: item["source"], target: item["target"], weight: item["weight"]});
-                });
-                //console.log(links);
                 var option = {
                     title: {
                         text: '信任关系网络',
@@ -366,7 +356,7 @@
                     series: [{
                         type: 'graph',
                         layout: 'force',
-                        data: nodes.map(function (node) {
+                        data: result["nodes"].map(function (node) {
                             node.itemStyle = null;
                             node.symbolSize = node.value;
                             // Use random x, y
@@ -389,7 +379,7 @@
                             }
                             return node;
                         }),
-                        links: links,
+                        links: result["edges"],
                         categories: categories,
                         focusNodeAdjacency: true,
                         itemStyle: {
@@ -408,7 +398,8 @@
                             }
                         },
                         force: {
-                            repulsion: 150
+                            repulsion: 100,
+                            edgeLength: 100
                         }
                     }]
                 };

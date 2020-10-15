@@ -105,12 +105,14 @@ public class RecommendController {
 
         for (int i = 0; i < level1; i++) {//第一层节点
             Friend friend = friendList.get(i);
-            idSet.add(friend.getFriendId());
-            JSONObject node = new JSONObject();  // 创建新节点
-            node.put("category", 1);
-            node.put("name", String.valueOf(friend.getFriendId()));
-            node.put("value", 30);
-            nodes.add(node);
+            if (!idSet.contains(friend.getFriendId())) {
+                JSONObject node = new JSONObject();  // 创建新节点
+                node.put("category", 1);
+                node.put("name", String.valueOf(friend.getFriendId()));
+                node.put("value", 30);
+                nodes.add(node);
+                idSet.add(friend.getFriendId());
+            }
             JSONObject edge = new JSONObject();  // 创建新边
             edge.put("source", String.valueOf(userId));   // 第一层每个节点都与中心节点相连
             edge.put("target", String.valueOf(friend.getFriendId()));
@@ -130,12 +132,11 @@ public class RecommendController {
             }
             for (int j = 0; j < friendList1.size(); j++) {//第二层节点
                 Friend friend1 = friendList1.get(j);
-
-                JSONObject node1 = new JSONObject();  // 创建新节点
-                node1.put("category", 2);
-                node1.put("name", String.valueOf(friend1.getFriendId()));
-                node1.put("value", 20);
                 if (!idSet.contains(friend1.getFriendId())) {
+                    JSONObject node1 = new JSONObject();  // 创建新节点
+                    node1.put("category", 2);
+                    node1.put("name", String.valueOf(friend1.getFriendId()));
+                    node1.put("value", 20);
                     nodes.add(node1);
                     idSet.add(friend1.getFriendId());
                 }
@@ -167,12 +168,11 @@ public class RecommendController {
                 }
                 for (int k = 0; k < friendList2.size(); k++) {//第三层节点
                     Friend friend2 = friendList2.get(k);
-
-                    JSONObject node2 = new JSONObject();  // 创建新节点
-                    node2.put("category", 3);
-                    node2.put("name", String.valueOf(friend2.getFriendId()));
-                    node2.put("value", 10);
                     if (!idSet.contains(friend2.getFriendId())) {
+                        JSONObject node2 = new JSONObject();  // 创建新节点
+                        node2.put("category", 3);
+                        node2.put("name", String.valueOf(friend2.getFriendId()));
+                        node2.put("value", 10);
                         nodes.add(node2);
                         idSet.add(friend2.getFriendId());
                     }

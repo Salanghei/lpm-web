@@ -4,11 +4,18 @@ import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hit.lpm.common.utils.StringUtil;
 
+import com.hit.lpm.portrait.model.Course;
+import com.hit.lpm.portrait.service.CourseService;
 import com.hit.lpm.portrait.service.TopicService;
 
 import com.hit.lpm.portrait.model.Topic;
 import com.hit.lpm.portrait.service.TopicService;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.io.*;
@@ -21,8 +28,8 @@ import java.util.*;
  * @author: guoyang
  * @create: 2019-10-22 14:46
  **/
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class HanNLPTest {
     //@Autowired
     private TopicService topicService;
@@ -45,7 +52,7 @@ public class HanNLPTest {
 //    }
 
     //通过课程文件生成领域关键词
-    public static void segmentDomain() throws IOException {
+    /*public static void segmentDomain() throws IOException {
         Map<String, Integer> wordMap = new HashMap<>();
         File file = new File("course_type.txt");
         File outFile = new File("domain.txt");
@@ -73,6 +80,45 @@ public class HanNLPTest {
             writer.write(mapping.getKey() + ":" + mapping.getValue() + "\n");
         }
         reader.close();
+        writer.flush();
+        writer.close();
+    }*/
+
+    @Autowired
+    private CourseService courseService;
+
+    //通过课程文件生成领域关键词
+    @Test
+    public void segmentDomain() throws IOException {
+        Map<String, Integer> wordMap = new HashMap<>();
+        File outFile = new File("E:\\ices\\数据集\\2019Q\\domain.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+        //Course courses = courseService.selectById("course-v1:CIE+CIE2016005+sp");
+        //System.out.println(courses.getCourseName());
+        List<String> courseTypeLst = courseService.getCourseType();
+        System.out.println(courseTypeLst);
+        for (String str: courseTypeLst) {
+            if(str == null || str.equals("null"))
+                continue;
+            String[] words = StringUtil.spilt(str);
+            List<String> termList = new ArrayList<>(Arrays.asList(words));
+            for (String term : termList) {
+                wordMap.put(term, wordMap.getOrDefault(term, 0) + 1);
+            }
+        }
+        //这里将map.entrySet()转换成list
+        List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(wordMap.entrySet());
+        //然后通过比较器来实现排序
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+
+        });
+        for (Map.Entry<String, Integer> mapping : list) {
+            writer.write(mapping.getKey() + ":" + mapping.getValue() + "\n");
+        }
         writer.flush();
         writer.close();
     }
@@ -159,10 +205,11 @@ public class HanNLPTest {
     public static void main(String[] args) throws IOException {
         System.out.println(StringUtil.isWord("哈哈哈"));
         System.out.println(StringUtil.isWord("word"));
-        //segmentDomain();
+        HanNLPTest test = new HanNLPTest();
+        test.segmentDomain();
         //countKeyword();
 //        generateShortFile();
-        testSegment();
+        //testSegment();
 //        List<Term> termList = StandardTokenizer.segment("商品和服务");
 //        for (Term term : termList) {
 //            System.out.println(term + " " + term.getFrequency());
