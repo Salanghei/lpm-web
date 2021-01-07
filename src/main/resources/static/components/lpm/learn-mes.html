@@ -717,36 +717,105 @@
                                                 </div>
                                                 <div class="layui-col-md9 state-mes-box">
                                                     <p>结果：学习意图分析结果</p>
-                                                    <p>结果描述：学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述</p>
+                                                    <p>学习意图是通过对学习者的视频观看行为和测验行为进行分析，得出知识需求度与成绩需求度，进而向学习者推荐符合其需求的学习视频，并提供合适的辅助功能。</p>
+                                                    <p>对于知识需求度较高的学习者，分析出其在本门课程中最关注的知识点，并推荐与该知识点相关的其他课程视频。</p>
+                                                    <p>对于成绩需求度较高的学习者，为其开启测验/考试截止时间提醒的服务，反之则关闭服务。学习者也可以自定义是否开启服务。</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="layui-col-md6">
+                                <div class="layui-col-md12">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
-                                            学习意图分析
+                                            课程学习意图
                                         </div>
-                                        <div class="layui-card-body graph-box">
-                                            <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerIntention1">
+                                        <div class="layui-card-body" style="padding: 20px 50px">
+                                            <!--标签4-->
+                                            <div class="layui-row" style="border-bottom: 2px dotted #f6f6f6; padding-top: 10px; padding-bottom: 20px;">
+                                                <h3><b>计算机网络</b></h3>
+                                                <div class="layui-col-md7" style="padding-right: 30px;">
+                                                    <div class="layui-res" style="border: none;">
+                                                        <p class="layui-word-aux layui-inline">知识需求度：</p>
+                                                        <div class="test1"></div>
+                                                        <p class="layui-word-aux layui-inline">成绩需求度：</p>
+                                                        <div class="test1"></div>
+                                                        <p class="layui-word-aux">知识点需求</p>
+                                                        <form class="layui-form" style="margin-top: 10px;">
+                                                            <div class="layui-form-item">
+                                                                <select name="city" lay-filter="course-select">
+                                                                    <option value="{{ d.ids[index] }}">{{ item }}</option>
+                                                                    <option value="{{ d.ids[index] }}">{{ item }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </form>
+                                                        <p class="layui-word-aux">测验/考试截止时间提醒</p>
+                                                        <form class="layui-form" style="position: absolute; bottom: 10px; right: 30px;">
+                                                            <input type="checkbox" name="xxx" lay-skin="switch" checked>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-col-md5" style="min-height: 180px; border-left: 2px dotted #f6f6f6; padding-left: 30px; padding-bottom: 10px;">
+                                                    <h4>相关视频推荐</h4>
+                                                    <div style="margin-top: 20px;">
+                                                        <div class="layui-row">
+                                                            <div class="layui-col-md2" style="text-align: center;">
+                                                                <i class="layui-icon layui-icon-video" style="font-size: 30px; display: block; margin-top: 15px;"></i>
+                                                            </div>
+                                                            <div class="layui-col-md10">
+                                                                <a href="#"><p>计算机网络-第三讲-第一节-视频名称</p></a>
+                                                                <p class="layui-word-aux">开课院校：哈尔滨工业大学 </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row" style="margin-bottom: 5px; margin-top: 5px;">
+                                                            <div class="layui-col-md2" style="text-align: center;">
+                                                                <i class="layui-icon layui-icon-video" style="font-size: 30px; display: block; margin-top: 15px;"></i>
+                                                            </div>
+                                                            <div class="layui-col-md10">
+                                                                <a href="#"><p>计算机网络-第三讲-第一节-视频名称</p></a>
+                                                                <p class="layui-word-aux">开课院校：哈尔滨工业大学 </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row">
+                                                            <div class="layui-col-md2" style="text-align: center;">
+                                                                <i class="layui-icon layui-icon-video" style="font-size: 30px; display: block; margin-top: 15px;"></i>
+                                                            </div>
+                                                            <div class="layui-col-md10">
+                                                                <a href="#"><p>计算机网络-第三讲-第一节-视频名称</p></a>
+                                                                <p class="layui-word-aux">开课院校：哈尔滨工业大学 </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-row" style="border-bottom: 2px dotted #f6f6f6; padding-top: 10px; padding-bottom: 20px;">
+                                                <h3><b>计算机网络</b></h3>
+                                                <div class="layui-col-md7" style="padding-right: 30px;">
+                                                    <div class="layui-res" style="border: none;">
+                                                        <p class="layui-word-aux layui-inline">知识需求度：</p>
+                                                        <div class="test1"></div>
+                                                        <p class="layui-word-aux layui-inline">成绩需求度：</p>
+                                                        <div class="test1"></div>
+                                                        <p class="layui-word-aux">知识点需求</p>
+                                                        <form class="layui-form" style="margin-top: 10px;">
+                                                            <div class="layui-form-item">
+                                                                <select name="city" lay-filter="course-select" disabled>
+                                                                    <option value="{{ d.ids[index] }}">无知识点需求</option>
+                                                                </select>
+                                                            </div>
+                                                        </form>
+                                                        <p class="layui-word-aux">测验/考试截止时间提醒</p>
+                                                        <form class="layui-form" style="position: absolute; bottom: 10px; right: 30px;">
+                                                            <input type="checkbox" name="xxx" lay-skin="switch">
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
 
-                                <div class="layui-col-md6">
-                                    <div class="layui-card">
-                                        <div class="layui-card-header">
-                                            学习意图分析
-                                        </div>
-                                        <div class="layui-card-body graph-box">
-                                            <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerIntention2">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -781,38 +850,6 @@
                                     </div>
                                 </div>
 
-                                <!--<div class="layui-col-md12">
-                                    <div class="layui-card">
-                                        <div class="layui-card-header">
-                                            知识表格
-                                        </div>
-                                        <div class="layui-card-body graph-box">
-                                            <div class="big-graph row" id="knowledge-table-box">
-                                                <script id="knowledge-table" type="text/html">
-                                                    {{# layui.each(d, function(index, item){ }}
-                                                        {{# layui.use('rate', function(){ }}
-                                                            {{# var rate = layui.rate  }}
-                                                            <div class="layui-col-md2">
-                                                                <div class="layui-card">
-                                                                    <div class="layui-card-body" style="height: 50px">
-                                                                        <div>
-                                                                            <p><span class="layuiadmin-span-color">{{ item.knowledge_node }}</span></p>
-                                                                            <p><span class="layuiadmin-span-color"><div class="rate">{{ item.score || '' }}</div></span></p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {{# rate.render({elem: '.rate',value:3 ,half: true }) }}
-                                                        {{# }); }}
-                                                        {{# if(d.length === 0){ }}
-                                                            无数据
-                                                        {{# } }}
-                                                    {{# }); }}
-                                                </script>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
                             </div>
                         </div>
 
@@ -835,3 +872,22 @@
     <script type="text/javascript" src="../../assets/js/learn-state.js"></script>
     <script type="text/javascript" src="../../assets/js/learn-interest.js"></script>
     <script type="text/javascript" src="../../assets/js/learn-knowledge.js"></script>
+    <script>
+        layui.use('rate', function(){
+            var rate = layui.rate;
+
+            //渲染
+            var ins1 = rate.render({
+                elem: '.test1',  //绑定元素
+                theme: '#FFB800',  // 主题颜色
+                value: 3.5,    // 评分的初始值
+                half: true,    // 设定组件是否可以选择半星
+                readonly: true    // 是否只读，即只用于展示而不可点
+            });
+
+            function setStarValue(value){
+                ins1.render({});
+            }
+        });
+    </script>
+</div>
