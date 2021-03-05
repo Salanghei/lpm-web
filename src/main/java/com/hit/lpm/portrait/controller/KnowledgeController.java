@@ -72,6 +72,7 @@ public class KnowledgeController extends BaseController {
         }
         return new PageResult<>(maps);
     }
+
     @Autowired
     private StudentCourseService studentCourseService;
 

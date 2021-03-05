@@ -77,9 +77,11 @@ public class HistoryController extends BaseController {
         }
         JSONObject result = new JSONObject();
         result.put("courseCount", String.valueOf(courseCount));
-        result.put("passRatio", String.format("%.2f", ((double)passCount/courseCount) * 100));
-        result.put("videoWatchRatio", String.format("%.2f", (videoWatchRatio/courseCount) * 100));
-        result.put("score", String.format("%.2f", score/courseCount));
+        if(courseCount != 0) {
+            result.put("passRatio", String.format("%.2f", ((double) passCount / courseCount) * 100));
+            result.put("videoWatchRatio", String.format("%.2f", (videoWatchRatio / courseCount) * 100));
+            result.put("score", String.format("%.2f", score / courseCount));
+        }
         return result;
     }
 

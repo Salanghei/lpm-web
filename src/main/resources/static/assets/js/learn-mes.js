@@ -10,9 +10,9 @@ layui.use(['config', 'element', "laytpl", 'form'], function(){
     $.ajaxSettings.async = true;
 
     // 获取个人信息
-    console.log(config.base_server + 'student/message?access_token=' + config.getToken() + "&id=");
-    $.get(config.base_server + 'student/message?access_token=' + config.getToken() + "&id=", function (data) {
-        console.log(data);
+    console.log(config.base_server + 'student/message?access_token=' + config.getToken());
+    $.get(config.base_server + 'student/message?access_token=' + config.getToken(), function (data) {
+        //console.log(data);
         var getMessageTpl = message.innerHTML;
         var getMessageView = document.getElementById("message-box");
         laytpl(getMessageTpl).render(data, function (html) {
@@ -23,28 +23,39 @@ layui.use(['config', 'element', "laytpl", 'form'], function(){
 
     // 获取总体学习数据
     $.get(config.base_server + 'history/total?access_token=' + config.getToken(), function(data){
-        console.log(data);
+        var courseCount = "0";
+        var score = "0";
+        var videoWatchRatio = "0";
+        var passRatio = "0";
+        if(data.courseCount !== "0") {
+            //console.log(data);
+            courseCount = data.courseCount;
+            score = data.score;
+            videoWatchRatio = data.videoWatchRatio;
+            passRatio = data.passRatio;
+        }
+
         var courseCountTpl = document.getElementById("course-count").innerHTML;
         var courseCountView = document.getElementById("course-count-box");
-        laytpl(courseCountTpl).render(data.courseCount, function(html){
+        laytpl(courseCountTpl).render(courseCount, function(html){
             courseCountView.innerHTML = html;
         });
 
         var scoreTpl = document.getElementById("score").innerHTML;
         var scoreView = document.getElementById("score-box");
-        laytpl(scoreTpl).render(data.score, function(html){
+        laytpl(scoreTpl).render(score, function(html){
             scoreView.innerHTML = html;
         });
 
         var videoWatchTpl = document.getElementById("video-watch").innerHTML;
         var videoWatchView = document.getElementById("video-watch-box");
-        laytpl(videoWatchTpl).render(data.videoWatchRatio, function(html){
+        laytpl(videoWatchTpl).render(videoWatchRatio, function(html){
             videoWatchView.innerHTML = html;
         });
 
         var passTpl = document.getElementById("pass-ratio").innerHTML;
         var passView = document.getElementById("pass-ratio-box");
-        laytpl(passTpl).render(data.passRatio, function(html){
+        laytpl(passTpl).render(passRatio, function(html){
             passView.innerHTML = html;
         });
         element.render();
@@ -52,7 +63,7 @@ layui.use(['config', 'element', "laytpl", 'form'], function(){
 
     // 获取学习历史
     $.get(config.base_server + 'history/timeline?access_token=' + config.getToken(), function(data){
-        console.log(data);
+        //console.log(data);
         var timelineTpl = document.getElementById("time-line").innerHTML;
         var timelineView = document.getElementById("time-line-box");
         laytpl(timelineTpl).render(data, function(html){
@@ -63,7 +74,7 @@ layui.use(['config', 'element', "laytpl", 'form'], function(){
 
     // 获取已选课程信息
     $.get(config.base_server + 'history/course?access_token=' + config.getToken(), function(data){
-        console.log(data);
+        //console.log(data);
         var courseTpl = document.getElementById("choose-course").innerHTML;
         var courseView = document.getElementById("choose-course-box");
         laytpl(courseTpl).render(data, function(html){

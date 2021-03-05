@@ -91,7 +91,6 @@ public class InterestController extends BaseController {
     })
     @GetMapping("/domain")
     public PageResult<Map<String, Object>> listDomain(HttpServletRequest request, Integer stuId) {
-        List<Map<String, Object>> maps = new ArrayList<>();
         Integer userId = getLoginUserId(request);
         User user = userService.selectById(userId);
         if (stuId == null) {
@@ -103,6 +102,7 @@ public class InterestController extends BaseController {
                 .selectList(new EntityWrapper<StudentCourseRelation>().eq("student_id", stuId));
         StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class, "portrait");
         if(studentPortrait != null) {
+            List<Map<String, Object>> maps = new ArrayList<>();
             Map<String, Integer> domains = new HashMap<>();
             for (Course course : studentPortrait.getCourses()) {
                 for (String courseDomain : course.getDomains()) {
@@ -119,8 +119,9 @@ public class InterestController extends BaseController {
                 map.put("score", domains.get(domain));
                 maps.add(map);
             }
+            return new PageResult<>(maps);
         }
-        return new PageResult<>(maps);
+        return null;
     }
 
 }

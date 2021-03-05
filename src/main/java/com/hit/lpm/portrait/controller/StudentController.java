@@ -64,8 +64,7 @@ public class StudentController extends BaseController {
 
     @ApiOperation(value = "查询个人信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "id", value = "ID", required = true, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
     })
     @GetMapping("/message")
     @ResponseBody
@@ -74,8 +73,22 @@ public class StudentController extends BaseController {
         User user = userService.selectById(userId);
         Integer stuId = 1;
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
-        if (!id.equals("")) stuId = Integer.valueOf(id);
-        return studentService.selectById(stuId);
+        //if (!id.equals("")) stuId = Integer.valueOf(id);
+        Student student = studentService.selectById(stuId);
+        if(student == null){
+            student = new Student();
+            StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class);
+            student.setStudentId(studentPortrait.getStudentId());
+            student.setStudentName(studentPortrait.getStudentName());
+            student.setNickname(studentPortrait.getNickname());
+            student.setGender(studentPortrait.getGender());
+            student.setBirthday(studentPortrait.getBirthday());
+            student.setEducation(studentPortrait.getEducation());
+            student.setCountry(studentPortrait.getCountry());
+            student.setProvince(studentPortrait.getProvince());
+            student.setCity(student.getCity());
+        }
+        return student;
     }
 
     @ApiOperation(value = "查询个人信息（带有所选课程）")

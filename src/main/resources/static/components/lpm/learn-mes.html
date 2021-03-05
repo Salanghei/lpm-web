@@ -205,6 +205,9 @@
                                             <ul class="layui-timeline" id="time-line-box">
 
                                                 <script type="text/html" id="time-line">
+                                                    {{# if(!d || d.length == 0){ }}
+                                                    <p>暂无历史记录......</p>
+                                                    {{# }else{ }}
                                                     {{# layui.each(d, function(index, item){ }}
                                                     <li class="layui-timeline-item">
                                                         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
@@ -217,6 +220,7 @@
                                                         </div>
                                                     </li>
                                                     {{# }); }}
+                                                    {{# } }}
                                                 </script>
 
                                             </ul>
@@ -232,13 +236,21 @@
                                         </div>
                                         <div class="layui-card-body" style="padding: 10px 30px; height: 440px; overflow-y: scroll;" id="choose-course-box">
                                             <script type="text/html" id="choose-course">
+                                                {{# if(!d || d.length == 0){ }}
+                                                <p>暂无选课记录......</p>
+                                                {{# }else{ }}
                                                 {{# layui.each(d, function(index, item){ }}
                                                 <div class="layui-res reco-res-box">
                                                     <h3><b>{{ item.courseName }}</b></h3>
                                                     <p class="layui-word-aux">视频观看率：{{ item.videoWatchRatio }} &nbsp;&nbsp;&nbsp;最终成绩：{{ item.score }}</p>
+                                                    {{# if(item.getCertificate === "未获得证书"){ }}
+                                                    <p class="layui-word-aux">课程评价：{{ item.scoreLevel }} &nbsp;&nbsp;&nbsp;<span style="color: #FF5722;">{{ item.getCertificate }}</span></p>
+                                                    {{# }else{ }}
                                                     <p class="layui-word-aux">课程评价：{{ item.scoreLevel }} &nbsp;&nbsp;&nbsp;<span style="color: #5FB878;">{{ item.getCertificate }}</span></p>
+                                                    {{# } }}
                                                 </div>
                                                 {{# }); }}
+                                                {{# } }}
                                             </script>
                                         </div>
                                     </div>
@@ -373,18 +385,18 @@
                                         <div class="layui-col-md6">
                                             <div class="layui-card">
                                                 <div class="layui-card-header">
-                                                    平台访问
-                                                    <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">频</span>
+                                                    视频观看
+                                                    <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">次</span>
                                                 </div>
                                                 <div class="layui-card-body tiny-card-height">
                                                     <div id="log-count-box">
-                                                        <!--平台访问-->
+                                                        <!--视频观看-->
                                                         <script type="text/html" id="log-count">
                                                             <p class="layuiadmin-big-font learn-attitude-count">{{ d }}</p>
                                                         </script>
                                                     </div>
                                                     <p>
-                                                        学习者访问平台频率
+                                                        学习者观看视频次数
                                                         <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-read"></i></span>
                                                     </p>
                                                 </div>
@@ -449,20 +461,23 @@
                                                     <script type="text/html" id="personality">
                                                         结果：
                                                         {{# layui.each(d, function(index, item){ }}
-                                                            {{# if(item == "宜人型"){ }}
+                                                            {{# if(item === "宜人型"){ }}
                                                                 <span class="layui-badge layui-bg-blue">宜人型</span>
                                                             {{# } }}
-                                                            {{# if(item == "严谨型"){ }}
+                                                            {{# if(item === "严谨型"){ }}
                                                                 <span class="layui-badge layui-bg-green">严谨型</span>
                                                             {{# } }}
-                                                            {{# if(item == "外倾型"){ }}
+                                                            {{# if(item === "外倾型"){ }}
                                                                 <span class="layui-badge layui-bg-red">外倾型</span>
                                                             {{# } }}
-                                                            {{# if(item == "神经质"){ }}
+                                                            {{# if(item === "神经质"){ }}
                                                                 <span class="layui-badge layui-bg-black">神经质</span>
                                                             {{# } }}
-                                                            {{# if(item == "经验开放型"){ }}
+                                                            {{# if(item === "经验开放型"){ }}
                                                                 <span class="layui-badge layui-bg-orange">经验开放型</span>
+                                                            {{# } }}
+                                                            {{# if(item === "未知"){ }}
+                                                                <span class="layui-badge layui-bg-gray">未知</span>
                                                             {{# } }}
                                                         {{# }); }}
                                                     </script>
@@ -814,6 +829,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -830,8 +846,7 @@
                                                     <p style="font-size: 17px;"><b>知识背景</b></p>
                                                 </div>
                                                 <div class="layui-col-md9 state-mes-box">
-                                                    <p>结果：知识背景分析结果</p>
-                                                    <p>结果描述：学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述学习能力分析结果的描述</p>
+                                                    <p>根据学习者已选课程的课程大纲，结合该学习者在课程中的测验得分，得到该学习者在相应课程章节下的大概学习情况，进而形成该学习者的知识背景。</p>
                                                 </div>
                                             </div>
                                         </div>

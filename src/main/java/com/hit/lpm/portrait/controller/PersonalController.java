@@ -62,38 +62,41 @@ public class PersonalController extends BaseController {
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         List<StudentVideoRecord> studentVideoRecords = studentVideoRecordService.selectList(
                 new EntityWrapper<StudentVideoRecord>().eq("student_id", stuId));
-        Map<Double, Integer> speedMap = new HashMap<>();
-        int c0 = 0, c1 = 0, c2 = 0, c3 = 0, c4 = 0;
-        for(StudentVideoRecord studentVideoRecord: studentVideoRecords){
-            Double speed = studentVideoRecord.getSpeed();
-            if(speedMap.containsKey(speed)){
-                speedMap.put(speed, speedMap.get(speed) + 1);
-            }else{
-                speedMap.put(speed, 0);
+        if(studentVideoRecords != null && studentVideoRecords.size() > 0) {
+            Map<Double, Integer> speedMap = new HashMap<>();
+            int c0 = 0, c1 = 0, c2 = 0, c3 = 0, c4 = 0;
+            for (StudentVideoRecord studentVideoRecord : studentVideoRecords) {
+                Double speed = studentVideoRecord.getSpeed();
+                if (speedMap.containsKey(speed)) {
+                    speedMap.put(speed, speedMap.get(speed) + 1);
+                } else {
+                    speedMap.put(speed, 0);
+                }
+                Double videoLen = studentVideoRecord.getVideoLen();
+                if (videoLen < 5 * 60) {
+                    c0++;
+                } else if (videoLen < 10 * 60) {
+                    c1++;
+                } else if (videoLen < 15 * 60) {
+                    c2++;
+                } else if (videoLen < 20 * 60) {
+                    c3++;
+                } else {
+                    c4++;
+                }
             }
-            Double videoLen = studentVideoRecord.getVideoLen();
-            if(videoLen < 5 * 60){
-                c0 ++;
-            }else if(videoLen < 10 * 60){
-                c1 ++;
-            }else if(videoLen < 15 * 60){
-                c2 ++;
-            }else if(videoLen < 20 * 60){
-                c3 ++;
-            }else{
-                c4 ++;
-            }
+            Map<String, Integer> videoLenMap = new HashMap<>();
+            videoLenMap.put("< 5min", c0);
+            videoLenMap.put("5min ~ 10min", c1);
+            videoLenMap.put("10min ~ 15min", c2);
+            videoLenMap.put("15min ~ 20min", c3);
+            videoLenMap.put(">= 20min", c4);
+            JSONObject result = new JSONObject();
+            result.put("speed", speedMap);
+            result.put("videoLen", videoLenMap);
+            return result;
         }
-        Map<String, Integer> videoLenMap = new HashMap<>();
-        videoLenMap.put("< 5min", c0);
-        videoLenMap.put("5min ~ 10min", c1);
-        videoLenMap.put("10min ~ 15min", c2);
-        videoLenMap.put("15min ~ 20min", c3);
-        videoLenMap.put(">= 20min", c4);
-        JSONObject result = new JSONObject();
-        result.put("speed", speedMap);
-        result.put("videoLen", videoLenMap);
-        return result;
+        return null;
     }
 
     @Autowired
@@ -113,7 +116,7 @@ public class PersonalController extends BaseController {
         Behavior behavior = studentBehaviorService.selectById(stuId);
         JSONObject result = new JSONObject();
         if(behavior != null) {
-            result.put("logCount", String.valueOf(behavior.getFrequency()));
+            result.put("logCount", String.valueOf(behavior.getVideoFrequency()));
             result.put("postCount", String.valueOf(behavior.getPostCount() + behavior.getReplyCount()));
             result.put("learnLength", String.valueOf(behavior.getLearnHours()));
             result.put("testCount", String.valueOf(behavior.getTestCount()));
@@ -128,10 +131,10 @@ public class PersonalController extends BaseController {
                 result.put("kind", "半途而废型");
             }
         }else{
-            result.put("logCount", 0);
-            result.put("postCount", 0);
-            result.put("learnLength", 0);
-            result.put("testCount", 0);
+            result.put("logCount", "0");
+            result.put("postCount", "0");
+            result.put("learnLength", "0");
+            result.put("testCount", "0");
             result.put("kind", "未知");
         }
         return result;
@@ -164,31 +167,34 @@ public class PersonalController extends BaseController {
         for(StudentVideoRecord studentVideoRecord: studentVideoRecords){
             activeTimeList.add(studentVideoRecord.getStartTime());
         }
-        int[] workDay = new int[24];
-        int[] weekend = new int[24];
-        for(String activeTime: activeTimeList){
-            String dateStr = activeTime.substring(0, 10);
-            String time = activeTime.substring(11, activeTime.length());
-            int hour = Integer.valueOf(time.split(":")[0]);
-            Calendar cal = Calendar.getInstance();
-            Date date;
-            try {
-                date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-                cal.setTime(date);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if(activeTimeList.size() != 0) {
+            int[] workDay = new int[24];
+            int[] weekend = new int[24];
+            for (String activeTime : activeTimeList) {
+                String dateStr = activeTime.substring(0, 10);
+                String time = activeTime.substring(11, activeTime.length());
+                int hour = Integer.valueOf(time.split(":")[0]);
+                Calendar cal = Calendar.getInstance();
+                Date date;
+                try {
+                    date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+                    cal.setTime(date);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                int w = cal.get(Calendar.DAY_OF_WEEK);  // 获取周几
+                if (w == 1 || w == 7) {
+                    weekend[hour]++;
+                } else {
+                    workDay[hour]++;
+                }
             }
-            int w = cal.get(Calendar.DAY_OF_WEEK);  // 获取周几
-            if(w == 1 || w == 7){
-                weekend[hour] ++;
-            }else {
-                workDay[hour] ++;
-            }
+            JSONObject result = new JSONObject();
+            result.put("workday", Ints.asList(workDay));
+            result.put("weekend", Ints.asList(weekend));
+            return result;
         }
-        JSONObject result = new JSONObject();
-        result.put("workday", Ints.asList(workDay));
-        result.put("weekend", Ints.asList(weekend));
-        return result;
+        return null;
     }
 
     @Autowired
@@ -252,18 +258,15 @@ public class PersonalController extends BaseController {
         User user = userService.selectById(userId);
         Integer stuId = 1;
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
-        System.out.println(stuId + "====================================");
         StudentHabit studentHabit = studentHabitService.selectById(stuId);
-        JSONObject json = new JSONObject();
         if(studentHabit == null){
-            System.out.println("1111111=========================================");
-            return json;
+            return null;
         }
+        JSONObject json = new JSONObject();
         json.put("activeTime", studentHabit.getTimeslot());
         json.put("activeDomain", studentHabit.getDiscipline());
         json.put("activeArea", studentHabit.getArea());
         json.put("activeSystem", studentHabit.getSystem());
-        System.out.println("2222222============================================");
         return json;
     }
 
@@ -330,29 +333,30 @@ public class PersonalController extends BaseController {
         }
         System.out.println(courseId);
         JSONObject res = new JSONObject();
-        if(courseId == null)
-            return res;
-        List<CourseStructure> courseStructures = courseStructureService.selectList(
-                new EntityWrapper<CourseStructure>().eq("course_id", courseId));
-        if(courseStructures != null){
-            JSONArray problems = new JSONArray();
-            JSONArray scores = new JSONArray();
-            JSONArray fullScores = new JSONArray();
-            for(CourseStructure cs: courseStructures){
-                problems.add(cs.getProblemId());
-                fullScores.add(cs.getFullScore());
-                Double score = studentService.selectStudentProblemScore(stuId, cs.getProblemId());
-                if(score != null){
-                    scores.add(score);
-                }else{
-                    scores.add(0);
+        if(courseId != null) {
+            List<CourseStructure> courseStructures = courseStructureService.selectList(
+                    new EntityWrapper<CourseStructure>().eq("course_id", courseId));
+            if (courseStructures != null) {
+                JSONArray problems = new JSONArray();
+                JSONArray scores = new JSONArray();
+                JSONArray fullScores = new JSONArray();
+                for (CourseStructure cs : courseStructures) {
+                    problems.add(cs.getProblemId());
+                    fullScores.add(cs.getFullScore());
+                    Double score = studentService.selectStudentProblemScore(stuId, cs.getProblemId());
+                    if (score != null) {
+                        scores.add(score);
+                    } else {
+                        scores.add(0);
+                    }
                 }
+                res.put("problems", problems);
+                res.put("scores", scores);
+                res.put("fullScores", fullScores);
+                return res;
             }
-            res.put("problems", problems);
-            res.put("scores", scores);
-            res.put("fullScores", fullScores);
         }
-        return res;
+        return null;
     }
 
     @ApiOperation(value = "学习能力")

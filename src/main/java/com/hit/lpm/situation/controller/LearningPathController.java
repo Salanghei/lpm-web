@@ -39,7 +39,8 @@ public class LearningPathController {
     @GetMapping("/getLearningPath")
     @ResponseBody
     public JSONObject getLearningPath(HttpServletRequest request){
-        int userid = baseController.getLoginUserId(request);
+        //int userid = baseController.getLoginUserId(request);
+        int userid = 1;
         JSONArray nodes = new JSONArray();
         JSONArray edges = new JSONArray();
         String courseId = "course-v1:SCUT+145033+2018_T1";
