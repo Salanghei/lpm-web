@@ -1,9 +1,10 @@
-layui.use(['config', 'element', 'form', 'laytpl'], function(){
+layui.use(['config', 'element', 'form', 'laytpl', 'table'], function(){
     var $ = layui.jquery;
     var config = layui.config;
     var element = layui.element;
     var form = layui.form;
     var laytpl = layui.laytpl;
+    var table = layui.table;
 
     $.ajaxSettings.async = true;
 
@@ -143,6 +144,19 @@ layui.use(['config', 'element', 'form', 'laytpl'], function(){
             };
             myChart1.hideLoading();
             myChart1.setOption(option);
+            // 学习能力表格表示
+            /*table.render({
+                elem: '#learner-ability-table'
+                ,cols: [[ //标题栏
+                    {field: 'courseName', title: '课程名称', width: '40%', align: "center"}
+                    ,{field: 'value', title: '能力', width: '14%', align: "center"}
+                    ,{field: 'pic1', title: '', width: '23%', align: "right", templet: '#pic1'}
+                    ,{field: 'pic2', title: '', width: '23%', align: "left", templet: '#pic2'}
+                ]]
+                ,data: data,
+                //skin: 'line', //表格风格
+                even: true
+            });*/
         }
     });
 
@@ -436,4 +450,6 @@ layui.use(['config', 'element', 'form', 'laytpl'], function(){
             myChart4.setOption(option);
         }
     });
+
+
 });

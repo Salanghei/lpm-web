@@ -127,18 +127,25 @@ public class HistoryController extends BaseController {
         List<StudentVideoRecord> studentVideoRecords = studentVideoRecordService.selectList(
                 new EntityWrapper<StudentVideoRecord>().eq("student_id", stuId).orderBy("start_time", false));
         JSONArray jsonArray = new JSONArray();
-        for(StudentVideoRecord studentVideoRecord: studentVideoRecords){
-            JSONObject resultCell = new JSONObject();
-            Video video = videoService.selectOne(
-                    new EntityWrapper<Video>().eq("video_id", studentVideoRecord.getVideoId()));
-            resultCell.put("time", studentVideoRecord.getStartTime());
-            Double length = (studentVideoRecord.getEndPoint() - studentVideoRecord.getStartPoint()) / 60;
-            resultCell.put("length", String.format("%.2f", length));
-            resultCell.put("speed", String.format("%.1f", studentVideoRecord.getSpeed()));
-            resultCell.put("system", studentVideoRecord.getSystem());
-            resultCell.put("courseName", video.getCourseName());
-            resultCell.put("videoName", video.getVideoName());
-            jsonArray.add(resultCell);
+        if(studentVideoRecords != null) {
+            for (StudentVideoRecord studentVideoRecord : studentVideoRecords) {
+                JSONObject resultCell = new JSONObject();
+                Video video = videoService.selectOne(
+                        new EntityWrapper<Video>().eq("video_id", studentVideoRecord.getVideoId()));
+                resultCell.put("time", studentVideoRecord.getStartTime());
+                Double length = (studentVideoRecord.getEndPoint() - studentVideoRecord.getStartPoint()) / 60;
+                resultCell.put("length", String.format("%.2f", length));
+                resultCell.put("speed", String.format("%.1f", studentVideoRecord.getSpeed()));
+                resultCell.put("system", studentVideoRecord.getSystem());
+                if(video != null) {
+                    resultCell.put("courseName", video.getCourseName());
+                    resultCell.put("videoName", video.getVideoName());
+                }else{
+                    resultCell.put("courseName", "unknown");
+                    resultCell.put("videoName", studentVideoRecord.getVideoId());
+                }
+                jsonArray.add(resultCell);
+            }
         }
         return jsonArray;
     }

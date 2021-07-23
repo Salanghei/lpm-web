@@ -78,15 +78,18 @@ public class StudentController extends BaseController {
         if(student == null){
             student = new Student();
             StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class);
-            student.setStudentId(studentPortrait.getStudentId());
-            student.setStudentName(studentPortrait.getStudentName());
-            student.setNickname(studentPortrait.getNickname());
-            student.setGender(studentPortrait.getGender());
-            student.setBirthday(studentPortrait.getBirthday());
-            student.setEducation(studentPortrait.getEducation());
-            student.setCountry(studentPortrait.getCountry());
-            student.setProvince(studentPortrait.getProvince());
-            student.setCity(student.getCity());
+            System.out.println(studentPortrait);
+            if(studentPortrait != null) {
+                student.setStudentId(studentPortrait.getStudentId());
+                student.setStudentName(studentPortrait.getStudentName());
+                student.setNickname(studentPortrait.getNickname());
+                student.setGender(studentPortrait.getGender());
+                student.setBirthday(studentPortrait.getBirthday());
+                student.setEducation(studentPortrait.getEducation());
+                student.setCountry(studentPortrait.getCountry());
+                student.setProvince(studentPortrait.getProvince());
+                student.setCity(student.getCity());
+            }
         }
         return student;
     }

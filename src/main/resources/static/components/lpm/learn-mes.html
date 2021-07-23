@@ -1,80 +1,80 @@
     <style>
-        body{
-            background-color: #f0f2f5;
-        }
-        .layuiadmin-big-font{
-            font-size: 40px;
-            display: block;
-            margin: 20px 0;
-        }
-        .learn-progress{
-            margin: 15px 20px;
-        }
-        .count-box{
-            text-align: center;
-        }
-        .mid-count-box{
-            border-left: 1px solid #f0f2f5;
-            border-right: 1px solid #f0f2f5;
-        }
-        .count{
-            margin-top: 20px;
-        }
-        .layui-res{
-            padding: 10px 0;
-            border-bottom: 1px dashed #f6f6f6;
-        }
-        .self-mes-img-box{
-            text-align: center;
-        }
-        .self-mes-img-box img{
-            width: 50%;
-        }
-        .self-mes p{
-            margin: 8px 0;
-        }
-        .state-box{
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        .state-title-box{
-            text-align: center;
-            margin-top: 10px;
-        }
-        .state-mes-box{
-            border-left: 3px solid #5FB878;
-            padding-left: 20px;
-        }
-        .learn-attitude-count{
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-        .graph-box{
-            text-align: center;
-        }
-        .small-graph{
-            width: 513px;
-            height: 300px;
-            margin: auto;
-        }
-        .mini-graph{
-            width: 340px;
-            height: 300px;
-            margin: auto;
-        }
-        .big-graph{
-            width: 1080px;
-            height: 500px;
-            margin: auto;
-        }
-        .table-mes-align{
-            text-align: left;
-        }
-        .tiny-card-height {
-            height: 107px;
-        }
-    </style>
-<div class="layui-container">
+    body{
+        background-color: #f0f2f5;
+    }
+    .layuiadmin-big-font{
+        font-size: 40px;
+        display: block;
+        margin: 20px 0;
+    }
+    .learn-progress{
+        margin: 15px 20px;
+    }
+    .count-box{
+        text-align: center;
+    }
+    .mid-count-box{
+        border-left: 1px solid #f0f2f5;
+        border-right: 1px solid #f0f2f5;
+    }
+    .count{
+        margin-top: 20px;
+    }
+    .layui-res{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 8px 0;
+    }
+    .state-box{
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .state-title-box{
+        text-align: center;
+        margin-top: 10px;
+    }
+    .state-mes-box{
+        border-left: 3px solid #5FB878;
+        padding-left: 20px;
+    }
+    .learn-attitude-count{
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .graph-box{
+        text-align: center;
+    }
+    .small-graph{
+        width: 513px;
+        height: 300px;
+        margin: auto;
+    }
+    .mini-graph{
+        width: 340px;
+        height: 300px;
+        margin: auto;
+    }
+    .big-graph{
+        width: 1080px;
+        height: 500px;
+        margin: auto;
+    }
+    .table-mes-align{
+        text-align: left;
+    }
+    .tiny-card-height {
+        height: 107px;
+    }
+</style>
+    <div class="layui-container">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
@@ -315,16 +315,32 @@
                                 </div>
 
                                 <div class="layui-col-md6">
-                                    <div class="layui-card">
-                                        <div class="layui-card-header">
-                                            学习能力分析
+                                <div class="layui-card">
+                                    <div class="layui-card-header">
+                                        学习能力分析
+                                    </div>
+                                    <div class="layui-card-body graph-box">
+                                        <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="analyseLearnerAbility">
                                         </div>
-                                        <div class="layui-card-body graph-box">
-                                            <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="analyseLearnerAbility">
+                                        <!--学习能力表格表示-->
+                                        <!--<div class="small-graph">
+                                            <table id="learner-ability-table" lay-filter="learner-ability"></table>
+                                        </div>
+
+                                        <script type="text/html" id="pic1">
+                                            <div>
+                                                <div style="width:{{d.pic1}}; height: 30px; background: red;"></div>
                                             </div>
-                                        </div>
+                                        </script>
+                                        <script type="text/html" id="pic2">
+                                            <div>
+
+                                                <div style="width:{{d.pic2}}; height: 30px; background: #00B83F;"></div>
+                                            </div>
+                                        </script>-->
                                     </div>
                                 </div>
+                            </div>
 
                                 <div class="layui-col-md12">
                                     <div class="layui-card">
@@ -375,7 +391,7 @@
                                                         </script>
                                                     </div>
                                                     <p>
-                                                        学习者总学习时长
+                                                        每门课程平均学习时长
                                                         <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-log"></i></span>
                                                     </p>
                                                 </div>
@@ -396,7 +412,7 @@
                                                         </script>
                                                     </div>
                                                     <p>
-                                                        学习者观看视频次数
+                                                        每门课程平均观看视频次数
                                                         <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-read"></i></span>
                                                     </p>
                                                 </div>
@@ -419,7 +435,7 @@
                                                         </script>
                                                     </div>
                                                     <p>
-                                                        学习者参与测验的次数
+                                                        每门课程平均参与测验次数
                                                         <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-download-circle"></i></span>
                                                     </p>
                                                 </div>
@@ -440,7 +456,7 @@
                                                         </script>
                                                     </div>
                                                     <p>
-                                                        提问及回复总次数
+                                                        每门课程平均提问及回复次数
                                                         <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-survey"></i></span>
                                                     </p>
                                                 </div>
@@ -560,7 +576,7 @@
                                 <div class="layui-col-md6">
                                     <div class="layui-card">
                                         <div class="layui-card-header">
-                                            活跃时间
+                                            登录情况
                                         </div>
                                         <div class="layui-card-body graph-box">
                                             <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="getLearnerActiveTime1">
@@ -723,7 +739,7 @@
                                     </div>
                                 </div>
 
-                                <div class="layui-col-md12">
+                                <!--<div class="layui-col-md12">
                                     <div class="layui-card">
                                         <div class="layui-card-body">
                                             <div class="layui-row state-box">
@@ -747,7 +763,7 @@
                                             课程学习意图
                                         </div>
                                         <div class="layui-card-body" style="padding: 20px 50px">
-                                            <!--标签4-->
+                                            &lt;!&ndash;标签4&ndash;&gt;
                                             <div class="layui-row" style="border-bottom: 2px dotted #f6f6f6; padding-top: 10px; padding-bottom: 20px;">
                                                 <h3><b>计算机网络</b></h3>
                                                 <div class="layui-col-md7" style="padding-right: 30px;">
@@ -760,7 +776,7 @@
                                                         <form class="layui-form" style="margin-top: 10px;">
                                                             <div class="layui-form-item">
                                                                 <select name="city" lay-filter="course-select">
-                                                                    <option value="{{ d.ids[index] }}">{{ item }}</option>
+                                                                    <option value="{{ d.ids[index] }}">TCP协议</option>
                                                                     <option value="{{ d.ids[index] }}">{{ item }}</option>
                                                                 </select>
                                                             </div>
@@ -779,7 +795,7 @@
                                                                 <i class="layui-icon layui-icon-video" style="font-size: 30px; display: block; margin-top: 15px;"></i>
                                                             </div>
                                                             <div class="layui-col-md10">
-                                                                <a href="#"><p>计算机网络-第三讲-第一节-视频名称</p></a>
+                                                                <a href="#"><p>计算机网络-第六周-3.8 TCP拥塞控制</p></a>
                                                                 <p class="layui-word-aux">开课院校：哈尔滨工业大学 </p>
                                                             </div>
                                                         </div>
@@ -788,8 +804,8 @@
                                                                 <i class="layui-icon layui-icon-video" style="font-size: 30px; display: block; margin-top: 15px;"></i>
                                                             </div>
                                                             <div class="layui-col-md10">
-                                                                <a href="#"><p>计算机网络-第三讲-第一节-视频名称</p></a>
-                                                                <p class="layui-word-aux">开课院校：哈尔滨工业大学 </p>
+                                                                <a href="#"><p>计算机网络-03 传输层-3.7 TCP的拥塞控制原理</p></a>
+                                                                <p class="layui-word-aux">开课院校：中国科学技术大学 </p>
                                                             </div>
                                                         </div>
                                                         <div class="layui-row">
@@ -797,8 +813,8 @@
                                                                 <i class="layui-icon layui-icon-video" style="font-size: 30px; display: block; margin-top: 15px;"></i>
                                                             </div>
                                                             <div class="layui-col-md10">
-                                                                <a href="#"><p>计算机网络-第三讲-第一节-视频名称</p></a>
-                                                                <p class="layui-word-aux">开课院校：哈尔滨工业大学 </p>
+                                                                <a href="#"><p>计算机网络实验-实验7 传输层实验-7.2 TCP协议基本分析</p></a>
+                                                                <p class="layui-word-aux">开课院校：北京航空航天大学 </p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -830,7 +846,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                             </div>
                         </div>
@@ -905,4 +921,3 @@
             }
         });
     </script>
-</div>

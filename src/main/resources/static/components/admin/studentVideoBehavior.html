@@ -1,0 +1,84 @@
+<style>
+    body{
+        background-color: #f0f2f5;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 8px 0;
+    }
+    .graph-box{
+        text-align: center;
+    }
+    .huge-graph{
+        width: 1080px;
+        height: 500px;
+        margin: auto;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <form class="layui-form" style="margin-top: 10px; margin-left: 10px;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <!--<label class="layui-form-label">课程ID</label>-->
+                                <div class="layui-input-inline" style="width: 300px;">
+                                    <select name="studentId" lay-filter="course-id-select">
+                                        <option value="">请选择学生ID</option>
+                                        <option value="8990">8990</option>
+                                        <option value="21771">21771</option>
+                                        <option value="123188">123188</option>
+                                        <option value="178861">178861</option>
+                                        <option value="197785">197785</option>
+                                        <option value="346756">346756</option>
+                                        <option value="442939">442939</option>
+                                        <option value="602460">602460</option>
+                                        <option value="1044053">1044053</option>
+                                        <option value="2766755">2766755</option>
+                                        <option value="2862191">2862191</option>
+                                        <option value="3207154">3207154</option>
+                                        <option value="10804337">10804337</option>
+                                        <option value="9834822">9834822</option>
+                                        <option value="9900299">9900299</option>
+                                        <option value="10270293">10270293</option>
+                                        <option value="10511404">10511404</option>
+                                        <option value="10503596">10503596</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" lay-submit lay-filter="choose-id">选择</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    学习行为
+                </div>
+                <div class="layui-card-body graph-box">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview huge-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="student-video-behavior">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/main.js"></script>-->
+<script type="text/javascript" src="../../assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+<script type="text/javascript" src="../../assets/js/dataTool.min.js"></script>
+<script type="text/javascript" src="../../assets/js/studentVideoBehavior.js"></script>

@@ -51,16 +51,16 @@ public class InterestController extends BaseController {
             @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query")
     })
     @GetMapping("/topic")
-    public PageResult<Topic> listTopic(HttpServletRequest request) {
+    public List<Topic> listTopic(HttpServletRequest request) {
         List<Map<String, Object>> maps = new ArrayList<>();
         Integer userId = getLoginUserId(request);
         User user = userService.selectById(userId);
         Integer stuId = 1;
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class, "portrait");
-        PageResult<Topic> topics = null;
+        List<Topic> topics = null;
         if(studentPortrait != null){
-            topics = new PageResult<>(studentPortrait.getTopics());
+            topics = studentPortrait.getTopics();
         }
         return topics;
     }
@@ -98,19 +98,25 @@ public class InterestController extends BaseController {
             if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         }
         System.out.println(stuId);
-        List<StudentCourseRelation> scs = studentCourseRelationService
-                .selectList(new EntityWrapper<StudentCourseRelation>().eq("student_id", stuId));
+        //List<StudentCourseRelation> scs = studentCourseRelationService
+        //        .selectList(new EntityWrapper<StudentCourseRelation>().eq("student_id", stuId));
         StudentPortrait studentPortrait = mongoTemplate.findOne(Query.query(Criteria.where("studentId").is(stuId)), StudentPortrait.class, "portrait");
         if(studentPortrait != null) {
             List<Map<String, Object>> maps = new ArrayList<>();
             Map<String, Integer> domains = new HashMap<>();
-            for (Course course : studentPortrait.getCourses()) {
-                for (String courseDomain : course.getDomains()) {
-                    domains.put(courseDomain, domains.getOrDefault(courseDomain, 0) + 10);
+            List<Course> courses = studentPortrait.getCourses();
+            if(courses != null) {
+                for (Course course :courses) {
+                    for (String courseDomain : course.getDomains()) {
+                        domains.put(courseDomain, domains.getOrDefault(courseDomain, 0) + 10);
+                    }
                 }
             }
-            for (Topic topic : studentPortrait.getTopics()) {
-                domains.put(topic.getDomain(), domains.getOrDefault(topic.getDomain(), 0) + topic.getCount());
+            List<Topic> topics = studentPortrait.getTopics();
+            if(topics != null) {
+                for (Topic topic : topics) {
+                    domains.put(topic.getDomain(), domains.getOrDefault(topic.getDomain(), 0) + topic.getCount());
+                }
             }
             for (String domain : domains.keySet()) {
                 Map<String, Object> map = new HashMap<>();

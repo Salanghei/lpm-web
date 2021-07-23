@@ -1,0 +1,309 @@
+<style>
+    body{
+        background-color: #f0f2f5;
+    }
+    .layuiadmin-big-font{
+        font-size: 40px;
+        display: block;
+        margin: 20px 0;
+    }
+    .learn-progress{
+        margin: 15px 20px;
+    }
+    .count-box{
+        text-align: center;
+    }
+    .mid-count-box{
+        border-left: 1px solid #f0f2f5;
+        border-right: 1px solid #f0f2f5;
+    }
+    .count{
+        margin-top: 20px;
+    }
+    .layui-res{
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+    .self-mes-img-box{
+        text-align: center;
+    }
+    .self-mes-img-box img{
+        width: 50%;
+    }
+    .self-mes p{
+        margin: 8px 0;
+    }
+    .state-box{
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .state-title-box{
+        text-align: center;
+        margin-top: 10px;
+    }
+    .state-mes-box{
+        border-left: 3px solid #5FB878;
+        padding-left: 20px;
+    }
+    .learn-attitude-count{
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .graph-box{
+        text-align: center;
+    }
+    .small-graph{
+        width: 1080px;
+        height: 300px;
+        margin: auto;
+    }
+    .mini-graph{
+        width: 340px;
+        height: 300px;
+        margin: auto;
+    }
+    .big-graph{
+        width: 1080px;
+        height: 500px;
+        margin: auto;
+    }
+    .table-mes-align{
+        text-align: left;
+    }
+    .tiny-card-height {
+        height: 107px;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <form class="layui-form" style="margin-top: 10px; margin-left: 10px;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <!--<label class="layui-form-label">课程ID</label>-->
+                                <div class="layui-input-inline" style="width: 300px;">
+                                    <select name="courseId" lay-filter="course-id-select">
+                                        <option value="">请选择课程ID</option>
+                                        <option value="course-v1:TsinghuaX+60700052X+2019_T1">course-v1:TsinghuaX+60700052X+2019_T1</option>
+                                        <option value="course-v1:TsinghuaX+70000662+2019_T1">course-v1:TsinghuaX+70000662+2019_T1</option>
+                                        <option value="course-v1:nku+COTD0001+2018_T2">course-v1:nku+COTD0001+2018_T2</option>
+                                        <option value="course-v1:nku+COTD0001+2019_T1">course-v1:nku+COTD0001+2019_T1</option>
+                                        <option value="course-v1:JSU+JSU001+2019_T1">course-v1:JSU+JSU001+2019_T1</option>
+                                        <option value="course-v1:TsinghuaX+34100333+2018_T1">course-v1:TsinghuaX+34100333+2018_T1</option>
+                                        <option value="course-v1:AFEU+2018122504X+2018_T2">course-v1:AFEU+2018122504X+2018_T2</option>
+                                        <option value="course-v1:SZIIT+20180903+2019_T1">course-v1:SZIIT+20180903+2019_T1</option>
+                                        <option value="course-v1:nku+1030310150+2019_T1">course-v1:nku+1030310150+2019_T1</option>
+                                        <option value="course-v1:IBMandDiscoveryChannel+20181120+2018_T2">course-v1:IBMandDiscoveryChannel+20181120+2018_T2</option>
+                                        <option value="course-v1:XIYOU+20180208+2018_T2">course-v1:XIYOU+20180208+2018_T2</option>
+                                        <option value="course-v1:TsinghuaX+30240184+sp">course-v1:TsinghuaX+30240184+sp</option>
+                                        <option value="course-v1:HRBEU+20181211X+2018_T2">course-v1:HRBEU+20181211X+2018_T2</option>
+                                        <option value="course-v1:WUST+20181108X2+2018_T2">course-v1:WUST+20181108X2+2018_T2</option>
+                                        <option value="course-v1:LNTU+F111740012064+2018_T2">course-v1:LNTU+F111740012064+2018_T2</option>
+                                        <option value="course-v1:TsinghuaX+THU201606X+2019_T1">course-v1:TsinghuaX+THU201606X+2019_T1</option>
+                                        <option value="course-v1:NBCC+032J36A00+2018_T2">course-v1:NBCC+032J36A00+2018_T2</option>
+                                        <option value="course-v1:TsinghuaX+00740043X_2015_T2+sp">course-v1:TsinghuaX+00740043X_2015_T2+sp</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline" id="student-id-box">
+                                <script type="text/html" id="student-id">
+                                    <div class="layui-input-inline" style="width: 200px;">
+                                        <select name="studentId" lay-filter="student-id-select">
+                                            <option value="">请选择学生ID</option>
+                                            {{# layui.each(d, function(index, item){ }}
+                                            <option value="{{ item.studentId }}">{{ item.studentId }}</option>
+                                            {{# }); }}
+                                        </select>
+                                    </div>
+                                </script>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" lay-submit lay-filter="choose-id">选择</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="layui-form" style="margin-top: 10px; margin-left: 10px;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <!--<label class="layui-form-label">课程ID</label>-->
+                                <div class="layui-input-inline" style="width: 300px;">
+                                    <select name="tag" lay-filter="tag-select">
+                                        <option value="">请选择标签</option>
+                                        <option value="0">游览旁听</option>
+                                        <option value="1">任务型学习</option>
+                                        <option value="2">知识型学习</option>
+                                        <option value="3">认真学习</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" lay-submit lay-filter="add-tag">提交</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    课程得分
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">分</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <div id="final-score-box">
+                        <script type="text/html" id="final-score">
+                            <p class="layuiadmin-big-font">{{ d }}</p>
+                        </script>
+                    </div>
+                    <p>
+                        课程最终得分
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-read"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    课程视频观看率
+                    <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">%</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <div id="video-percent-box">
+                        <script type="text/html" id="video-percent">
+                            <p class="layuiadmin-big-font">{{ d }}%</p>
+                        </script>
+                    </div>
+                    <p>
+                        本门课程视频观看占比
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-form"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    课程测验参与率
+                    <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">%</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <div id="test-percent-box">
+                        <script type="text/html" id="test-percent">
+                            <p class="layuiadmin-big-font">{{ d }}%</p>
+                        </script>
+                    </div>
+                    <p>
+                        本门课程参与测验占比
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-video"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    课程是否通过
+                    <span class="layui-badge layui-bg-red layuiadmin-badge pull-right">Pass</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <div id="pass-box">
+                        <script type="text/html" id="pass">
+                            <p class="layuiadmin-big-font">{{ d }}</p>
+                        </script>
+                    </div>
+                    <p>
+                        本门课程是否获得Pass
+                        <span class="layuiadmin-span-color pull-right"> <i class="layui-icon layui-icon-ok-circle"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    视频观看次数分布
+                </div>
+                <div class="layui-card-body graph-box">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="video-count">
+                    </div>
+                    <!--视频观看次数分布-->
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    视频观看时长分布
+                </div>
+                <div class="layui-card-body graph-box">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="video-length">
+                    </div>
+                    <!--视频观看时长分布-->
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    测验得分分布
+                </div>
+                <div class="layui-card-body graph-box">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="test-score">
+                    </div>
+                    <!--测验得分分布-->
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    视频观看历史趋势
+                </div>
+                <div class="layui-card-body graph-box">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="video-sequence">
+                    </div>
+                    <!--视频观看序列-->
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    参与测验历史趋势
+                </div>
+                <div class="layui-card-body graph-box">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview small-graph" data-anim="fade" lay-filter="LAY-index-pagetwo" lay-anim="fade" id="test-history">
+                    </div>
+                    <!--测验得分分布-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/main.js"></script>-->
+<script type="text/javascript" src="../../assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+<script type="text/javascript" src="../../assets/js/dataTool.min.js"></script>
+<script type="text/javascript" src="../../assets/js/addTag.js"></script>

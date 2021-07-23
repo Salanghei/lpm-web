@@ -4,25 +4,28 @@ layui.use(['config', 'element', 'laytpl', "rate"], function(){
     var laytpl = layui.laytpl;
     var element = layui.element;
     var rate = layui.rate;
-    $.ajaxSettings.async = true;
+    //$.ajaxSettings.async = true;
 
     // 获取知识结构
     var graphChart = echarts.init(document.getElementById("getLearnerKnowledgeGraph"));
     graphChart.showLoading();
-    $.get(config.base_server + 'knowledge/background?access_token=' + config.getToken(), function(data){
+    console.log(config.base_server + 'knowledge/backgroundtest?access_token=' + config.getToken());
+    $.get(config.base_server + 'knowledge/backgroundtest?access_token=' + config.getToken(), function(data){
         console.log("知识结构");
-        //data = parseData(data);
 
         var courses = data.children;
         for(var i = 0; i < courses.length; i ++){
-            var r = Math.floor(Math.random()*256);
-            var g = Math.floor(Math.random()*256);
-            var b = Math.floor(Math.random()*256);
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
             var color = "#" + r.toString(16) + g.toString(16) + b.toString(16);
             if(courses[i].value != null && courses[i].value > 0){
+                //var borderWidth = Math.min((courses[i].value / data.max) * 10 + 1.5, 10);
+                courses[i].value = courses[i].value.toFixed(2);
+                var borderWidth = courses[i].value * 10 + 1.5;
                 courses[i].itemStyle = {
                     borderColor: color,
-                    borderWidth: courses[i].value * 5 + 1.5
+                    borderWidth: borderWidth
                 };
             }else{
                 courses[i].itemStyle = {
@@ -30,7 +33,7 @@ layui.use(['config', 'element', 'laytpl', "rate"], function(){
                     borderWidth: 1.5
                 };
             }
-            changeColor(courses[i].children, color);
+            changeColor(courses[i].children, color, data.max);
         }
         console.log(data);
 
@@ -132,12 +135,15 @@ layui.use(['config', 'element', 'laytpl', "rate"], function(){
         return result;
     }
 
-    function changeColor(list, color){
+    function changeColor(list, color, max){
         $.each(list, function(i, obj){
             if(obj.value != null && obj.value > 0){
+                //var borderWidth = Math.min((obj.value / max) * 10 + 1.5, 10);
+                obj.value = obj.value.toFixed(2);
+                var borderWidth = obj.value * 10 + 1.5;
                 obj.itemStyle = {
                     borderColor: color,
-                    borderWidth: obj.value * 5 + 1.5
+                    borderWidth: borderWidth
                 };
             }else{
                 obj.itemStyle = {
@@ -146,7 +152,7 @@ layui.use(['config', 'element', 'laytpl', "rate"], function(){
                 };
             }
             if(obj.children != null && obj.children.length != 0){
-                changeColor(obj.children, color);
+                changeColor(obj.children, color, max);
             }
         });
     }

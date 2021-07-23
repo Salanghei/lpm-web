@@ -16,14 +16,16 @@ layui.use(['config', 'element', 'laytpl'], function(){
         }
     };
     $.get(config.base_server + 'interest/domain?access_token=' + config.getToken(), function (data) {
-        console.log("领域" + data);
-        if(!data || data.length === 0){
+        //console.log(data);
+        if(data.data == null || data.data.length === 0){
+            console.log("暂无感兴趣的领域");
             domainChart.hideLoading();
             domainChart.showLoading({
                 text: "暂无感兴趣的领域......",
                 showSpinner: false
             });
         }else {
+            console.log(data);
             var domains = new Array();
             for (i = 0; i < data.count; i++) {
                 var domain = new Object();
@@ -54,18 +56,20 @@ layui.use(['config', 'element', 'laytpl'], function(){
         backgroundColor: '#ffffff'
     };
     $.get(config.base_server + 'interest/topic?access_token=' + config.getToken(), function (data) {
-        if(!data || data.length === 0){
+        if(data == null || data.length === 0){
+            console.log("暂无感兴趣的话题");
             topicChart.hideLoading();
             topicChart.showLoading({
                 text: "暂无感兴趣的话题......",
                 showSpinner: false
             });
         }else {
+            console.log(data);
             var topics = new Array();
-            for (i = 0; i < data.count; i++) {
+            for (i = 0; i < data.length; i++) {
                 var topic = new Object();
-                topic.name = data.data[i].topicName;
-                topic.value = data.data[i].count;
+                topic.name = data[i].topicName;
+                topic.value = data[i].count;
                 topics.push(topic);
             }
             option1.series = [
@@ -101,7 +105,7 @@ layui.use(['config', 'element', 'laytpl'], function(){
     $.get(config.base_server + 'interest/course?access_token=' + config.getToken(), function(data){
         //console.log(data);
         var interestCourse = [{"courseName": "暂无感兴趣的课程"}];
-        if(data && data.length > 0){
+        if(data != null && data.length > 0){
             interestCourse = data;
         }
         var getCourseTpl = document.getElementById("course").innerHTML;

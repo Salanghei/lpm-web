@@ -102,6 +102,9 @@ public class PersonalController extends BaseController {
     @Autowired
     private StudentBehaviorService studentBehaviorService;
 
+    @Autowired
+    private StudentProblemService studentProblemService;
+
     @ApiOperation(value = "总体学习状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "令牌", required = true, dataType = "String", paramType = "query"),
@@ -114,12 +117,15 @@ public class PersonalController extends BaseController {
         Integer stuId = 1;
         if (user.getUsername().matches("^[0-9]*$")) stuId = Integer.valueOf(user.getUsername());
         Behavior behavior = studentBehaviorService.selectById(stuId);
+        int courseCount = studentCourseService.selectCount(
+                new EntityWrapper<StudentCourse>().eq("student_id", stuId));
+        courseCount = courseCount == 0? 1: courseCount;
         JSONObject result = new JSONObject();
         if(behavior != null) {
-            result.put("logCount", String.valueOf(behavior.getVideoFrequency()));
-            result.put("postCount", String.valueOf(behavior.getPostCount() + behavior.getReplyCount()));
-            result.put("learnLength", String.valueOf(behavior.getLearnHours()));
-            result.put("testCount", String.valueOf(behavior.getTestCount()));
+            result.put("logCount", String.valueOf(behavior.getVideoFrequency()/ courseCount));
+            result.put("postCount", String.valueOf((behavior.getPostCount() + behavior.getReplyCount())/ courseCount));
+            result.put("learnLength", String.format("%.2f", behavior.getLearnHours()/ courseCount));
+            result.put("testCount", String.valueOf(behavior.getTestCount()/ courseCount));
             int kind = behavior.getKind();
             if(kind == 0){
                 result.put("kind", "拖沓懒散型");
@@ -131,10 +137,18 @@ public class PersonalController extends BaseController {
                 result.put("kind", "半途而废型");
             }
         }else{
-            result.put("logCount", "0");
-            result.put("postCount", "0");
-            result.put("learnLength", "0");
-            result.put("testCount", "0");
+            int logCount = studentVideoRecordService.selectCount(
+                    new EntityWrapper<StudentVideoRecord>().eq("student_id", stuId));
+            Map<String, Object> learnLength = studentVideoRecordService.selectMap(
+                    new EntityWrapper<StudentVideoRecord>().setSqlSelect("ifnull(sum(video_len), 0) as sum").eq("student_id", stuId));
+            int postCount = studentPostService.selectCount(
+                    new EntityWrapper<StudentPost>().eq("student_id", stuId));
+            int testCount = studentProblemService.selectCount(
+                    new EntityWrapper<StudentProblem>().eq("student_id", stuId));
+            result.put("logCount", String.valueOf(logCount / courseCount));
+            result.put("postCount", String.valueOf(postCount / courseCount));
+            result.put("learnLength", String.format("%.2f", (Double)learnLength.get("sum") / (courseCount * 60)));
+            result.put("testCount", String.valueOf(testCount / courseCount));
             result.put("kind", "未知");
         }
         return result;

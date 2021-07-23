@@ -1,0 +1,900 @@
+<style>
+    body {
+        background-color: #f0f2f5;
+    }
+
+    .layuiadmin-big-font {
+        font-size: 40px;
+        display: block;
+        margin: 20px 0;
+    }
+
+    .learn-progress {
+        margin: 15px 20px;
+    }
+
+    .count-box {
+        text-align: center;
+    }
+
+    .mid-count-box {
+        border-left: 1px solid #f0f2f5;
+        border-right: 1px solid #f0f2f5;
+    }
+
+    .count {
+        margin-top: 20px;
+    }
+
+    .layui-res {
+        padding: 10px 0;
+        border-bottom: 1px dashed #f6f6f6;
+    }
+
+    .self-mes-img-box {
+        text-align: center;
+    }
+
+    .self-mes-img-box img {
+        width: 50%;
+    }
+
+    .self-mes p {
+        margin: 8px 0;
+    }
+
+    .state-box {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .state-title-box {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .state-mes-box {
+        border-left: 3px solid #5FB878;
+        padding-left: 20px;
+    }
+
+    .learn-attitude-count {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .graph-box {
+        text-align: center;
+    }
+
+    .small-graph {
+        width: 513px;
+        height: 300px;
+        margin: auto;
+    }
+
+    .mini-graph {
+        width: 340px;
+        height: 300px;
+        margin: auto;
+    }
+
+    .big-graph {
+        width: 1080px;
+        height: 500px;
+        margin: auto;
+    }
+
+    .table-mes-align {
+        text-align: left;
+    }
+
+    .tiny-card-height {
+        height: 107px;
+    }
+</style>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    基本信息
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row" style="margin-top: 10px; margin-bottom: 10px;" id="message-box">
+                        <script type="text/html" id="message">
+                            <div class="layui-col-sm2 self-mes-img-box">
+                                <img src="../../assets/images/cn.png" class="layui-card-img"/>
+                            </div>
+                            <div class="layui-col-md8 self-mes">
+                                <p style="font-size: 20px;"><b>计算机网络</b></p>
+                                <div class="layui-row layui-col-space5">
+                                    <div class="layui-col-md4">
+                                        <p>开课机构：华南理工大学</p>
+                                        <p>主讲教师：袁华</p>
+                                        <p>报名人数：49740</p>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <p>适合人群：学生</p>
+                                        <p>课程起点：入门</p>
+                                        <p>课程内容：偏理论</p>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <p class="layui-inline">课程质量：3.7</p>
+                                        <p>课程难度：3.75</p>
+                                        <p>课程特点 <span class="layui-inline layui-badge layui-bg-orange layuiadmin-badge">知识点丰富型</span>
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+
+                <div class="layui-tab layui-tab-brief" style="border-top: 1px solid #f0f2f5;"
+                     lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">课程质量</li>
+                        <li>课程难度</li>
+                        <li>课程特点</li>
+                    </ul>
+                    <div class="layui-tab-content" style="background-color: #f0f2f5; padding: 10px 0;">
+                        <!--                        课程质量-->
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-row layui-col-space5">
+                                <!-- 视频观看率-->
+                                <div class="layui-col-sm6 layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            视频观看率
+                                            <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">%</span>
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="course-count-box">
+                                                <script type="text/html" id="course-count">
+                                                    <p class="layuiadmin-big-font">63.0%</p>
+                                                </script>
+                                            </div>
+                                            <p>
+                                                平均观看时长与视频长度比值
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-video"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                课程好评率-->
+                                <div class="layui-col-sm6 layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            课程好评率
+                                            <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">%</span>
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="score-box">
+                                                <script type="text/html" id="score">
+                                                    <p class="layuiadmin-big-font">80.9%</p>
+                                                </script>
+                                            </div>
+                                            <p>
+                                                学生评论好评占比
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-praise"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                教师投入-->
+                                <div class="layui-col-sm6 layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            教师投入
+                                            <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">%</span>
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="video-watch-box">
+                                                <script type="text/html" id="video-watch">
+                                                    <p class="layuiadmin-big-font">42.3%</p>
+                                                </script>
+                                            </div>
+                                            <p>
+                                                讨论区教师发帖数量占比
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-reply-fill"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--  视频观看情况-->
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card" style="padding-bottom: 30px;">
+                                        <div class="layui-card-header">
+                                            视频观看情况
+                                        </div>
+                                        <div class="layui-card-body"
+                                             style="padding: 30px 50px; height: 400px; overflow-y: scroll;">
+                                            <ul class="layui-timeline" id="time-line-box">
+                                                <script type="text/html" id="time-line">
+                                                    {{# if(!d || d.length == 0){ }}
+                                                    <p>暂无历史记录......</p>
+                                                    {{# }else{ }}
+                                                    {{# layui.each(d, function(index, item){ }}
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">1.1为什么要学习计算机网络</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">40%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">1.2互联网发展史</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">33%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">1.3常用的基本概念</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">48%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">1.4参考模型（重点）</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">83%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">1.5参考模型相关的概念</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">81%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">1.6本课程的组织</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">30%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">2.1物理层概述及信号分析</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">85%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">2.2引导性传输介质</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">81%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">2.3复用技术</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">80%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">2.4调制技术</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">83%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">2.5公共交换电话网络</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">75%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">3.1数据链路层功能和成帧</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">87%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="layui-timeline-item">
+                                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                                        <div class="layui-timeline-content layui-text">
+                                                            <h3 class="layui-timeline-title">3.2差错处理概述</h3>
+                                                            <p>
+                                                                视频观看率 <span style="color: #009688;">83%</span>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+
+                                                    <!--                                                    {{# }); }}-->
+                                                    <!--                                                    {{# } }}-->
+                                                </script>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 讨论区发帖情况-->
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card" style="padding-bottom: 30px;">
+                                        <div class="layui-card-header">
+                                            讨论区发帖情况
+                                        </div>
+                                        <div class="layui-card-body"
+                                             style="padding: 10px 30px; height: 440px; overflow-y: scroll;"
+                                             id="choose-course-box">
+                                            <script type="text/html" id="choose-course">
+                                                {{# if(!d || d.length == 0){ }}
+                                                <p>暂无选课记录......</p>
+                                                {{# }else{ }}
+                                                {{# layui.each(d, function(index, item){ }}
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第一章 概述</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">60%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第二章 物理层</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">38%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第三章 数据链路层</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">51%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第四章 介质访问控制子层</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">42%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第五章 网络层</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">57%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第六章 传输层</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">55%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>套接字编程</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">34%</span></p>
+                                                </div>
+                                                <div class="layui-res reco-res-box">
+                                                    <h3><b>第七章 应用层</b></h3>
+                                                    <p class="layui-word-aux">教师发帖占比 <span
+                                                            style="color: #009688;">37%</span></p>
+                                                </div>
+                                                <!--                                                {{# }); }}-->
+                                                <!--                                                {{# } }}-->
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--课程难度-->
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-row layui-col-space5">
+                                <!--                                视频难度-->
+                                <div class="layui-col-sm6 layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            视频难度
+                                            <!--                                            <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">%</span>-->
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="course1-count-box">
+                                                <p class="layuiadmin-big-font">0.76</p>
+                                            </div>
+                                            <p>
+                                                1倍速、未跳跃、重复播放占比加权结果
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-video"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                习题难度-->
+                                <div class="layui-col-sm6 layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            习题难度
+                                            <!--                                            <span class="layui-badge layui-bg-blue layuiadmin-badge pull-right">%</span>-->
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="score1-box">
+                                                <p class="layuiadmin-big-font">0.18</p>
+                                            </div>
+                                            <p>
+                                                习题做对人数占比
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-survey"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                专业性-->
+                                <div class="layui-col-sm6 layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            专业性
+                                            <!--                                            <span class="layui-badge layui-bg-green layuiadmin-badge pull-right">%</span>-->
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="video1-watch-box">
+                                                <p class="layuiadmin-big-font">0.224</p>
+                                            </div>
+                                            <p>
+                                                课程适合人群、起点、内容得分加权结果
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-senior"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--                            三个饼图-->
+                            <div class="layui-row layui-col-space5">
+                                <div class="layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            视频难度分析：倍速播放
+                                        </div>
+                                        <div class="layui-card-body graph-box">
+                                            <div class="layui-card-body"  style="padding: 0;">
+                                                <div id="EchartZhu" style="width: 350px;height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            视频难度分析：跳跃播放
+                                        </div>
+                                        <div class="layui-card-body graph-box">
+                                            <div class="layui-card-body" style="padding: 0;">
+                                                <div id="EchartZhu1" style="width: 350px;height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            视频难度分析：重复播放
+                                        </div>
+                                        <div class="layui-card-body graph-box">
+                                            <div class="layui-card-body" style="padding: 0;">
+                                                <div id="EchartZhu2" style="width: 350px;height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-tab-item layui-show">
+                            <!-- 课程特点-->
+                            <div class="layui-row layui-col-space15">
+                                <div class="layui-col-md12">
+                                    <div class="layui-card">
+                                        <div class="layui-card-body">
+                                            <div class="layui-row state-box">
+                                                <div class="layui-col-sm2 state-title-box">
+                                                    <p style="font-size: 17px;"><b>课程特点</b></p>
+                                                </div>
+                                                <div class="layui-col-md9 state-mes-box">
+                                                    <p>课程特点包括知识点丰富型和易得高分型，主要针对知识点覆盖度和成绩情况统计得出。</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--                            三张图-->
+                            <div class="layui-row layui-col-space5">
+                                <!-- 词云图-->
+                                <div class="layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            知识点词云图
+                                        </div>
+                                        <div class="layui-card-body graph-box">
+                                            <div class="layui-card-body" style="padding: 0;">
+                                                <div id="EchartZhu3" style="width: 350px;height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 知识点覆盖度-->
+                                <div class="layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            知识点覆盖度
+                                            <span class="layui-badge layui-bg-orange layuiadmin-badge pull-right">%</span>
+                                        </div>
+                                        <div class="layui-card-body layuiadmin-card-list">
+                                            <div id="course-count1-box">
+                                                <p class="layuiadmin-big-font">64.7%</p>
+                                            </div>
+                                            <p>
+                                                课程大纲中抽取出的知识点数与同类课程知识全集数的比值
+                                                <span class="layuiadmin-span-color pull-right"> <i
+                                                        class="layui-icon layui-icon-read"></i></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--                                成绩分析-->
+                                <div class="layui-col-md4">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">
+                                            学生成绩统计
+                                        </div>
+                                        <div class="layui-card-body graph-box">
+                                            <div class="layui-card-body" style="padding: 0;">
+                                                <div id="EchartZhu4" style="width: 350px;height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="../../assets/js/main.js"></script>-->
+    <script type="text/javascript" src="../../assets/libs/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="../../assets/libs/wordcloud/echarts-wordcloud.min.js"></script>
+    <script type="text/javascript" src="../../assets/js/dataTool.min.js"></script>
+    <script type="text/javascript" src="../../assets/js/learn-mes.js"></script>
+    <script type="text/javascript" src="../../assets/js/learn-state.js"></script>
+    <script type="text/javascript" src="../../assets/js/learn-interest.js"></script>
+    <script type="text/javascript" src="../../assets/js/learn-knowledge.js"></script>
+    <script>
+        layui.use('rate', function () {
+            var rate = layui.rate;
+            var element = layui.element,
+                $ = layui.jquery;
+            // echarts = layui.echarts;
+            var chartZhu = echarts.init(document.getElementById('EchartZhu'));
+            var chartZhu1 = echarts.init(document.getElementById('EchartZhu1'));
+            var chartZhu2 = echarts.init(document.getElementById('EchartZhu2'));
+            var chartZhu3 = echarts.init(document.getElementById('EchartZhu3'));//词云图
+            var chartZhu4 = echarts.init(document.getElementById('EchartZhu4'));
+
+
+            var optionchart = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                },
+                series: [
+                    {
+                        name: '观看倍速',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [
+                            {value: 0.01, name: '0.5x'},
+                            {value: 0.83, name: '1x'},
+                            {value: 0.04, name: '1.25x'},
+                            {value: 0.05, name: '1.5x'},
+                            {value: 0.07, name: '2x'}
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            }
+
+            var optionchart1 = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                },
+                series: [
+                    {
+                        name: '是否跳跃',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [
+                            {value: 0.24, name: '跳跃播放'},
+                            {value: 0.76, name: '未跳跃播放'},
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            }
+
+            var optionchart2 = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                },
+                series: [
+                    {
+                        name: '是否重复',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [
+                            {value: 0.15, name: '重复播放'},
+                            {value: 0.85, name: '未重复播放'},
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            }
+
+            var optionchart3 = {
+                tooltip: {},
+                series: [{
+                    type: 'wordCloud',
+                    gridSize: 2,
+                    sizeRange: [12, 50],
+                    // rotationRange: [-90, 90],
+                    rotationRange: [-50, 50],
+                    shape: 'rectangle',
+                    // width: 100,
+                    // height: 400,
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: [
+                        {
+                            name: '协议',
+                            value: 6,
+                            textStyle: {
+                                normal: {
+                                    color: 'black'
+                                },
+                                emphasis: {
+                                    color: 'red'
+                                }
+                            }
+                        },
+                        {
+                            name: '网络',
+                            value: 3
+                        },
+                        {
+                            name: '模型',
+                            value: 3
+                        },
+                        {
+                            name: '业务',
+                            value: 3
+                        },
+                        {
+                            name: '复用技术',
+                            value: 2
+                        },
+                        {
+                            name: '传输层',
+                            value: 2
+                        },
+                        {
+                            name: '算法',
+                            value: 2
+                        },
+                        {
+                            name: '路由',
+                            value: 2
+                        },
+                        {
+                            name: '线路',
+                            value: 2
+                        },
+                        {
+                            name: '数据链',
+                            value: 2
+                        },
+                        {
+                            name: '检测',
+                            value: 2
+                        },
+                        {
+                            name: '计算机',
+                            value: 2
+                        },
+                        {
+                            name: '项目',
+                            value: 2
+                        },
+                        {
+                            name: '数据通信',
+                            value: 2
+                        },
+                        {
+                            name: '标准',
+                            value: 2
+                        },
+                        {
+                            name: '介质',
+                            value: 2
+                        },
+                        {
+                            name: '数字网',
+                            value: 1
+                        },
+                        {
+                            name: '应用层',
+                            value: 1
+                        },
+                        {
+                            name: '表示层',
+                            value: 1
+                        },
+                        {
+                            name: '会话层',
+                            value: 1
+                        },
+                        {
+                            name: '网络设备',
+                            value: 1
+                        },
+                        {
+                            name: '网际',
+                            value: 1
+                        },
+                        {
+                            name: '计算机网络',
+                            value: 1
+                        },
+                        {
+                            name: '网络协议',
+                            value: 1
+                        },
+                        {
+                            name: '设备',
+                            value: 1
+                        },
+                        {
+                            name: '信号',
+                            value: 1
+                        },
+                        {
+                            name: '广域网',
+                            value: 1
+                        },
+                        {
+                            name: '分组',
+                            value: 1
+                        },
+                        {
+                            name: '令牌环',
+                            value: 1
+                        },
+                        {
+                            name: '总线',
+                            value: 1
+                        },
+                        {
+                            name: '以太网',
+                            value: 1
+                        },
+                        {
+                            name: '局域网',
+                            value: 1
+                        },
+                        {
+                            name: '网络层',
+                            value: 1
+                        },
+                        {
+                            name: '传输',
+                            value: 1
+                        },
+                        {
+                            name: '媒介',
+                            value: 1
+                        },
+                    ]
+                }]
+            }
+
+            var optionchart4 ={
+                xAxis: {
+                    type: 'category',
+                    data: ['及格率', '优秀率', '平均分(÷100)']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: [0.23, 0.17, 0.26],
+                    type: 'bar'
+                }]
+            }
+
+            chartZhu.setOption(optionchart, true);
+            chartZhu1.setOption(optionchart1, true);
+            chartZhu2.setOption(optionchart2, true);
+            chartZhu3.setOption(optionchart3, true);
+            chartZhu4.setOption(optionchart4, true);
+
+
+        });
+    </script>
+</div>
